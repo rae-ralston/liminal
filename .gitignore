@@ -1,0 +1,30 @@
+  # Unity generated
+  Library/
+  Temp/
+  Logs/
+  obj/
+  Build/
+  Builds/
+
+  # Unity auto-generated
+  *.pidb
+  *.suo
+  *.user
+  *.booproj
+  *.svd
+  *.pdb
+  *.mdb
+  *.opendb
+  *.VC.db
+
+  # OS
+  .DS_Store
+  Thumbs.db
+
+  # IDE
+  .vscode/
+  .idea/
+  *.csproj
+  *.unityproj
+  *.sln
+  *.userprefs
