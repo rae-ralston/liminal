@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     private InputAction moveAction;
     private Animator animator;
-    private SpriteRenderer spritRenderer;
+    private SpriteRenderer spriteRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         moveAction = InputSystem.actions.FindAction("Move");
         animator = GetComponent<Animator>();
-        spritRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -24,14 +24,14 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 movement = moveAction.ReadValue<Vector2>();
         rb.linearVelocity = movement * moveSpeed;
-
+        
         animator.SetFloat("Speed", movement.magnitude);
         animator.SetFloat("DirectionX", movement.x);
         animator.SetFloat("DirectionY", movement.y);
 
-        if (movement.x < 0)
-          spritRenderer.flipX = true;
-        else if (movement.x > 0)
-          spritRenderer.flipX = false;
+    if (movement.x < 0)
+      spriteRenderer.flipX = true;
+    else if (movement.x > 0)
+      spriteRenderer.flipX = false;
     }
 }
