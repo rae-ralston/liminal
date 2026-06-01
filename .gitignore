@@ -33,7 +33,6 @@ Thumbs.db
 
 # FMOD
 Assets/Plugins/FMOD/Cache/
-Assets/StreamingAssets/
 
 # Never ignore DLLs in the FMOD subfolder.
 !/[Aa]ssets/Plugins/FMOD/**/lib/*
