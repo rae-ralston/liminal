@@ -64,13 +64,39 @@ Press final button → ending
 
 ---
 
+## Opening Sequence
+
+1. Black screen — sounds of an old computer booting (loud fan, mechanical clicking)
+2. The monitor flicks on — only light in the room. Screen shows a single word: **CLICK**
+3. Player clicks / presses interact
+4. The desk lamp turns on — the home base pool of light establishes
+5. The flashlight on the desk is highlighted as the first interactable object
+6. Player picks up the flashlight — portable ViR is now active
+7. The system starts. The game begins.
+
+*Details TBD: whether the boot screen is a static overlay (first-person close-up of monitor) or top-down with an unlit sprite — both work technically. Decide closer to implementation.*
+
+---
+
+## Interactions
+
+- **Interact button** — player approaches an object and presses a key to interact (not pure proximity auto-pickup, not mouse-only)
+- **Flashlight highlight** — pointing the flashlight at an interactable object highlights it, so the player knows it can be used before committing to an interaction
+- **Static overlays** — for reading monitors, papers, or other close-up content: a simple screen overlay (no perspective switch required)
+- Some interactables require an item from the environment to unlock (key, found object, etc.)
+
+---
+
 ## Systems
 
 ### Vision Radius (ViR)
 
 The player has a limited circle of visibility. Beyond it: darkness.
 
-- Base ViR is small — the office is mostly dark
+- The ViR is represented in-world as a **flashlight** — the player picks it up from the home desk at the start of the game
+- The flashlight also serves as the **interaction highlight system**: pointing it at an interactable object highlights it, signaling to the player that it can be used
+- The home desk has a **single lamp** that stays on — this creates a natural, wider pool of light at home base so the player can always orient themselves and find their way back
+- Base ViR (flashlight range) is small — beyond the desk lamp, the office is mostly dark
 - A **ViR Multiplier** expands the radius but decays over time after a grace period
 - There is a single **ViR Button** in a fixed location in the office
   - Pressing it resets the decay timer, maintaining the expanded ViR
@@ -131,11 +157,16 @@ There is one ending. It is not clearly good or bad. The player presses the final
 
 ## Map
 
-Top-down 2D office space. Small enough to feel claustrophobic, large enough to require exploration. Rooms connected by corridors.
+Top-down 2D office space. **Scale: roughly one floor of a high-rise office building** — not a sprawling warehouse, not a single room. Small enough to feel claustrophobic, large enough to require exploration.
+
+**Layout philosophy:** Winding rooms and corridors rather than long linear hallways — back-and-forth travel should feel like navigating a building, not walking a corridor. First draft should be sketched on paper.
+
+**Doors:** Some lead to normal spaces, some to weird ones, some require keys or items found in the environment.
 
 **Potential areas (subject to change):**
 
-- Main office floor (central computer here)
+- Main office floor (central computer + home desk here)
+- Boss's office
 - Break room / cafeteria
 - Bathroom or kitchen (running tap)
 - Server room or utility closet (malfunctions happen here)
@@ -144,8 +175,9 @@ Top-down 2D office space. Small enough to feel claustrophobic, large enough to r
 **Architecture ideas:**
 
 - Some passages that shouldn't architecturally exist
-- At least one stretching corridor
+- At least one never-ending tunnel / stretching corridor
 - Slight repetition between rooms — same layout, something slightly different each time
+- Some doors lead to weird spaces (never-ending tunnel, room that loops back on itself)
 
 ---
 
@@ -180,4 +212,5 @@ Top-down 2D office space. Small enough to feel claustrophobic, large enough to r
 - Does the player have any dialogue or text? (current direction: no — environment only)
 - What is the counter counting? (intentionally unclear, but worth agreeing internally)
 - Does the office change visually as the counter increases? (would reinforce the liminal feeling)
-- ~~Where exactly is the ViR Button located?~~ **Proposed:** The ViR Button is on the same desk as the central computer. The desk is the player's home base — a small safe zone of light. Exploration means walking away from it into the dark.
+- **Counter display:** some visual indication of progress is agreed — method TBD. Options: in-world element (digital clock, ticker on the computer), UI overlay, or both. In-world preferred for immersion.
+- ~~Where exactly is the ViR Button located?~~ **Resolved:** The ViR Button is on the same desk as the central computer. The desk is the player's home base — lamp provides a permanent pool of light. Flashlight is picked up here at game start.
