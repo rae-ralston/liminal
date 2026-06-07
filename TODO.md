@@ -12,7 +12,7 @@ Cross-reference with `GDD.md` for design intent.
 ## Map & Navigation
 
 - [ ] Map layout — sketch on paper first, then build all rooms in scene
-- [ ] Door system: in-scene teleport trigger (normal rooms)
+- [x] Door system: in-scene teleport trigger (normal rooms)
 - [ ] Door system: scene-loading (weird spaces — never-ending corridor, looping room, etc.)
 - [ ] Camera confiner _(hold until map is final)_
 
@@ -36,7 +36,7 @@ Cross-reference with `GDD.md` for design intent.
 
 ## Interact System
 
-- [ ] Interact button (approach object + press key)
+- [x] Interact button (approach object + press key) — `IInteractable` interface, `SetInteractable`/`ClearInteractable` on PlayerMovement
 - [ ] Flashlight highlight — pointing at interactable object highlights it
 - [ ] Static overlays — for reading monitors, papers, close-up content
 
