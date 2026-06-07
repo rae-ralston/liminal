@@ -1,3 +1,5 @@
+CLAUDE.md
+
 # Unity generated
 Library/
 Temp/
@@ -25,6 +27,7 @@ Thumbs.db
 # IDE
 .vscode/
 .vsconfig
+.vs/
 .idea/
 *.csproj
 *.unityproj
@@ -44,10 +47,5 @@ Assets/Plugins/FMOD/Cache/
 # Ignore the Cache folder since it is updated locally.
 /[Aa]ssets/Plugins/FMOD/Cache/*
 
-# Ignore bank files in the StreamingAssets folder.
-/[Aa]ssets/StreamingAssets/**/*.bank
-/[Aa]ssets/StreamingAssets/**/*.bank.meta
-
-# If the source bank files are kept outside of the StreamingAssets folder then these can be ignored.
 # Log files can be ignored.
 fmod_editor.log
