@@ -6,13 +6,13 @@ public class PlayerMovement : MonoBehaviour
 {
   private Rigidbody2D rb;
   public float moveSpeed = 5f;
+  public Vector2 FacingDirection { get; private set; } = Vector2.down;
   private InputAction moveAction;
   private Animator animator;
   private SpriteRenderer spriteRenderer;
   private InputAction interactAction;
   private IInteractable currentInteractable;
 
-  // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
     rb = GetComponent<Rigidbody2D>();
@@ -22,10 +22,12 @@ public class PlayerMovement : MonoBehaviour
     interactAction = InputSystem.actions.FindAction("Interact");
   }
 
-  // Update is called once per frame
   void Update()
   {
     Vector2 movement = moveAction.ReadValue<Vector2>();
+    if (movement.sqrMagnitude > 0.01f)
+      FacingDirection = movement.normalized;
+
     rb.linearVelocity = movement * moveSpeed;
 
     animator.SetFloat("Speed", movement.magnitude);
