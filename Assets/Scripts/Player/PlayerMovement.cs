@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     animator.SetFloat("Speed", movement.magnitude);
     animator.SetFloat("DirectionX", movement.x);
     animator.SetFloat("DirectionY", movement.y);
+    animator.SetFloat("LastDirectionX", FacingDirection.x);
+    animator.SetFloat("LastDirectionY", FacingDirection.y);
 
     if (movement.x < 0)
       spriteRenderer.flipX = true;
