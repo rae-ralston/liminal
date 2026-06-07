@@ -5,9 +5,9 @@ Cross-reference with `GDD.md` for design intent.
 ## Setup & Art
 
 - [ ] Place `environment-grey-room-desk` tiles in scene
-- [ ] Implement new character sheet 
-- [ ] Wire new character sprites into animation
-- [ ] Idle direction memory (snaps to IdleDown on stop) _(blocked on idle animation state)_
+- [x] Implement new character sheet 
+- [x] Wire new character sprites into animation
+- [x] Idle direction memory (holds last facing direction on stop)
 
 ## Map & Navigation
 
@@ -25,11 +25,11 @@ Cross-reference with `GDD.md` for design intent.
 ## ViR (Vision Radius)
 
 - [x] Review Bo's Light2D branch before starting ViR implementation
-- [ ] Global Light 2D — dark ambient (near-black / deep blue-black)
-- [ ] Update all sprite renderers to Sprite-Lit-Default shader
+- [x] Global Light 2D — dark ambient (near-black / deep blue-black)
+- [x] Update all sprite renderers to Sprite-Lit-Default shader
 - [ ] ViR core — darkness beyond player's light radius *(assess Dylan's solution)*
 - [ ] Desk lamp — permanent wider light pool at home base (stationary Point Light 2D)
-- [ ] Flashlight as in-world ViR representation (Point Light 2D on player, small radius, soft falloff)
+- [x] Flashlight as in-world ViR representation (Point Light 2D on player, small radius, soft falloff)
 - [ ] ViR Multiplier — expands radius, decays over time after grace period
 - [ ] ViR Button — resets decay timer + increments counter (located at central computer desk)
 - [ ] Grace period — time before decay begins; upgradeable
