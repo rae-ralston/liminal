@@ -4,16 +4,6 @@ Cross-reference with `GDD.md` for design intent.
 
 ## Setup & Art
 
-- [x] Player movement (WASD/arrows, Rigidbody2D velocity)
-- [x] Directional animations with sprite flipping for left
-- [x] Tiled room — floor, wall, furniture, props tilemap layers
-- [x] Wall + furniture collisions
-- [x] Camera follow (Cinemachine)
-- [x] Dylan's environment tilesets imported and sliced (32x32)
-- [x] FMOD plugin installed and merged (Bo)
-- [x] Tilemap Order in Layer values — floor -1, walls 0, furniture 1, props 2, player 3
-- [x] Rigidbody2D Z rotation freeze fix (spinning character bug)
-- [x] `environment-grey-room-desk` imported, sliced (16x16), tiles added to palette
 - [ ] Place `environment-grey-room-desk` tiles in scene
 - [ ] Implement new character sheet 
 - [ ] Wire new character sprites into animation
@@ -95,3 +85,15 @@ Cross-reference with `GDD.md` for design intent.
 ## Build
 
 - [ ] WebGL build
+
+## Completed
+- [x] Player movement (WASD/arrows, Rigidbody2D velocity)
+- [x] Directional animations with sprite flipping for left
+- [x] Tiled room — floor, wall, furniture, props tilemap layers
+- [x] Wall + furniture collisions
+- [x] Camera follow (Cinemachine)
+- [x] Dylan's environment tilesets imported and sliced (32x32)
+- [x] FMOD plugin installed and merged (Bo)
+- [x] Tilemap Order in Layer values — floor -1, walls 0, furniture 1, props 2, player 3
+- [x] Rigidbody2D Z rotation freeze fix (spinning character bug)
+- [x] `environment-grey-room-desk` imported, sliced (16x16), tiles added to palette
