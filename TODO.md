@@ -10,14 +10,14 @@ Cross-reference with `GDD.md` for design intent.
 - [x] Wall + furniture collisions
 - [x] Camera follow (Cinemachine)
 - [x] Dylan's environment tilesets imported and sliced (32x32)
-- [x] FMOD plugin installed and merged
+- [x] FMOD plugin installed and merged (Bo)
 - [x] Tilemap Order in Layer values — floor -1, walls 0, furniture 1, props 2, player 3
 - [x] Rigidbody2D Z rotation freeze fix (spinning character bug)
 - [x] `environment-grey-room-desk` imported, sliced (16x16), tiles added to palette
 - [ ] Place `environment-grey-room-desk` tiles in scene
-- [ ] New character sheet — waiting on Dylan to remake with consistent spacing
-- [ ] Wire new character sprites into animation _(blocked on above)_
-- [ ] Idle direction memory (snaps to IdleDown on stop)
+- [ ] Implement new character sheet 
+- [ ] Wire new character sprites into animation
+- [ ] Idle direction memory (snaps to IdleDown on stop) _(blocked on idle animation state)_
 
 ## Map & Navigation
 
