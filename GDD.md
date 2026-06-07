@@ -66,6 +66,8 @@ Press final button → ending
 
 ## Opening Sequence
 
+The player finds themselves in a **security room** — no explanation, no NPC, no guard. They are simply there. The security room is home base for the entire game.
+
 1. Black screen — sounds of an old computer booting (loud fan, mechanical clicking)
 2. The monitor flicks on — only light in the room. Screen shows a single word: **CLICK**
 3. Player clicks / presses interact
@@ -95,7 +97,7 @@ The player has a limited circle of visibility. Beyond it: darkness.
 
 - The ViR is represented in-world as a **flashlight** — the player picks it up from the home desk at the start of the game
 - The flashlight also serves as the **interaction highlight system**: pointing it at an interactable object highlights it, signaling to the player that it can be used
-- The home desk has a **single lamp** that stays on — this creates a natural, wider pool of light at home base so the player can always orient themselves and find their way back
+- The security room desk has a **single lamp** that stays on — this creates a natural, wider pool of light at home base so the player can always orient themselves and find their way back
 - Base ViR (flashlight range) is small — beyond the desk lamp, the office is mostly dark
 - A **ViR Multiplier** expands the radius but decays over time after a grace period
 - There is a single **ViR Button** in a fixed location in the office
@@ -165,7 +167,8 @@ Top-down 2D office space. **Scale: roughly one floor of a high-rise office build
 
 **Potential areas (subject to change):**
 
-- Main office floor (central computer + home desk here)
+- **Security room** (home base) — central computer + ViR button + desk lamp + flashlight spawn here. Player starts here. Custom painted environment with security monitors/TVs. Camera in this room has a found-footage/grainy post-processing effect.
+- Main office floor
 - Boss's office
 - Break room / cafeteria
 - Bathroom or kitchen (running tap)
