@@ -5,9 +5,9 @@ Cross-reference with `GDD.md` for design intent.
 ## Setup & Art
 
 - [ ] Place `environment-grey-room-desk` tiles in scene
-- [ ] Implement new character sheet 
-- [ ] Wire new character sprites into animation
-- [ ] Idle direction memory (snaps to IdleDown on stop) _(blocked on idle animation state)_
+- [x] Implement new character sheet 
+- [x] Wire new character sprites into animation
+- [x] Idle direction memory (holds last facing direction on stop)
 
 ## Map & Navigation
 
