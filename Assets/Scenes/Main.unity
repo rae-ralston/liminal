@@ -6878,9 +6878,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1983034558}
+  - component: {fileID: 1983034560}
   - component: {fileID: 1983034559}
   - component: {fileID: 1983034561}
-  - component: {fileID: 1983034560}
   m_Layer: 0
   m_Name: SecurityStation
   m_TagString: Untagged
