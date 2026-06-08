@@ -23,7 +23,7 @@ Cross-reference with `GDD.md` for design intent.
 - [x] Review Bo's Light2D branch before starting ViR implementation
 - [x] Global Light 2D — dark ambient (near-black / deep blue-black)
 - [x] Update all sprite renderers to Sprite-Lit-Default shader
-- [ ] ViR core — darkness beyond player's light radius _(assess Dylan's solution)_
+- [ ] ViR core — darkness beyond player's light radius
 - [ ] Desk lamp — permanent wider light pool at home base (stationary Point Light 2D)
 - [x] Flashlight as in-world ViR representation (Point Light 2D on player, small radius, soft falloff)
 - [ ] ViR Multiplier — expands radius, decays over time after grace period
@@ -76,7 +76,7 @@ Cross-reference with `GDD.md` for design intent.
 
 ## Visual Polish
 
-- [ ] Post-processing Volume — bloom, color adjustments (desaturated cool tint), chromatic aberration, film grain, vignette
+- [x] Post-processing Volume — bloom, chromatic aberration, film grain, vignette *(color grading / cool tint pass still needed)*
 - [ ] Scanline overlay — custom fullscreen shader or UI overlay _(late polish)_
 - [ ] Infinite corridor shader — scrolling UV trick for never-ending tunnel scene _(required for weird spaces)_
 
