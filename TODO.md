@@ -4,7 +4,8 @@ Cross-reference with `GDD.md` for design intent.
 
 ## Setup & Art
 
-- [ ] set up separate security desk room for game initiation/boot screen
+- [x] Security room overlay system — SecurityRoomView.cs (show/hide, disables player), SecurityRoomEntrance.cs (InteractableTrigger), SecurityRoomCanvas with close button; placeholder image in place
+- [ ] Security room overlay — swap placeholder with Dylan's illustration; add terminal, lamp, flashlight as interactable hotspots
 
 ## Map & Navigation
 
@@ -24,7 +25,7 @@ Cross-reference with `GDD.md` for design intent.
 - [x] Global Light 2D — dark ambient (near-black / deep blue-black)
 - [x] Update all sprite renderers to Sprite-Lit-Default shader
 - [ ] ViR core — darkness beyond player's light radius
-- [ ] Desk lamp — permanent wider light pool at home base (stationary Point Light 2D)
+- [ ] Desk lamp — hotspot in security room overlay; turns on during boot sequence, provides permanent light in that view
 - [x] Flashlight as in-world ViR representation (Point Light 2D on player, small radius, soft falloff)
 - [ ] ViR Multiplier — expands radius, decays over time after grace period
 - [ ] ViR Button — resets decay timer + increments counter (located at central computer desk)
