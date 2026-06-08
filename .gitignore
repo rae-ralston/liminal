@@ -34,6 +34,9 @@ Thumbs.db
 *.sln
 *.userprefs
 
+# TextMesh Pro
+Assets/TextMesh Pro/Examples & Extras/
+
 # FMOD
 Assets/Plugins/FMOD/Cache/
 
