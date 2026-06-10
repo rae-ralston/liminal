@@ -6,7 +6,7 @@ using FMODUnity;
 public class FMODEvents : MonoBehaviour
 {
     [field: Header("Footsteps")]
-    [field: SerializeField] public EventReference footstepSound { get; private set; }
+    [field: SerializeField] public EventReference playerFootsteps { get; private set; }
     public static FMODEvents instance { get; private set; }
 
     private void Awake() 
