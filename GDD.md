@@ -76,7 +76,7 @@ The player finds themselves in a **security room** — no explanation, no NPC, n
 6. Player picks up the flashlight — portable ViR is now active
 7. The system starts. The game begins.
 
-*Details TBD: whether the boot screen is a static overlay (first-person close-up of monitor) or top-down with an unlit sprite — both work technically. Decide closer to implementation.*
+**Resolved:** The security room / boot screen is a **full-screen static overlay** — a pre-rendered illustration by Dylan showing the desk close-up (terminal, lamp, security monitors). Interactive elements (terminal, lamp, flashlight) are hotspots over the illustration. The player character does not appear in this view. This view persists as the home base screen; the player returns to it when re-entering the security room. The top-down exploration view begins when the player leaves the security room for the first time.
 
 ---
 
@@ -167,7 +167,7 @@ Top-down 2D office space. **Scale: roughly one floor of a high-rise office build
 
 **Potential areas (subject to change):**
 
-- **Security room** (home base) — central computer + ViR button + desk lamp + flashlight spawn here. Player starts here. Custom painted environment with security monitors/TVs. Camera in this room has a found-footage/grainy post-processing effect.
+- **Security room** (home base) — shown as a full-screen static overlay illustration (not top-down). Contains terminal, desk lamp, flashlight, and security monitors as interactable hotspots. Player starts here and returns here from the office. The found-footage/grainy camera effect applies to this view.
 - Main office floor
 - Boss's office
 - Break room / cafeteria
