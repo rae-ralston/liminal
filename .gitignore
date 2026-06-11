@@ -32,6 +32,7 @@ Thumbs.db
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.userprefs
 
 # TextMesh Pro
