@@ -84,8 +84,21 @@ public class AudioManager : MonoBehaviour
 
         emitter.EventReference = eventReference;
         emitter.Play();
+
         eventEmitters.Add(emitter);
         return emitter;
+    }
+
+    public void CreateEmitterInstance(EventInstance eventInstance, PropAudioType propAudioType, GameObject gameObject)
+    {
+        EventReference eventRef = FMODEvents.instance.GetPropEvent(propAudioType);
+        eventInstance = RuntimeManager.CreateInstance(eventRef);
+
+        RuntimeManager.AttachInstanceToGameObject(
+            eventInstance,
+            gameObject
+        );
+        eventInstance.start();
     }
 
     /*

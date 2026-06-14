@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
@@ -8,27 +9,14 @@ public class PropAudioEmitter : MonoBehaviour
     private PropAudioType propType;
 
     private StudioEventEmitter emitter;
+    private EventInstance instance;
 
+    private void Awake()
+    {
+        //AudioManager.instance.InitializeEventEmitter(this.GetEvent(), this.gameObject);
+    }
     private void Start()
     {
-        AudioManager.instance.InitializeEventEmitter(this.GetEvent(), this.gameObject);
-    }
-
-    private EventReference GetEvent()
-    {
-        switch (propType)
-        {
-            case PropAudioType.Computer:
-                return FMODEvents.instance.computer;
-
-            case PropAudioType.Hvac:
-                return FMODEvents.instance.hvac;
-
-            case PropAudioType.vendingMachine:
-                return FMODEvents.instance.vendingMachine; 
-
-            default:
-                return default;
-        }
-    }
+        AudioManager.instance.CreateEmitterInstance(instance, propType, gameObject);
+    }    
 }
