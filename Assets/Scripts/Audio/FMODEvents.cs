@@ -44,14 +44,6 @@ public class FMODEvents : MonoBehaviour
     private List<InteractionAudioEntry> interactionAudioEntries;    
     private Dictionary<InteractionAudioType, EventReference> interactionAudioLookup;
 
-/*
-    [field: SerializeField] public EventReference passDoor { get; private set; }
-    [field: SerializeField] public EventReference checkDrawer { get; private set; }
-    [field: SerializeField] public EventReference pressButton { get; private set; }
-    [field: SerializeField] public EventReference pullLever { get; private set; }
-    [field: SerializeField] public EventReference lightSwitch { get; private set; }
-*/
-
 
     private void Awake() 
     {
