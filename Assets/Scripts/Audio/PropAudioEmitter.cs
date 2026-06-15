@@ -2,7 +2,6 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-[RequireComponent(typeof(StudioEventEmitter))]
 public class PropAudioEmitter : MonoBehaviour
 {
     [SerializeField]

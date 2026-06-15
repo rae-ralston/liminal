@@ -7,6 +7,8 @@ public class FMODEvents : MonoBehaviour
 {       
     public static FMODEvents instance { get; private set; }
 
+    // add fields to the inspector to choose FMOD events from a dropdown menu
+
     // horizontal bar in inspector
     [field: Header("_____________________________________________________________________________________________________________________________")]   
     
@@ -38,22 +40,18 @@ public class FMODEvents : MonoBehaviour
 
     // Interaction Audio
     [field: Header("Interactables")]        
+    [SerializeField]
+    private List<InteractionAudioEntry> interactionAudioEntries;    
+    private Dictionary<InteractionAudioType, EventReference> interactionAudioLookup;
+
+/*
     [field: SerializeField] public EventReference passDoor { get; private set; }
     [field: SerializeField] public EventReference checkDrawer { get; private set; }
     [field: SerializeField] public EventReference pressButton { get; private set; }
     [field: SerializeField] public EventReference pullLever { get; private set; }
     [field: SerializeField] public EventReference lightSwitch { get; private set; }
+*/
 
-
-
-
-    // add fields to the inspector to choose FMOD events from a dropdown menu
-    
-    
-    
-
-    public Dictionary<PropAudioType, EventReference> PropSounds = new Dictionary<PropAudioType, EventReference>();
-    public Dictionary<PlayerAudioType, EventReference> PlayerSounds = new Dictionary<PlayerAudioType, EventReference>();
 
     private void Awake() 
     {
@@ -63,14 +61,28 @@ public class FMODEvents : MonoBehaviour
         }
         instance = this;    
 
-        // Prop Audio
+        CreatePropAudioDictionary();            
+        CreateInteractionAudioDictionary();            
+   }
+
+   private void CreatePropAudioDictionary()
+    {
         propAudioLookup = new Dictionary<PropAudioType, EventReference>();
 
         foreach (var entry in propAudioEntries)
         {
             propAudioLookup[entry.type] = entry.eventReference;
-        }         
-   }
+        } 
+    }
+   private void CreateInteractionAudioDictionary()
+    {
+        interactionAudioLookup = new Dictionary<InteractionAudioType, EventReference>();
+
+        foreach (var entry in interactionAudioEntries)
+        {
+            interactionAudioLookup[entry.type] = entry.eventReference;
+        } 
+    }
 
     public EventReference GetPropEvent(PropAudioType type)
     {
@@ -80,6 +92,17 @@ public class FMODEvents : MonoBehaviour
         }
 
         Debug.LogWarning($"No FMOD event assigned for {type}. Go to FMODEvents object and add the event under Prop Audio Emitters");
+        return default;
+    }
+
+    public EventReference GetInteractionEvent(InteractionAudioType type)
+    {
+        if (interactionAudioLookup.TryGetValue(type, out EventReference evt))
+        {
+            return evt;
+        }
+
+        Debug.LogWarning($"No FMOD event assigned for {type}. Go to FMODEvents object and add the event under Interaction Audio Emitters");
         return default;
     }
 }
