@@ -110,6 +110,11 @@ public class AudioManager : MonoBehaviour
         eventInstances.Add(eventInstance);
         return eventInstance;
     }
+
+    public void PlayFootstep(SurfaceType surfaceType)
+    {
+        Debug.Log("AudioManager playFootsteps: " + surfaceType);
+    }
     
     private void CleanUp()
     {

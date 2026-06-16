@@ -10,10 +10,6 @@ public class PropAudioEmitter : MonoBehaviour
     private StudioEventEmitter emitter;
     private EventInstance instance;
 
-    private void Awake()
-    {
-        //AudioManager.instance.InitializeEventEmitter(this.GetEvent(), this.gameObject);
-    }
     private void Start()
     {
         AudioManager.instance.CreateEmitterInstance(instance, propType, gameObject);

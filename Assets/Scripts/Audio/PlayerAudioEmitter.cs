@@ -1,14 +1,36 @@
 using FMODUnity;
 using UnityEngine;
+using FMOD.Studio;
 
+[RequireComponent(typeof(SurfaceDetector))]
 public class PlayerAudioEmitter : MonoBehaviour
 {
     [SerializeField]
     private PlayerAudioType playerAudioType;
+    
+    private SurfaceDetector surfaceDetector;
 
-    public void PlayOneShot()
+    public void Awake()
     {
-        AudioManager.instance.PlayOneShot(this.GetEvent(), this.transform.position);
+        surfaceDetector = GetComponent<SurfaceDetector>();
+    }
+
+    public void PlayFootstepOnSurface()
+    {
+        SurfaceType surfaceType = surfaceDetector.GetCurrentSurface();
+        
+        EventInstance instance = RuntimeManager.CreateInstance(GetEvent());
+
+        instance.setParameterByNameWithLabel(
+            "SurfaceType",
+            surfaceType.ToString());
+
+        RuntimeManager.AttachInstanceToGameObject(
+            instance,
+            gameObject);
+
+        instance.start();
+        instance.release();
     }
 
     private EventReference GetEvent()
@@ -22,4 +44,5 @@ public class PlayerAudioEmitter : MonoBehaviour
                 return default;
         }
     }
+    
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
-using System.ComponentModel;
+using System;
 
 public class FMODEvents : MonoBehaviour
 {       
@@ -26,14 +26,6 @@ public class FMODEvents : MonoBehaviour
     private List<PropAudioEntry> propAudioEntries;    
     private Dictionary<PropAudioType, EventReference> propAudioLookup;
 
-    
-    // horizontal bar in inspector
-    [field: Header("_____________________________________________________________________________________________________________________________")]   
-    
-    // Ambience Audio
-    [field: Header("Ambience")]    
-    [field: SerializeField] public EventReference ambience { get; private set; }
-
 
     // horizontal bar in inspector
     [field: Header("_____________________________________________________________________________________________________________________________")]   
@@ -43,6 +35,14 @@ public class FMODEvents : MonoBehaviour
     [SerializeField]
     private List<InteractionAudioEntry> interactionAudioEntries;    
     private Dictionary<InteractionAudioType, EventReference> interactionAudioLookup;
+
+    
+    // horizontal bar in inspector
+    [field: Header("_____________________________________________________________________________________________________________________________")]   
+    
+    // Ambience Audio
+    [field: Header("Ambience")]    
+    [field: SerializeField] public EventReference ambience { get; private set; }
 
 
     private void Awake() 
@@ -54,10 +54,10 @@ public class FMODEvents : MonoBehaviour
         instance = this;    
 
         CreatePropAudioDictionary();            
-        CreateInteractionAudioDictionary();            
+        CreateInteractionAudioDictionary();     
    }
 
-   private void CreatePropAudioDictionary()
+    private void CreatePropAudioDictionary()
     {
         propAudioLookup = new Dictionary<PropAudioType, EventReference>();
 
@@ -66,7 +66,8 @@ public class FMODEvents : MonoBehaviour
             propAudioLookup[entry.type] = entry.eventReference;
         } 
     }
-   private void CreateInteractionAudioDictionary()
+
+    private void CreateInteractionAudioDictionary()
     {
         interactionAudioLookup = new Dictionary<InteractionAudioType, EventReference>();
 
@@ -97,4 +98,10 @@ public class FMODEvents : MonoBehaviour
         Debug.LogWarning($"No FMOD event assigned for {type}. Go to FMODEvents object and add the event under Interaction Audio Emitters");
         return default;
     }
+
+    public static EventReference getComponent<T>()
+    {
+        throw new NotImplementedException();
+    }
+
 }

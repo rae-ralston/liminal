@@ -1,5 +1,4 @@
 using FMOD.Studio;
-using FMODUnity;
 using UnityEngine;
 
 //[RequireComponent(typeof(StudioEventEmitter))]
