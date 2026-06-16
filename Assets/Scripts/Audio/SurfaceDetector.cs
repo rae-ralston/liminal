@@ -9,15 +9,6 @@ public class SurfaceDetector : MonoBehaviour
 
     public SurfaceType CurrentSurface { get; private set; }
 
-    private void Update()
-    {
-        //DetectSurface();
-    }
-    private void FixedUpdate()
-    {
-        GetCurrentSurface();
-    }
-
     public SurfaceType GetCurrentSurface()
     {
         Vector3Int cell = surfaceTilemap.WorldToCell(feetTransform.position);

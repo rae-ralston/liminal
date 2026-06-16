@@ -99,9 +99,4 @@ public class FMODEvents : MonoBehaviour
         return default;
     }
 
-    public static EventReference getComponent<T>()
-    {
-        throw new NotImplementedException();
-    }
-
 }

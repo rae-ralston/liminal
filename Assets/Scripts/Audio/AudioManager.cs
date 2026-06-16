@@ -11,16 +11,17 @@ using FMOD.Studio;
  *
  * ### EMITTERS on gameObjects
  * How to attach audio event to gameObjects:
- * add new entry to enum in PropAudioType.cs
- * add new Prop Audio Entry to FMODEvents gameObject via inspector. Choose the new Type from dropdown and if available connect to Event Reference from FMOD in the field below
- * add new prefab or gameObject and add component PropAudioEmitter
- * choose corresponding type from list
- * Adding audio events to gameObjects is done by adding the corresponding field to the FMODevents.cs
+ * Add new entry to enum in PropAudioType.cs
+ * Add new 'Prop Audio Entry' to FMODEvents gameObject via inspector. 
+ * Choose the new Type from dropdown and if available connect to Event Reference from FMOD in the field below it
+ * Add new prefab or gameObject to scene and add component PropAudioEmitter
+ * On PropAudioEmitter choose corresponding type from list
+ * Adding the actual audio event to a gameObject is done by adding the corresponding field to the FMODevents.cs
  * Calling the event is done by calling a method of the audioManager object and passing arguments
  *
  * ### PLAYER AUDIO EVENTS
- * Note: for methods to be available on Animations, they have to be part of a component attached to the animated object, in this case the player object
- * to be centralized
+ * Note: for methods to be available on Animations, they have to be part of a component attached to the animated object, 
+ * in this case the player object
  */
 public class AudioManager : MonoBehaviour    
 {    
@@ -109,11 +110,6 @@ public class AudioManager : MonoBehaviour
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         eventInstances.Add(eventInstance);
         return eventInstance;
-    }
-
-    public void PlayFootstep(SurfaceType surfaceType)
-    {
-        Debug.Log("AudioManager playFootsteps: " + surfaceType);
     }
     
     private void CleanUp()
