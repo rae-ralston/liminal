@@ -6,9 +6,9 @@ public class DoorTriggerInScene : InteractableTrigger
   [SerializeField] private Transform destination;
   public override void Interact()
   {
-
     Vector3 delta = destination.position - player.position;
     player.position = destination.position;
     CinemachineCore.OnTargetObjectWarped(player, delta);
+    GetComponentInParent<InteractionAudioEmitter>().PlayOneShot();
   }
 }
