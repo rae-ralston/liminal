@@ -10,6 +10,7 @@ public class RoomLoader : MonoBehaviour
   [SerializeField] private Transform player;
   [SerializeField] private FadeController fadeController;
   [SerializeField] private string initialRoomSceneName;
+  [SerializeField] private string initialSpawnId;
 
   private Scene currentRoomScene;
   private bool isTransitioning;
@@ -35,6 +36,7 @@ public class RoomLoader : MonoBehaviour
     yield return SceneManager.LoadSceneAsync(initialRoomSceneName, LoadSceneMode.Additive);
     currentRoomScene = SceneManager.GetSceneByName(initialRoomSceneName);
     SceneManager.SetActiveScene(currentRoomScene);
+    MovePlayerToSpawn(currentRoomScene, initialSpawnId);
   }
 
   public void TeleportTo(string targetSceneName, string targetSpawnId)
@@ -54,20 +56,25 @@ public class RoomLoader : MonoBehaviour
     Scene newRoomScene = SceneManager.GetSceneByName(targetSceneName);
     SceneManager.SetActiveScene(newRoomScene);
 
-    Transform spawn = FindSpawnPoint(newRoomScene, targetSpawnId);
-    if (spawn != null)
-    {
-      Vector3 delta = spawn.position - player.position;
-      player.position = spawn.position;
-      player.rotation = spawn.rotation;
-      CinemachineCore.OnTargetObjectWarped(player, delta);
-    }
+    MovePlayerToSpawn(newRoomScene, targetSpawnId);
 
     yield return SceneManager.UnloadSceneAsync(previousRoomScene);
 
     currentRoomScene = newRoomScene;
     yield return fadeController.FadeIn();
     isTransitioning = false;
+  }
+
+  private void MovePlayerToSpawn(Scene scene, string spawnId)
+  {
+    Transform spawn = FindSpawnPoint(scene, spawnId);
+    if (spawn == null)
+      return;
+
+    Vector3 delta = spawn.position - player.position;
+    player.position = spawn.position;
+    player.rotation = spawn.rotation;
+    CinemachineCore.OnTargetObjectWarped(player, delta);
   }
 
   private static Transform FindSpawnPoint(Scene scene, string id)

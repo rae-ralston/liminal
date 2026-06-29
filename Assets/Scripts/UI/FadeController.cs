@@ -20,5 +20,9 @@ public class FadeController : MonoBehaviour
       yield return null;
     }
     canvasGroup.alpha = to;
+  
+  //  Debug.Log("fading");
+  // yield return null;
   }
+  
 }

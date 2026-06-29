@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Surface : MonoBehaviour
 {
-    public SurfaceType surfaceType;
+    //public SurfaceType surfaceType;
 }
 
 public enum SurfaceType
 {
     concrete,
-    tile,
+    floorTile,
     linoleum,
     carpet,
     wood
