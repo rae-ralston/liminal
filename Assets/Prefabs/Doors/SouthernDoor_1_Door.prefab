@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1557190214036330372}
   - component: {fileID: 1448116824519272833}
   m_Layer: 0
-  m_Name: Sprite
+  m_Name: DoorSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 842983471276622468}
   m_Layer: 0
-  m_Name: SouthernDoor
+  m_Name: SouthernDoor_1_Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

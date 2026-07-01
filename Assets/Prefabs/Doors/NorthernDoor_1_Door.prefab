@@ -117,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 3843938217148095831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -103.91468, y: -2.088253, z: 0}
+  m_LocalPosition: {x: -0.45733643, y: -2.088253, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2145721635966703379}
   m_Layer: 0
-  m_Name: NorthernDoor
+  m_Name: NorthernDoor_1_Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ Transform:
   m_GameObject: {fileID: 9188537787486551999}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -103.91468, y: -2.588253, z: 0}
+  m_LocalPosition: {x: -0.45733643, y: -3.1500015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
