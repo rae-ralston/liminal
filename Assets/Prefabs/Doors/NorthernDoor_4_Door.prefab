@@ -286,8 +286,12 @@ PrefabInstance:
       value: DoorSprite
       objectReference: {fileID: 0}
     - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: targetSpawnId
+      value: fromHallway_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: targetSceneName
-      value: Hallway_1
+      value: AssemblyHall
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -295,7 +299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 12
+      value: -6.99
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -331,15 +335,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3843938217148095831, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
-      value: SpawnPoint_fromHallway_1
+      value: SpawnPoint_fromAssemblyHall
       objectReference: {fileID: 0}
     - target: {fileID: 6133700687670556024, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
-      value: NorthernDoor XL
+      value: NorthernDoor_4_Door
       objectReference: {fileID: 0}
     - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: id
-      value: fromOpenSpace
+      value: fromAssemblyHall
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818652182744627748, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Size.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818652182744627748, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Offset.y
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 7431081365333483475, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -347,7 +359,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
-      value: DoorTeleporter_toHallway_1
+      value: DoorTeleporter_toAssemblyHall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

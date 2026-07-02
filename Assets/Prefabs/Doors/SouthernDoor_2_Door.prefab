@@ -8,6 +8,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1959482116753538390, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_Name
+      value: DoorTeleporter_toAssemblyHall_Door_Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494241786807006416, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: targetSpawnId
+      value: fromHallway_2_with_BreakoutSpace_Door_Left
+      objectReference: {fileID: 0}
+    - target: {fileID: 2494241786807006416, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: targetSceneName
+      value: AssemblyHall
+      objectReference: {fileID: 0}
+    - target: {fileID: 3879469493862293694, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: id
+      value: fromAssemblyHall_Door_Left
+      objectReference: {fileID: 0}
     - target: {fileID: 4952090374927930436, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -18,15 +34,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6527961932712132932, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.407961
+      value: 4.013859
       objectReference: {fileID: 0}
     - target: {fileID: 6527961932712132932, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 91.0747
+      value: 0.016906738
       objectReference: {fileID: 0}
     - target: {fileID: 6527961932712132932, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.000000050043468
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6527961932712132932, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalRotation.w
@@ -56,9 +72,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7459169634214239414, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_Name
+      value: SpawnPoint_fromAssemblyHall_Door_Left
+      objectReference: {fileID: 0}
     - target: {fileID: 7801074955169001809, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_Name
-      value: AssemblyHall Variant
+      value: SouthernDoor_2_Door
       objectReference: {fileID: 0}
     - target: {fileID: 7933384811101582654, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.x
@@ -67,6 +87,14 @@ PrefabInstance:
     - target: {fileID: 7933384811101582654, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.62000465
+      objectReference: {fileID: 0}
+    - target: {fileID: 7991919862352071579, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.9952774
+      objectReference: {fileID: 0}
+    - target: {fileID: 9067796945745402485, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.9952774
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

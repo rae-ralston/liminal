@@ -37,6 +37,8 @@ public class RoomLoader : MonoBehaviour
     currentRoomScene = SceneManager.GetSceneByName(initialRoomSceneName);
     SceneManager.SetActiveScene(currentRoomScene);
     MovePlayerToSpawn(currentRoomScene, initialSpawnId);
+
+    yield return fadeController.FadeIn();
   }
 
   public void TeleportTo(string targetSceneName, string targetSpawnId)
