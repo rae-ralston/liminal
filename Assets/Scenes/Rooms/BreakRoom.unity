@@ -4284,7 +4284,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 1553707080}
+    m_Mesh: {fileID: 2024205562}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -7190,7 +7190,153 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!43 &1553707080
+--- !u!1 &1707979093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1707979094}
+  m_Layer: 0
+  m_Name: NorthernDoors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1707979094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707979093}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1807522035}
+  m_Father: {fileID: 543333917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1807522034
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1707979094}
+    m_Modifications:
+    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: targetSpawnId
+      value: fromBreakRoom_Door_North
+      objectReference: {fileID: 0}
+    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: targetSceneName
+      value: Hallway_2_with_BreakoutSpace
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843938217148095831, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: SpawnPoint_fromHallway_2_with_BreakoutSpace_Door_North
+      objectReference: {fileID: 0}
+    - target: {fileID: 6133700687670556024, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: Hallway_2_with_BreakoutSpace_Door_North
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: fromHallway_2_with_BreakoutSpace_Door_North
+      objectReference: {fileID: 0}
+    - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_North
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+--- !u!4 &1807522035 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+  m_PrefabInstance: {fileID: 1807522034}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1950191278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1950191279}
+  m_Layer: 0
+  m_Name: FloorTilemaps
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1950191279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1950191278}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 211504443}
+  m_Father: {fileID: 249178288}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!43 &2024205562
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7368,152 +7514,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &1707979093
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1707979094}
-  m_Layer: 0
-  m_Name: NorthernDoors
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1707979094
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707979093}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1807522035}
-  m_Father: {fileID: 543333917}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1807522034
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1707979094}
-    m_Modifications:
-    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: targetSpawnId
-      value: fromBreakRoom_Door_North
-      objectReference: {fileID: 0}
-    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: targetSceneName
-      value: Hallway_2_with_BreakoutSpace
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -10.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843938217148095831, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: SpawnPoint_fromHallway_2_with_BreakoutSpace_Door_North
-      objectReference: {fileID: 0}
-    - target: {fileID: 6133700687670556024, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: Hallway_2_with_BreakoutSpace_Door_North
-      objectReference: {fileID: 0}
-    - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: id
-      value: fromHallway_2_with_BreakoutSpace_Door_North
-      objectReference: {fileID: 0}
-    - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_North
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
---- !u!4 &1807522035 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-  m_PrefabInstance: {fileID: 1807522034}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1950191278
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1950191279}
-  m_Layer: 0
-  m_Name: FloorTilemaps
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1950191279
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1950191278}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 211504443}
-  m_Father: {fileID: 249178288}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
