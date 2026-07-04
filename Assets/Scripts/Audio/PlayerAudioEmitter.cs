@@ -17,7 +17,7 @@ public class PlayerAudioEmitter : MonoBehaviour
 
     public void PlayFootstepOnSurface()
     {
-        SurfaceType surfaceType = surfaceDetector.GetCurrentSurface();
+        SurfaceType surfaceType = surfaceDetector.CurrentSurface;
         
         EventInstance instance = RuntimeManager.CreateInstance(GetEvent());
 
