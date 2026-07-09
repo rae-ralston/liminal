@@ -6,7 +6,7 @@ public enum InteractionAudioType
     doorLocked,
     checkDrawer,
     openDrawer,
-    closekDrawer,
+    closetDrawer,
     pressButton,
     pullLever,
     switchLight,
