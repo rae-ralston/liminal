@@ -3,6 +3,8 @@ using FMODUnity;
 [System.Serializable]
 public class PropAudioEntry
 {
-    public PropAudioType type;
-    public EventReference eventReference;
+    public PropType type;
+    public EventReference passiveSound;
+    public EventReference interactionSound;
+
 }

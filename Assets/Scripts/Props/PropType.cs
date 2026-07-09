@@ -1,8 +1,9 @@
-public enum PropAudioType
+public enum PropType
 {
     Computer,
     Hvac,
     vendingMachine,
     serverRack,
-    printer
+    printer,
+    OfficeDoor
 }

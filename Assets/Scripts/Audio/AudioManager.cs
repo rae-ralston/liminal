@@ -11,7 +11,7 @@ using FMOD.Studio;
  *
  * ### EMITTERS on gameObjects
  * How to attach audio event to gameObjects:
- * Add new entry to enum in PropAudioType.cs
+ * Add new entry to enum in PropType.cs
  * Add new 'Prop Audio Entry' to FMODEvents gameObject via inspector. 
  * Choose the new Type from dropdown and if available connect to Event Reference from FMOD in the field below it
  * Add new prefab or gameObject to scene and add component PropAudioEmitter
@@ -90,9 +90,9 @@ public class AudioManager : MonoBehaviour
         return emitter;
     }
 
-    public void CreateEmitterInstance(EventInstance eventInstance, PropAudioType propAudioType, GameObject gameObject)
+    public void CreateEmitterInstance(EventInstance eventInstance, PropType PropType, GameObject gameObject)
     {
-        EventReference eventRef = FMODEvents.instance.GetPropEvent(propAudioType);
+        EventReference eventRef = FMODEvents.instance.GetPropEvent(PropType);
         eventInstance = RuntimeManager.CreateInstance(eventRef);
 
         RuntimeManager.AttachInstanceToGameObject(

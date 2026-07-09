@@ -5,7 +5,7 @@ using UnityEngine;
 public class PropAudioEmitter : MonoBehaviour
 {
     [SerializeField]
-    private PropAudioType propType;
+    private PropType propType;
 
     private StudioEventEmitter emitter;
     private EventInstance instance;

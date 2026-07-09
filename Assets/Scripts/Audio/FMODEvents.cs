@@ -24,7 +24,7 @@ public class FMODEvents : MonoBehaviour
     [field: Header("Prop Audio Emitters")]    
     [SerializeField]
     private List<PropAudioEntry> propAudioEntries;    
-    private Dictionary<PropAudioType, EventReference> propAudioLookup;
+    private Dictionary<PropType, EventReference> propAudioLookup;
 
 
     // horizontal bar in inspector
@@ -59,7 +59,7 @@ public class FMODEvents : MonoBehaviour
 
     private void CreatePropAudioDictionary()
     {
-        propAudioLookup = new Dictionary<PropAudioType, EventReference>();
+        propAudioLookup = new Dictionary<PropType, EventReference>();
 
         foreach (var entry in propAudioEntries)
         {
@@ -77,7 +77,7 @@ public class FMODEvents : MonoBehaviour
         } 
     }
 
-    public EventReference GetPropEvent(PropAudioType type)
+    public EventReference GetPropEvent(PropType type)
     {
         if (propAudioLookup.TryGetValue(type, out EventReference evt))
         {
