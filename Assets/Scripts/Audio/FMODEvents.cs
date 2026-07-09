@@ -49,7 +49,7 @@ public class FMODEvents : MonoBehaviour
     {
         if (instance != null) 
         {
-            Debug.LogError("Found more htan one FMOD Ambience Event instance in the scene.");
+            Debug.LogError("Found more than one FMODEvent instance in the scene.");
         }
         instance = this;    
 

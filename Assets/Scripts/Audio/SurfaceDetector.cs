@@ -4,8 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class SurfaceDetector : MonoBehaviour
-{
-    [SerializeField] private Vector2 feetOffset = new(0f, -0.3f);
+{    
     [SerializeField] private Transform feetTransform;
 
     private readonly List<Tilemap> floorTilemaps = new();
