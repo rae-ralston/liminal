@@ -13,6 +13,12 @@ public class PlayerMovement : MonoBehaviour
   private InputAction interactAction;
   private IInteractable currentInteractable;
 
+  [Header("Turn sound")]
+  [SerializeField] private float turnAngleThreshold = 90f;
+  [SerializeField] private float turnCooldown = 0.25f;
+  private PlayerAudio playerAudio;
+  private float lastTurnTime;
+
   void Start()
   {
     rb = GetComponent<Rigidbody2D>();
@@ -20,13 +26,24 @@ public class PlayerMovement : MonoBehaviour
     animator = GetComponent<Animator>();
     spriteRenderer = GetComponent<SpriteRenderer>();
     interactAction = InputSystem.actions.FindAction("Interact");
+    playerAudio = GetComponent<PlayerAudio>();
   }
 
   void Update()
   {
     Vector2 movement = moveAction.ReadValue<Vector2>();
     if (movement.sqrMagnitude > 0.01f)
-      FacingDirection = movement.normalized;
+    {
+      Vector2 newDirection = movement.normalized;
+      if (playerAudio != null
+          && Vector2.Angle(FacingDirection, newDirection) >= turnAngleThreshold
+          && Time.time - lastTurnTime >= turnCooldown)
+      {
+        playerAudio.PlayTurn();
+        lastTurnTime = Time.time;
+      }
+      FacingDirection = newDirection;
+    }
 
     rb.linearVelocity = movement * moveSpeed;
 

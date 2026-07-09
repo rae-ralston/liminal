@@ -27,9 +27,9 @@ public class PauseMenu : MonoBehaviour
    * If it turns out to be too processing heavy, we can move this call into TogglePause(), 
    * just before calling the snapshot
    */
-  private void StartMenuAudio() 
+  private void StartMenuAudio()
   {
-    menuAudio = RuntimeManager.CreateInstance(FMODMenuEvent);
+    menuAudio = AudioManager.Instance.CreateEventInstance(FMODMenuEvent);
     menuAudio.start();
   }
 
@@ -38,9 +38,9 @@ public class PauseMenu : MonoBehaviour
    * laods a snaptshot of the FMOD audio mixer in which the current game audio (atmo, player sounds) is muted 
    * and pause menu sounds/music are unmuted
    */
-  private void activateSnapshot()
+  private void ActivateSnapshot()
   {
-    menuSnapshot = RuntimeManager.CreateInstance(FMODMenuSnapshot);
+    menuSnapshot = AudioManager.Instance.CreateEventInstance(FMODMenuSnapshot);
     menuSnapshot.start();
   }
 
@@ -60,7 +60,7 @@ public class PauseMenu : MonoBehaviour
       menuPanel.SetActive(true);
       controlsPanel.SetActive(false);
       Time.timeScale = 0f;
-      activateSnapshot(); // call FMOD Snapshot      
+      ActivateSnapshot(); // call FMOD Snapshot      
     }
     else
     {

@@ -180,8 +180,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4597079071590844507}
   - component: {fileID: 4862184161958391692}
-  - component: {fileID: 8625191986892416028}
   - component: {fileID: 8338494399318947600}
+  - component: {fileID: 4190971981382789655}
   m_Layer: 0
   m_Name: DoorTeleporter_toOpenSpace
   m_TagString: Untagged
@@ -250,19 +250,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 2}
   m_EdgeRadius: 0
---- !u!114 &8625191986892416028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5337998457900596886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfa9599d99e796d4f9898354e2ebf612, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionAudioEmitter
-  interactionType: 0
 --- !u!114 &8338494399318947600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,3 +264,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorTeleporter
   targetSceneName: OpenSpace
   targetSpawnId: fromOffice_1
+--- !u!114 &4190971981382789655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5337998457900596886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ce79c7c1ec98c43832d1ddf894f025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropAudio
+  sounds: {fileID: 11400000, guid: 750f4edae7f0a284e8dcb6481b019ae8, type: 2}

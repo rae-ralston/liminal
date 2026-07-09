@@ -2203,40 +2203,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908de6b0be109eb4e8ef3112d83f83ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FMODEvents
-  <footsteps>k__BackingField:
+  <Footsteps>k__BackingField:
     Guid:
       Data1: -1130653439
       Data2: 1170452161
       Data3: 656428164
       Data4: 89312900
     Path: event:/Player/Footsteps/PLAYER_fs_walk
-  propAudioEntries:
-  - type: 0
-    eventReference:
-      Guid:
-        Data1: -1199521506
-        Data2: 1289360529
-        Data3: -633886838
-        Data4: -1854334941
-      Path: event:/Ambience/Emitter/AMB_emit_Computer
-  - type: 1
-    eventReference:
-      Guid:
-        Data1: 440543887
-        Data2: 1113709609
-        Data3: 634433156
-        Data4: 239883877
-      Path: event:/Ambience/Emitter/AMB_emit_Hvac
-  interactionAudioEntries:
-  - type: 0
-    eventReference:
-      Guid:
-        Data1: 1231172456
-        Data2: 1150833894
-        Data3: -1142503247
-        Data4: -1524680213
-      Path: event:/Player/Interact/PLAYER_int_door_close
-  <ambience>k__BackingField:
+  <PlayerTurn>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  <Ambience>k__BackingField:
     Guid:
       Data1: 1078335494
       Data2: 1110678014
@@ -2833,7 +2814,6 @@ GameObject:
   - component: {fileID: 1423616333}
   - component: {fileID: 1423616332}
   - component: {fileID: 1423616337}
-  - component: {fileID: 1423616338}
   - component: {fileID: 1423616340}
   - component: {fileID: 1423616341}
   - component: {fileID: 1423616339}
@@ -2857,6 +2837,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
+  turnAngleThreshold: 90
+  turnCooldown: 0.25
 --- !u!61 &1423616333
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3028,18 +3010,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1423616338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1423616331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3afc6c26497ce64c86fe0b9f0321ad3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationEvents
 --- !u!114 &1423616339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3104,7 +3074,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c8683efc2478c47b3dce71cb9c8320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAudioEmitter
-  playerAudioType: 0
 --- !u!114 &1423616341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3615,6 +3584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50e32f522ba4494bbff809e20fb1168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  musicBusPath: bus:/Music
+  sfxBusPath: bus:/SFX
 --- !u!1 &1860494874
 GameObject:
   m_ObjectHideFlags: 0

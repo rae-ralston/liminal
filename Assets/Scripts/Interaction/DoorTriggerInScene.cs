@@ -9,6 +9,7 @@ public class DoorTriggerInScene : InteractableTrigger
     Vector3 delta = destination.position - player.position;
     player.position = destination.position;
     CinemachineCore.OnTargetObjectWarped(player, delta);
-    GetComponentInParent<InteractionAudioEmitter>().PlayOneShot();
+    PropAudio audio = GetComponentInParent<PropAudio>();
+    if (audio != null) audio.PlayInteract();
   }
 }
