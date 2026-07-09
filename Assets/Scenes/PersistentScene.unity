@@ -2219,11 +2219,11 @@ MonoBehaviour:
     Path: 
   <Ambience>k__BackingField:
     Guid:
-      Data1: 1078335494
-      Data2: 1110678014
-      Data3: -965057362
-      Data4: -2058194817
-    Path: event:/Ambience/Bed/AMB_bed_test
+      Data1: 66790019
+      Data2: 1120352712
+      Data3: -320454484
+      Data4: 1960931474
+    Path: event:/Ambience/Bed/AMB_bed_DarkRoomTone
 --- !u!1 &1051643928
 GameObject:
   m_ObjectHideFlags: 0
@@ -3103,7 +3103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1494594653
 MonoBehaviour:
   m_ObjectHideFlags: 0
