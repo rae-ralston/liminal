@@ -7,7 +7,8 @@ public class DoorTeleporter : InteractableTrigger
 
   public override void Interact()
   {
-    GetComponentInParent<InteractionAudioEmitter>().PlayOneShot();
+    PropAudio audio = GetComponentInParent<PropAudio>();
+    if (audio != null) audio.PlayInteract();
     RoomLoader.Instance.TeleportTo(targetSceneName, targetSpawnId);
   }
 }

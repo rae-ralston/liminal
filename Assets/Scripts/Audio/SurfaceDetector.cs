@@ -4,7 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class SurfaceDetector : MonoBehaviour
-{    
+{
+    // scenes that intentionally have no floor tilemaps (e.g. the persistent
+    // scene, which only holds managers) - don't warn about those
+    private const string PersistentSceneName = "PersistentScene";
+
     [SerializeField] private Transform feetTransform;
 
     private readonly List<Tilemap> floorTilemaps = new();
@@ -41,8 +45,13 @@ public class SurfaceDetector : MonoBehaviour
         {
             foreach (FloorTilemapGroup group in root.GetComponentsInChildren<FloorTilemapGroup>(true))
             {
-                floorTilemaps.AddRange(group.GetComponentsInChildren<Tilemap>(true));
+                floorTilemaps.AddRange(group.GetTilemaps());
             }
+        }
+
+        if (floorTilemaps.Count == 0 && scene.name != PersistentSceneName)
+        {
+            Debug.LogWarning($"No FloorTilemapGroup with Tilemaps found in scene '{scene.name}' - footsteps fall back to {SurfaceType.concrete}.");
         }
     }
 
