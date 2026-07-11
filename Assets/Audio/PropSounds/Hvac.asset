@@ -18,7 +18,7 @@ MonoBehaviour:
       Data2: 1113709609
       Data3: 634433156
       Data4: 239883877
-    Path: event:/Ambience/Emitter/AMB_emit_Hvac
+    Path: event:/Props/Ambience/PROP_amb_Hvac
   interact:
     Guid:
       Data1: 0

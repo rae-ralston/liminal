@@ -18,7 +18,7 @@ MonoBehaviour:
       Data2: 1289360529
       Data3: -633886838
       Data4: -1854334941
-    Path: event:/Ambience/Emitter/AMB_emit_Computer
+    Path: event:/Props/Ambience/PROP_amb_Computer
   interact:
     Guid:
       Data1: -1488398329
