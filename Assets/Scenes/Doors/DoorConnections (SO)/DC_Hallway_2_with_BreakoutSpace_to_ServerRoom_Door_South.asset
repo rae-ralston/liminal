@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4867072b3dce04ba1f69c9256020d2, type: 3}
   m_Name: DC_Hallway_2_with_BreakoutSpace_to_ServerRoom_Door_South
   m_EditorClassIdentifier: Assembly-CSharp::DoorConnection
-  endpointA: {fileID: 11400000, guid: 1bfeee3163d21c34688abcfe6449845c, type: 2}
+  endpointA: {fileID: 11400000, guid: 4d17e19b714df994b9c073e54c5eb06c, type: 2}
   endpointB: {fileID: 11400000, guid: 2529f4f3ba075014b885bddb8bdba06a, type: 2}
   startsLocked: 0
   unlockId: 

@@ -165,11 +165,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 45.7996
+      value: 45.428
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.193
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -219,6 +219,14 @@ PrefabInstance:
       propertyPath: id
       value: fromOffice_4
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 34525d064d2afb844b7eaa947c57ae50, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 7873c03f5229b4a4a93aba82e748b591, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_4
@@ -16478,7 +16486,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 980683536}
+    m_Mesh: {fileID: 410227416}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -22562,121 +22570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9075591b4d3cb824789ae96272ca1924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorTilemapGroup
---- !u!1001 &854026056
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 963219707}
-    m_Modifications:
-    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: targetSceneName
-      value: Office_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 28.799599
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.7950401
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3843938217148095831, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: SpawnPoint_fromOffice_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6133700687670556024, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: Office_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: id
-      value: fromOffice_3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-      propertyPath: m_Name
-      value: DoorTeleporter_toOffice_3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
---- !u!4 &854026057 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
-  m_PrefabInstance: {fileID: 854026056}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &963219706
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 963219707}
-  m_Layer: 0
-  m_Name: NorthernDoors
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &963219707
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963219706}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -64.3396, y: -3.7950401, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1727645751}
-  - {fileID: 1310519461}
-  - {fileID: 854026057}
-  - {fileID: 109639240}
-  - {fileID: 2542496780121213656}
-  m_Father: {fileID: 74899215}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &980683536
+--- !u!43 &410227416
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22854,6 +22748,128 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1001 &854026056
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 963219707}
+    m_Modifications:
+    - target: {fileID: 1519177189994093100, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: targetSceneName
+      value: Office_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 28.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843938217148095831, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: SpawnPoint_fromOffice_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6133700687670556024, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: Office_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: fromOffice_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 6109cf3778510bf4b8ce096b1c7dbdd3, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: c674d7f7f8ef4354c922c4171658e88d, type: 2}
+    - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: m_Name
+      value: DoorTeleporter_toOffice_3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+--- !u!4 &854026057 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+  m_PrefabInstance: {fileID: 854026056}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &963219706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 963219707}
+  m_Layer: 0
+  m_Name: NorthernDoors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &963219707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963219706}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -64.3396, y: -3.7950401, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1727645751}
+  - {fileID: 1310519461}
+  - {fileID: 854026057}
+  - {fileID: 109639240}
+  - {fileID: 2542496780121213656}
+  m_Father: {fileID: 74899215}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &981684999
 GameObject:
   m_ObjectHideFlags: 0
@@ -22914,11 +22930,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22.200401
+      value: -22.57
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.2
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22964,6 +22980,14 @@ PrefabInstance:
       propertyPath: id
       value: fromOffice_2
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e195f221efa3b3468f4ad97a1648b16, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 731d629e94f0ac744a346ae5f06899b3, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_2
@@ -23103,11 +23127,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.2896004
+      value: 2.93
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15.79504
+      value: 16.19
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23145,6 +23169,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6320200252469040019, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: da12a1b1891fca7439905cbada71681d, type: 2}
+    - target: {fileID: 6320200252469040019, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 1256bc8507acda14a80bfc2936c0fca6, type: 2}
     - target: {fileID: 7011842796644608666, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_Name
       value: Hallway_1

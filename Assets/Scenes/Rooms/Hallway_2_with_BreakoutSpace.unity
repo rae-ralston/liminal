@@ -162,11 +162,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -212,6 +212,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_7
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value:
+      objectReference: {fileID: 11400000, guid: e30735ee58f0bc34abbaf1cc9946f544, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value:
+      objectReference: {fileID: 11400000, guid: 8350f8f098afeb14593e376b12b42531, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromOffice_7
@@ -244,11 +252,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 67
+      value: 68
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.016906738
+      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.z
@@ -290,6 +298,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint_fromAssemblyHall_Door_Right
       objectReference: {fileID: 0}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: bad0a00276718854b8afff763a33be00, type: 2}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 17a7eb5c3189ec149b205befb94001fb, type: 2}
     - target: {fileID: 5787194654530344331, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toAssemblyHall_Door_Right
@@ -386,7 +402,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 617403793}
+    m_Mesh: {fileID: 1196307692}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -1430,11 +1446,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 55
+      value: 54.62
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.01
+      value: 22.4
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1480,6 +1496,14 @@ PrefabInstance:
       propertyPath: id
       value: fromConferenceRoom_B_Door_Right
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 70843cb8daf653141b7411eb5616cb65, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b1a4aa532f3ed24d91aae4c3d4bd242, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toConferenceRoom_B_Door_Right
@@ -1504,11 +1528,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 79.01
+      value: 78.51
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1554,6 +1578,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_8
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 65a4bcf78685211428c7c40bc9f47a24, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 42776f5b0cfb98249a5f84ad88069911, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromOffice_8
@@ -1616,184 +1648,6 @@ Transform:
   - {fileID: 344173998}
   m_Father: {fileID: 543333917}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &448923640
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 12
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 0
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 0
-    _typelessdata: 
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
-  m_MeshLodInfo:
-    serializedVersion: 2
-    m_LodSelectionCurve:
-      serializedVersion: 1
-      m_LodSlope: 0
-      m_LodBias: 0
-    m_NumLevels: 1
-    m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
 --- !u!1001 &487778265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1804,11 +1658,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.009138
+      value: 19.509138
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.01
+      value: 16.39
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1854,6 +1708,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toSecurityRoom_Door_North
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 91e88d35332e1594b96acbc9474ba0bc, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 440ab9f539aba654196916557e1f7b22, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromSecurityRoom_Door_North
@@ -1951,7 +1813,7 @@ Transform:
   - {fileID: 1435502545851445328}
   m_Father: {fileID: 543333917}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &617403793
+--- !u!43 &603626521
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5408,7 +5270,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 448923640}
+    m_Mesh: {fileID: 603626521}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -17068,11 +16930,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 82
+      value: 81.619995
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.01
+      value: 22.4
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17118,6 +16980,14 @@ PrefabInstance:
       propertyPath: id
       value: fromConferenceRoom_C_Door_Right
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 463047f9a95bdf64dba41b5b9c6a9e00, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 31484db1ca39d97488b24f0dff33ce71, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toConferenceRoom_C_Door_Right
@@ -17181,11 +17051,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18
+      value: 17.625
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.402
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17231,6 +17101,14 @@ PrefabInstance:
       propertyPath: id
       value: fromSecurityRoom_Door_South
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 1bfeee3163d21c34688abcfe6449845c, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 0022f651325259c41bd49a086e742f40, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toSecurityRoom_Door_South
@@ -17310,11 +17188,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11
+      value: -11.38
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.01
+      value: 17.42
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17360,6 +17238,14 @@ PrefabInstance:
       propertyPath: id
       value: fromCafeteria_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 0fcf573210b0a9544b4a96c77b83999d, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: cb2615fe2689510479c7b45bca92398c, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toCafeteria_Door_Left
@@ -17374,6 +17260,184 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
   m_PrefabInstance: {fileID: 1156985872}
   m_PrefabAsset: {fileID: 0}
+--- !u!43 &1196307692
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 0
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 0
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 0
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 0
+    _typelessdata: 
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
 --- !u!1 &1396322081
 GameObject:
   m_ObjectHideFlags: 0
@@ -19662,11 +19726,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26
+      value: 25.63
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24
+      value: 24.403
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19712,6 +19776,14 @@ PrefabInstance:
       propertyPath: id
       value: fromRestroom_A
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 12445117ffdedd94880c8d77970df226, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: c884d20bb8b5d9e47b733c7223776afa, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toRestRoom_A
@@ -19736,11 +19808,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 85
+      value: 84.5
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22
+      value: 21.4
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19786,6 +19858,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toJanitorCloset
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: dd00205335b613547b16a28522ebb19c, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: a0615dd4dc145d243a10056334621110, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromJanitorCloset
@@ -19826,11 +19906,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 38
+      value: 37.62
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.01
+      value: 22.4
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19876,6 +19956,14 @@ PrefabInstance:
       propertyPath: id
       value: fromConferenceRoom_B_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value:
+      objectReference: {fileID: 11400000, guid: ed767152e6353064c8fee32d9b77e147, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value:
+      objectReference: {fileID: 11400000, guid: 68daee03dc39bfa4da3ef7131aec72cc, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toConferenceRoom_B_Door_Left
@@ -19908,11 +19996,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 65
+      value: 64.619995
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.01
+      value: 22.4
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -19958,6 +20046,14 @@ PrefabInstance:
       propertyPath: id
       value: fromConferenceRoom_C_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: a99e4a9187e2ebf4294cf9269e0fb84e, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: a78858bd28345954f9004400ca823ec9, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toConferenceRoom_C_Door_Left
@@ -19990,11 +20086,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 61
+      value: 60.626
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.405
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20040,6 +20136,14 @@ PrefabInstance:
       propertyPath: id
       value: fromServerRoom_Door_South
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d17e19b714df994b9c073e54c5eb06c, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 07165a23dab79d24c8be22dea4021eb3, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toServerRoom_Door_South
@@ -20097,11 +20201,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.01
+      value: 1.51
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.01
+      value: 16.41
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20147,6 +20251,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toBreakRoom_Door_North
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 98445037fdcde3342a69403bae7add62, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 151cb29e7602b8f45afcb2c92055b174, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromBreakRoom_Door_North
@@ -20179,11 +20291,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 63
+      value: 62.5
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22
+      value: 21.39
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20229,6 +20341,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toServerRoom_Door_North
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ba45f30bcfccf64b8fde1ea964df8f4, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 1f4fe92dc948fe04aab4d698a800b52e, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromServerRoom_Door_North
@@ -20269,11 +20389,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.37
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.41
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20319,6 +20439,14 @@ PrefabInstance:
       propertyPath: id
       value: fromBreakRoom_Door_South
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e69a2b8d3fc17b418136551d85169b1, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 91621783bd3b95f4796fbe3d828e0c6d, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toBreakRoom_Door_South
@@ -20351,11 +20479,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30
+      value: 29.629997
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24
+      value: 24.403
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -20401,6 +20529,14 @@ PrefabInstance:
       propertyPath: id
       value: fromRestroom_B
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: bf127963b7e08b247b824e95d8018581, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: df1c70cf20b3ad84aac84d84932617bc, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toRestRoom_B
@@ -34467,11 +34603,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 37.01
+      value: 36.51
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.597
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -34517,6 +34653,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toAssemblyHall_Stage
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b5da1ade95ab2a44a9f1d49c1f80998, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: bfa99924ac3deb34f92530f227491f12, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromAssemblyHall_Stage
@@ -34549,11 +34693,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2903424998812872114, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.956169
+      value: 15.628
       objectReference: {fileID: 0}
     - target: {fileID: 2903424998812872114, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.01
+      value: 17.41
       objectReference: {fileID: 0}
     - target: {fileID: 2903424998812872114, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
       propertyPath: m_LocalPosition.z
@@ -34587,6 +34731,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6226700299401098960, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 307564f9a2785214998e4a443507c911, type: 2}
+    - target: {fileID: 6226700299401098960, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 84377099502e0be4499fcf07cee1e5b0, type: 2}
     - target: {fileID: 6959015344236957657, guid: aa9b3bcec26014b46aefe475bf7ad993, type: 3}
       propertyPath: m_Name
       value: Cafeteria_Door_Right
@@ -34611,11 +34763,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.013859
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.016906738
+      value: -0.59
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.z
@@ -34653,6 +34805,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: AssemblyHall_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 4d19b665bdb3a4344a4bc02a8bda08ce, type: 2}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: f22f42787f67f3644a6603a543fcc9aa, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,0 +1,366 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+// Opens every scene under RoomSceneFolder, inspects every Door component, and
+// cross-checks it against every DoorId / DoorConnection asset in the project.
+// Mirrors the manual audit used to find and fix the door-wiring bugs on the
+// Prop-implementation branch: missing ids/connections, DoorId.sceneName not
+// matching the scene the door lives in, a door's id not being an endpoint of
+// its own connection, DoorIds used more than once (or never), and
+// DoorConnections that are one-sided, over-referenced, self-looping, missing
+// an endpoint, or duplicated (two assets sharing the same endpoint pair).
+public class DoorConsistencyWindow : EditorWindow
+{
+  private const string RoomSceneFolder = "Assets/Scenes/Rooms";
+
+  private enum Severity { Warning, Error }
+
+  private class Issue
+  {
+    public Severity severity;
+    public string message;
+    public string assetGuid;
+    public string scenePath;
+    public string hierarchyPath;
+  }
+
+  // Only GUIDs/strings survive here, never DoorId/DoorConnection object references:
+  // opening the next scene (OpenSceneMode.Single) can trigger an implicit
+  // Resources.UnloadUnusedAssets pass, and a plain C# reference in a collection
+  // does not root a ScriptableObject asset against that sweep. Holding the
+  // Object itself here previously caused a MissingReferenceException as soon as
+  // a later scene load unloaded it out from under us.
+  private class DoorInstance
+  {
+    public string scenePath;
+    public string sceneName;
+    public string hierarchyPath;
+    public string idGuid;
+    public string connectionGuid;
+  }
+
+  private Vector2 scroll;
+  private List<Issue> issues = new List<Issue>();
+  private int doorCount;
+  private int sceneCount;
+  private bool hasRun;
+
+  [MenuItem("Tools/Doors/Door Consistency Checker")]
+  private static void Open()
+  {
+    GetWindow<DoorConsistencyWindow>("Door Consistency");
+  }
+
+  private void OnGUI()
+  {
+    EditorGUILayout.HelpBox(
+      $"Opens every scene in {RoomSceneFolder}, inspects every Door component, and cross-checks it against " +
+      "every DoorId / DoorConnection asset in the project. This will open scenes one at a time (offering to " +
+      "save any unsaved changes first) and restores whatever you had open when it's done.",
+      MessageType.Info);
+
+    using (new EditorGUI.DisabledScope(EditorApplication.isPlaying))
+    {
+      if (GUILayout.Button("Run Check", GUILayout.Height(30)))
+        RunCheck();
+    }
+
+    if (EditorApplication.isPlaying)
+      EditorGUILayout.HelpBox("Exit Play Mode to run the check (it needs to open scenes).", MessageType.Warning);
+
+    if (!hasRun)
+      return;
+
+    EditorGUILayout.Space();
+    int errorCount = issues.Count(i => i.severity == Severity.Error);
+    int warningCount = issues.Count(i => i.severity == Severity.Warning);
+
+    if (issues.Count == 0)
+    {
+      EditorGUILayout.HelpBox(
+        $"All clear. {doorCount} door instance(s) across {sceneCount} scene(s), no problems found.",
+        MessageType.Info);
+      return;
+    }
+
+    EditorGUILayout.LabelField(
+      $"{doorCount} door instance(s) across {sceneCount} scene(s)  —  {errorCount} error(s), {warningCount} warning(s)",
+      EditorStyles.boldLabel);
+    EditorGUILayout.Space();
+
+    scroll = EditorGUILayout.BeginScrollView(scroll);
+    foreach (Issue issue in issues.OrderByDescending(i => i.severity))
+    {
+      EditorGUILayout.BeginVertical("box");
+
+      GUIStyle style = new GUIStyle(EditorStyles.wordWrappedLabel);
+      style.normal.textColor = issue.severity == Severity.Error
+        ? new Color(0.95f, 0.35f, 0.35f)
+        : new Color(0.85f, 0.65f, 0.15f);
+      EditorGUILayout.LabelField((issue.severity == Severity.Error ? "ERROR  " : "WARNING  ") + issue.message, style);
+
+      if (!string.IsNullOrEmpty(issue.assetGuid) || !string.IsNullOrEmpty(issue.scenePath))
+      {
+        EditorGUILayout.BeginHorizontal();
+        if (!string.IsNullOrEmpty(issue.assetGuid) && GUILayout.Button("Ping Asset", GUILayout.Width(90)))
+          PingAsset(issue.assetGuid);
+        if (!string.IsNullOrEmpty(issue.scenePath) && GUILayout.Button("Open & Select", GUILayout.Width(110)))
+          OpenAndSelect(issue.scenePath, issue.hierarchyPath);
+        EditorGUILayout.EndHorizontal();
+      }
+
+      EditorGUILayout.EndVertical();
+    }
+    EditorGUILayout.EndScrollView();
+  }
+
+  private static void PingAsset(string guid)
+  {
+    string path = AssetDatabase.GUIDToAssetPath(guid);
+    if (string.IsNullOrEmpty(path)) return;
+    Object obj = AssetDatabase.LoadAssetAtPath<Object>(path);
+    if (obj == null) return;
+    Selection.activeObject = obj;
+    EditorGUIUtility.PingObject(obj);
+  }
+
+  private static void OpenAndSelect(string scenePath, string hierarchyPath)
+  {
+    if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+      return;
+
+    Scene scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+    GameObject go = FindByHierarchyPath(scene, hierarchyPath);
+    if (go == null) return;
+    Selection.activeGameObject = go;
+    EditorGUIUtility.PingObject(go);
+  }
+
+  private void RunCheck()
+  {
+    if (EditorApplication.isPlaying)
+    {
+      Debug.LogError("[DoorConsistencyChecker] Cannot run while in Play Mode.");
+      return;
+    }
+
+    if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+      return;
+
+    issues = new List<Issue>();
+    doorCount = 0;
+
+    // Just the GUIDs for now (see DoorInstance comment) - resolved to live
+    // objects only after every scene load is done, further down.
+    HashSet<string> allDoorIdGuids = new HashSet<string>(AssetDatabase.FindAssets("t:DoorId"));
+    HashSet<string> allConnectionGuids = new HashSet<string>(AssetDatabase.FindAssets("t:DoorConnection"));
+
+    Dictionary<string, List<DoorInstance>> doorIdUsage = new Dictionary<string, List<DoorInstance>>();
+    Dictionary<string, List<DoorInstance>> connectionUsage = new Dictionary<string, List<DoorInstance>>();
+
+    string[] scenePaths = AssetDatabase.FindAssets("t:Scene", new[] { RoomSceneFolder })
+      .Select(AssetDatabase.GUIDToAssetPath)
+      .OrderBy(p => p)
+      .ToArray();
+    sceneCount = scenePaths.Length;
+
+    SceneSetup[] originalSetup = EditorSceneManager.GetSceneManagerSetup();
+
+    foreach (string scenePath in scenePaths)
+    {
+      string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+      Scene scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+
+      Door[] doors = Resources.FindObjectsOfTypeAll<Door>()
+        .Where(d => d.gameObject.scene == scene)
+        .ToArray();
+
+      foreach (Door door in doors)
+      {
+        doorCount++;
+        DoorId id = door.Id;
+        DoorConnection connection = door.Connection;
+        string hierarchyPath = GetHierarchyPath(door.transform);
+        var instance = new DoorInstance
+        {
+          scenePath = scenePath,
+          sceneName = sceneName,
+          hierarchyPath = hierarchyPath,
+          idGuid = id != null ? GetGuid(id) : null,
+          connectionGuid = connection != null ? GetGuid(connection) : null,
+        };
+
+        string tag = $"{sceneName} :: {hierarchyPath}";
+
+        if (id == null)
+        {
+          AddIssue(Severity.Error, $"{tag} has no DoorId assigned.", scenePath: scenePath, hierarchyPath: hierarchyPath);
+        }
+        else
+        {
+          if (!doorIdUsage.TryGetValue(instance.idGuid, out List<DoorInstance> idUses))
+            doorIdUsage[instance.idGuid] = idUses = new List<DoorInstance>();
+          idUses.Add(instance);
+
+          if (id.SceneName != sceneName)
+          {
+            AddIssue(Severity.Error,
+              $"{tag}: DoorId '{id.name}' declares sceneName='{id.SceneName}' but is placed in scene '{sceneName}'.",
+              assetGuid: instance.idGuid, scenePath: scenePath, hierarchyPath: hierarchyPath);
+          }
+        }
+
+        if (connection == null)
+        {
+          AddIssue(Severity.Error, $"{tag} has no DoorConnection assigned.", scenePath: scenePath, hierarchyPath: hierarchyPath);
+        }
+        else
+        {
+          if (!connectionUsage.TryGetValue(instance.connectionGuid, out List<DoorInstance> connUses))
+            connectionUsage[instance.connectionGuid] = connUses = new List<DoorInstance>();
+          connUses.Add(instance);
+
+          if (id != null && id != connection.EndpointA && id != connection.EndpointB)
+          {
+            AddIssue(Severity.Error,
+              $"{tag}: DoorId '{id.name}' is not an endpoint of connection '{connection.name}' " +
+              $"(endpoints: {NameOf(connection.EndpointA)} / {NameOf(connection.EndpointB)}).",
+              assetGuid: instance.connectionGuid, scenePath: scenePath, hierarchyPath: hierarchyPath);
+          }
+        }
+      }
+    }
+
+    bool restored = false;
+    if (originalSetup != null && originalSetup.Length > 0 && originalSetup.All(s => !string.IsNullOrEmpty(s.path)))
+    {
+      EditorSceneManager.RestoreSceneManagerSetup(originalSetup);
+      restored = true;
+    }
+    if (!restored)
+      Debug.LogWarning("[DoorConsistencyChecker] Could not restore your previous scene setup (it had an untitled/unsaved scene) — reopen it manually.");
+
+    // Resolve fresh live objects now that scene loading is finished - safe to
+    // hold onto them for the rest of this pass since no more scenes will load.
+    Dictionary<string, DoorId> doorIdsByGuid = LoadAssets<DoorId>(allDoorIdGuids);
+    Dictionary<string, DoorConnection> connectionsByGuid = LoadAssets<DoorConnection>(allConnectionGuids);
+
+    foreach (KeyValuePair<string, DoorId> kv in doorIdsByGuid)
+    {
+      string guid = kv.Key;
+      DoorId doorId = kv.Value;
+      doorIdUsage.TryGetValue(guid, out List<DoorInstance> uses);
+      int count = uses?.Count ?? 0;
+      if (count == 0)
+        AddIssue(Severity.Warning, $"DoorId '{doorId.name}' (sceneName={doorId.SceneName}) is not assigned to any door in any scene.", assetGuid: guid);
+      else if (count > 1)
+        AddIssue(Severity.Error, $"DoorId '{doorId.name}' is assigned to {count} doors ({string.Join(", ", uses.Select(u => u.sceneName))}).", assetGuid: guid);
+    }
+
+    Dictionary<(string, string), List<string>> pairMap = new Dictionary<(string, string), List<string>>();
+    foreach (KeyValuePair<string, DoorConnection> kv in connectionsByGuid)
+    {
+      string guid = kv.Key;
+      DoorConnection conn = kv.Value;
+      string aName = NameOf(conn.EndpointA);
+      string bName = NameOf(conn.EndpointB);
+
+      if (conn.EndpointA == null || conn.EndpointB == null)
+      {
+        AddIssue(Severity.Error, $"DoorConnection '{conn.name}' is missing an endpoint (A={aName}, B={bName}).", assetGuid: guid);
+      }
+      else
+      {
+        if (conn.EndpointA == conn.EndpointB)
+          AddIssue(Severity.Error, $"DoorConnection '{conn.name}' has endpointA == endpointB ({aName}).", assetGuid: guid);
+
+        string keyA = GetGuid(conn.EndpointA);
+        string keyB = GetGuid(conn.EndpointB);
+        (string, string) pairKey = string.CompareOrdinal(keyA, keyB) <= 0 ? (keyA, keyB) : (keyB, keyA);
+        if (!pairMap.TryGetValue(pairKey, out List<string> names))
+          pairMap[pairKey] = names = new List<string>();
+        names.Add(conn.name);
+      }
+
+      connectionUsage.TryGetValue(guid, out List<DoorInstance> connUses);
+      int useCount = connUses?.Count ?? 0;
+      if (useCount == 0)
+      {
+        AddIssue(Severity.Warning, $"DoorConnection '{conn.name}' ({aName} <-> {bName}) is not referenced by any door instance.", assetGuid: guid);
+      }
+      else if (useCount == 1)
+      {
+        AddIssue(Severity.Warning,
+          $"DoorConnection '{conn.name}' ({aName} <-> {bName}) is only referenced by ONE door instance ({connUses[0].sceneName}).",
+          assetGuid: guid, scenePath: connUses[0].scenePath, hierarchyPath: connUses[0].hierarchyPath);
+      }
+      else if (useCount > 2)
+      {
+        AddIssue(Severity.Error,
+          $"DoorConnection '{conn.name}' is referenced by {useCount} door instances ({string.Join(", ", connUses.Select(u => u.sceneName))}).",
+          assetGuid: guid);
+      }
+    }
+
+    foreach (KeyValuePair<(string, string), List<string>> kv in pairMap)
+    {
+      if (kv.Value.Count > 1)
+        AddIssue(Severity.Error, $"Duplicate DoorConnections share the same endpoint pair: {string.Join(", ", kv.Value)}.");
+    }
+
+    hasRun = true;
+    Debug.Log($"[DoorConsistencyChecker] Checked {doorCount} door instances across {sceneCount} scenes: {issues.Count} problem(s) found.");
+    Repaint();
+  }
+
+  private void AddIssue(Severity severity, string message, string assetGuid = null, string scenePath = null, string hierarchyPath = null)
+  {
+    issues.Add(new Issue { severity = severity, message = message, assetGuid = assetGuid, scenePath = scenePath, hierarchyPath = hierarchyPath });
+  }
+
+  private static string NameOf(DoorId id) => id != null ? id.name : "<null>";
+
+  private static string GetGuid(Object asset)
+  {
+    return AssetDatabase.TryGetGUIDAndLocalFileIdentifier(asset, out string guid, out long _) ? guid : null;
+  }
+
+  private static Dictionary<string, T> LoadAssets<T>(IEnumerable<string> guids) where T : Object
+  {
+    var result = new Dictionary<string, T>();
+    foreach (string guid in guids)
+    {
+      string path = AssetDatabase.GUIDToAssetPath(guid);
+      T asset = AssetDatabase.LoadAssetAtPath<T>(path);
+      if (asset != null) result[guid] = asset;
+    }
+    return result;
+  }
+
+  private static string GetHierarchyPath(Transform t)
+  {
+    StringBuilder sb = new StringBuilder(t.name);
+    while (t.parent != null)
+    {
+      t = t.parent;
+      sb.Insert(0, t.name + "/");
+    }
+    return sb.ToString();
+  }
+
+  private static GameObject FindByHierarchyPath(Scene scene, string hierarchyPath)
+  {
+    if (string.IsNullOrEmpty(hierarchyPath)) return null;
+    string[] parts = hierarchyPath.Split('/');
+    Transform current = scene.GetRootGameObjects().FirstOrDefault(r => r.name == parts[0])?.transform;
+    for (int i = 1; current != null && i < parts.Length; i++)
+      current = current.Find(parts[i]);
+    return current != null ? current.gameObject : null;
+  }
+}

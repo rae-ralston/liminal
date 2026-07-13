@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9166645312692847835}
   - component: {fileID: 6367782490958320054}
   - component: {fileID: 6761465659180650005}
+  - component: {fileID: 3076717905237411725}
   m_Layer: 0
   m_Name: SouthernDoor_1_Door
   m_TagString: Untagged
@@ -83,12 +84,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -207624378, guid: 107f80ec9b754426e94047c40f88e660, type: 3}
+  m_Sprite: {fileID: -524216315, guid: 3530af39d6be84445b87e8cc8e203c30, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 1.9, y: 3.9}
+  m_Size: {x: 1.9, y: 3.55}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 1
   m_WasSpriteAssigned: 1
@@ -127,17 +128,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0014784932, y: -0.0029857159}
+  m_Offset: {x: 0.0014784932, y: 0.020786643}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 1.9, y: 3.9}
+    newSize: {x: 1.9, y: 3.55}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
     adaptiveTiling: 1
   m_AutoTiling: 0
-  m_Size: {x: 1.9264601, y: 3.9106255}
+  m_Size: {x: 1.9264601, y: 3.6176279}
   m_EdgeRadius: 0
 --- !u!114 &6761465659180650005
 MonoBehaviour:
@@ -153,7 +154,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Door
   id: {fileID: 0}
   connection: {fileID: 0}
-  spawnOffset: {x: 0, y: -1.5}
+  spawnOffset: {x: 0, y: 0.6}
   spawnFacing: 0
-  width: 1.9
-  height: 3.9
+--- !u!114 &3076717905237411725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424759823621894801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ce79c7c1ec98c43832d1ddf894f025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropAudio
+  sounds: {fileID: 11400000, guid: 750f4edae7f0a284e8dcb6481b019ae8, type: 2}

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5361728688472815502}
   - component: {fileID: 9212626279728319189}
   - component: {fileID: 7198306073509252209}
+  - component: {fileID: -6605730752529913820}
   m_Layer: 0
   m_Name: NorthernDoor_1_Door
   m_TagString: Untagged
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -207624378, guid: 107f80ec9b754426e94047c40f88e660, type: 3}
+  m_Sprite: {fileID: -524216315, guid: 3530af39d6be84445b87e8cc8e203c30, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -155,5 +156,16 @@ MonoBehaviour:
   connection: {fileID: 0}
   spawnOffset: {x: 0, y: -1.5}
   spawnFacing: 0
-  width: 1.9
-  height: 3.9
+--- !u!114 &-6605730752529913820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6133700687670556024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6ce79c7c1ec98c43832d1ddf894f025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropAudio
+  sounds: {fileID: 11400000, guid: 750f4edae7f0a284e8dcb6481b019ae8, type: 2}

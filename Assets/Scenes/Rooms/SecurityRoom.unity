@@ -1643,6 +1643,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hallway_2_with_BreakoutSpace_Door_North
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value:
+      objectReference: {fileID: 11400000, guid: 294648cf7c2a3f04892d869cf07d0057, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value:
+      objectReference: {fileID: 11400000, guid: 440ab9f539aba654196916557e1f7b22, type: 2}
     - target: {fileID: 6441974350037815380, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: id
       value: fromHallway_2_with_BreakoutSpace_Door_North
@@ -3007,6 +3015,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hallway_2_with_BreakoutSpace_Door_South
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value:
+      objectReference: {fileID: 11400000, guid: b4bec3a209e462846a1f15c674dfbe71, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value:
+      objectReference: {fileID: 11400000, guid: 0022f651325259c41bd49a086e742f40, type: 2}
     - target: {fileID: 5337998457900596886, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_South

@@ -28,13 +28,17 @@ public class Door : InteractableTrigger
   [Tooltip("Z rotation (degrees) the player faces on arrival.")]
   [SerializeField] float spawnFacing;
 
+/*
   [Header("Appearance")]
   [Tooltip("Door width in world units. The SpriteRenderer must be in Tiled draw mode; this drives its size so one object covers single/double/wider doors.")]
   [SerializeField] float width = 1.5f;
   [Tooltip("Door height in world units.")]
   [SerializeField] float height = 3f;
+  */
 
   public DoorId Id => id;
+
+  public DoorConnection Connection => connection;
 
   public Vector3 SpawnPosition => transform.position + (Vector3)spawnOffset;
 
@@ -42,12 +46,14 @@ public class Door : InteractableTrigger
 
   void OnValidate()
   {
+    /*
     // keep the tiled sprite matching the authored width/height in-editor
     SpriteRenderer sr = GetComponent<SpriteRenderer>();
     if (sr != null && sr.drawMode != SpriteDrawMode.Simple)
     {
       sr.size = new Vector2(width, height);
     }
+    */
   }
 
   public override void Interact()

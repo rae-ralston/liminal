@@ -137,11 +137,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.46
+      value: 6.09
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.01
+      value: -8.61
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -187,6 +187,14 @@ PrefabInstance:
       propertyPath: id
       value: fromBackAlley
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 9e210469fe34d8548b1d357af362ee00, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 19ec2c5b755ed324bbb2730c417b3ffc, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toBackAlley
@@ -7166,11 +7174,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.41
+      value: -9.41
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.07
+      value: -11.691
       objectReference: {fileID: 0}
     - target: {fileID: 1294431608976533913, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7212,6 +7220,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint_fromCafeteria
       objectReference: {fileID: 0}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 9fef139d4c5f84a4e81d23abbe56c1d6, type: 2}
+    - target: {fileID: 5157134503627089160, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: b2d2967a6c2fea34d8a05cfc49de4fbf, type: 2}
     - target: {fileID: 5787194654530344331, guid: 0d9bc234f7c2ac64bb49ea55eba38c35, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toCafeteria
