@@ -5694,184 +5694,6 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!43 &425411731
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 12
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 0
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 0
-    localAABB:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 0
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 0
-    _typelessdata: 
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
-  m_MeshLodInfo:
-    serializedVersion: 2
-    m_LodSelectionCurve:
-      serializedVersion: 1
-      m_LodSlope: 0
-      m_LodBias: 0
-    m_NumLevels: 1
-    m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
 --- !u!1001 &495213243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5882,11 +5704,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.412682
+      value: -23.912682
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.088242
+      value: -11.69
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5932,6 +5754,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: cff2a6b41950ef94797a73470970292a, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 68daee03dc39bfa4da3ef7131aec72cc, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromHallway_2_with_BreakoutSpace_Door_Left
@@ -6089,7 +5919,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 425411731}
+    m_Mesh: {fileID: 1052997360}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -8286,6 +8116,184 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9075591b4d3cb824789ae96272ca1924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorTilemapGroup
+--- !u!43 &1052997360
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 0
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 0
+    localAABB:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 0
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 0
+    _typelessdata: 
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
 --- !u!1 &1396322081
 GameObject:
   m_ObjectHideFlags: 0
@@ -8400,16 +8408,6 @@ Tilemap:
       m_TileIndex: 18
       m_TileSpriteIndex: 18
       m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
-  - first: {x: -5, y: -8, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 14
-      m_TileSpriteIndex: 14
-      m_TileMatrixIndex: 1
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -8574,16 +8572,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: 12, y: -8, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 14
-      m_TileSpriteIndex: 14
-      m_TileMatrixIndex: 1
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 13, y: -8, z: 0}
     second:
       serializedVersion: 2
@@ -8709,7 +8697,7 @@ Tilemap:
     m_RefCount: 0
     m_Data: {fileID: 11400000, guid: 79e9b8012c71d48ee95a011f6b5e26c2, type: 2}
   - serializedVersion: 2
-    m_RefCount: 24
+    m_RefCount: 22
     m_Data: {fileID: 11400000, guid: 89c7eb5fe58ef46ea939eb2b6c106dd5, type: 2}
   - serializedVersion: 2
     m_RefCount: 0
@@ -8767,7 +8755,7 @@ Tilemap:
     m_RefCount: 0
     m_Data: {fileID: 1693465328, guid: 107f80ec9b754426e94047c40f88e660, type: 3}
   - serializedVersion: 2
-    m_RefCount: 24
+    m_RefCount: 22
     m_Data: {fileID: -1905993233, guid: 107f80ec9b754426e94047c40f88e660, type: 3}
   - serializedVersion: 2
     m_RefCount: 0
@@ -8802,7 +8790,7 @@ Tilemap:
       e32: 0
       e33: 1
   - serializedVersion: 2
-    m_RefCount: 20
+    m_RefCount: 18
     m_Data:
       e00: -1
       e01: 0
@@ -8860,7 +8848,7 @@ Tilemap:
       e33: 1
   m_TileColorArray:
   - serializedVersion: 2
-    m_RefCount: 28
+    m_RefCount: 26
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -8896,11 +8884,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.4126816
+      value: -6.9126816
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.088242
+      value: -11.690002
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8946,6 +8934,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_Right
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: df6caa979b77ac14d8f99aac3945710c, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b1a4aa532f3ed24d91aae4c3d4bd242, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromHallway_2_with_BreakoutSpace_Door_Right

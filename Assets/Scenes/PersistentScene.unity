@@ -230,6 +230,7 @@ Transform:
   - {fileID: 1317272323}
   - {fileID: 1836311572}
   - {fileID: 1580081640}
+  - {fileID: 1063789013}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &152473145
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_FalloffIntensity: 0.66
   m_Color: {r: 1, g: 0.75936246, b: 0.5707547, a: 1}
   m_Intensity: 1
-  m_LightVolumeIntensity: 0.1
+  m_LightVolumeIntensity: 0.01
   m_LightVolumeEnabled: 1
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -2219,11 +2220,11 @@ MonoBehaviour:
     Path: 
   <Ambience>k__BackingField:
     Guid:
-      Data1: 1078335494
-      Data2: 1110678014
-      Data3: -965057362
-      Data4: -2058194817
-    Path: event:/Ambience/Bed/AMB_bed_test
+      Data1: 66790019
+      Data2: 1120352712
+      Data3: -320454484
+      Data4: 1960931474
+    Path: event:/Ambience/Bed/AMB_bed_DarkRoomTone
 --- !u!1 &1051643928
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2334,50 @@ MonoBehaviour:
   walkDownOffset: -2
   walkLeftRightXOffset: 1
   verticalOffsetForLeftAndRight: -0.85
+--- !u!1 &1063789012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1063789013}
+  - component: {fileID: 1063789014}
+  m_Layer: 0
+  m_Name: DoorStateRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1063789013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063789012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 95062283}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1063789014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063789012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4992083dcd119946bf9572acdc5af76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorStateRegistry
 --- !u!1 &1222725586
 GameObject:
   m_ObjectHideFlags: 0
@@ -2876,7 +2921,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: -1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.49999985, y: 0.000624074}
     oldSize: {x: 0.9375, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -2959,7 +3004,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 915158201, guid: 442852eec27ea49bfb2f6c9056356cc3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3103,7 +3148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1494594653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3258,7 +3303,7 @@ GameObject:
   - component: {fileID: 1580081640}
   - component: {fileID: 1580081641}
   m_Layer: 0
-  m_Name: RoomLoader
+  m_Name: RoomTransitionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3290,11 +3335,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98890355377abee4091f500b06d27cf0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomLoader
+  m_EditorClassIdentifier: Assembly-CSharp::RoomTransitionManager
   player: {fileID: 1423616336}
   fadeController: {fileID: 1647222257}
-  initialRoomSceneName: Office_1
-  initialSpawnId: fromOpenSpace
+  initialDoor: {fileID: 11400000, guid: 1b2e5bcf1efc8944d8bb11f78d64e1ec, type: 2}
 --- !u!1 &1647222255
 GameObject:
   m_ObjectHideFlags: 0

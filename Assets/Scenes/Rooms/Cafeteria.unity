@@ -174,6 +174,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1922251695}
     m_Modifications:
+    - target: {fileID: 833294049924433788, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e8323895bef272418a23d9c98d3fcf1, type: 2}
+    - target: {fileID: 833294049924433788, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: b2d2967a6c2fea34d8a05cfc49de4fbf, type: 2}
     - target: {fileID: 1725388654104065202, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toKitchen
@@ -192,11 +200,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8481073922317835294, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.82
       objectReference: {fileID: 0}
     - target: {fileID: 8481073922317835294, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.38
       objectReference: {fileID: 0}
     - target: {fileID: 8481073922317835294, guid: 66213faad8bdfcc4a882b93c53d57276, type: 3}
       propertyPath: m_LocalPosition.z
@@ -493,7 +501,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 1950823130}
+    m_Mesh: {fileID: 1786384449}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -5097,11 +5105,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.42
+      value: -20.92
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.089996
+      value: -11.69
       objectReference: {fileID: 0}
     - target: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5147,6 +5155,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_2_with_BreakoutSpace_Door_Left
       objectReference: {fileID: 0}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: f826fea3e1e05324f9359aa1e3345b4e, type: 2}
+    - target: {fileID: 6761465659180650005, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: cb2615fe2689510479c7b45bca92398c, type: 2}
     - target: {fileID: 7274368078774543230, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
       propertyPath: id
       value: fromHallway_2_with_BreakoutSpace_Door_Left
@@ -5169,72 +5185,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 842983471276622468, guid: 5ccf5fb742d38ff468f5487e5bca0326, type: 3}
   m_PrefabInstance: {fileID: 1751227657}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1878531534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1878531535}
-  m_Layer: 0
-  m_Name: Doors
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1878531535
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1878531534}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1922251695}
-  - {fileID: 920968054}
-  m_Father: {fileID: 899319500}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1922251694
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1922251695}
-  m_Layer: 0
-  m_Name: NorthernDoors
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1922251695
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1922251694}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.41, y: 11.025513, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 235197338}
-  m_Father: {fileID: 1878531535}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1950823130
+--- !u!43 &1786384449
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5412,6 +5363,71 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1878531534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1878531535}
+  m_Layer: 0
+  m_Name: Doors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1878531535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1878531534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1922251695}
+  - {fileID: 920968054}
+  m_Father: {fileID: 899319500}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1922251694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1922251695}
+  m_Layer: 0
+  m_Name: NorthernDoors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1922251695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1922251694}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.41, y: 11.025513, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 235197338}
+  m_Father: {fileID: 1878531535}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2030779622
 GameObject:
   m_ObjectHideFlags: 0
@@ -15361,11 +15377,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3776500479711780839, guid: 148d4d3e4c197544f8078e8117a3a81a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.589156
+      value: 6.089156
       objectReference: {fileID: 0}
     - target: {fileID: 3776500479711780839, guid: 148d4d3e4c197544f8078e8117a3a81a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.086365
+      value: -11.69
       objectReference: {fileID: 0}
     - target: {fileID: 3776500479711780839, guid: 148d4d3e4c197544f8078e8117a3a81a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15399,6 +15415,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7066076468419171190, guid: 148d4d3e4c197544f8078e8117a3a81a, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 9f9e499487d54d24ba09bb8df67a65ad, type: 2}
+    - target: {fileID: 7066076468419171190, guid: 148d4d3e4c197544f8078e8117a3a81a, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 84377099502e0be4499fcf07cee1e5b0, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

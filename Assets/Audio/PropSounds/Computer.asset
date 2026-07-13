@@ -18,14 +18,14 @@ MonoBehaviour:
       Data2: 1289360529
       Data3: -633886838
       Data4: -1854334941
-    Path: event:/Ambience/Emitter/AMB_emit_Computer
+    Path: event:/Props/Ambience/PROP_amb_Computer
   interact:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1488398329
+      Data2: 1309267347
+      Data3: 962527896
+      Data4: 2004342830
+    Path: event:/Props/Interact/PROP_interact_keyboard_type
   locked:
     Guid:
       Data1: 0

@@ -165,11 +165,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 45.7996
+      value: 45.428
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.193
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -219,6 +219,14 @@ PrefabInstance:
       propertyPath: id
       value: fromOffice_4
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 34525d064d2afb844b7eaa947c57ae50, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 7873c03f5229b4a4a93aba82e748b591, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_4
@@ -16478,7 +16486,7 @@ MonoBehaviour:
     rid: -2
   m_ShadowCastingSource: 2
   m_ShadowMesh:
-    m_Mesh: {fileID: 474598017}
+    m_Mesh: {fileID: 410227416}
     m_LocalBounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0, y: 0, z: 0}
@@ -22562,7 +22570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9075591b4d3cb824789ae96272ca1924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorTilemapGroup
---- !u!43 &474598017
+--- !u!43 &410227416
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22754,11 +22762,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.799599
+      value: 28.42
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.19
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22804,6 +22812,14 @@ PrefabInstance:
       propertyPath: id
       value: fromOffice_3
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 6109cf3778510bf4b8ce096b1c7dbdd3, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: c674d7f7f8ef4354c922c4171658e88d, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_3
@@ -22914,11 +22930,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -22.200401
+      value: -22.57
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.2
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -22964,6 +22980,14 @@ PrefabInstance:
       propertyPath: id
       value: fromOffice_2
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e195f221efa3b3468f4ad97a1648b16, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 731d629e94f0ac744a346ae5f06899b3, type: 2}
     - target: {fileID: 9188537787486551999, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toOffice_2
@@ -23026,11 +23050,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -39.205063
+      value: -39.573082
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.7950401
+      value: 4.206791
       objectReference: {fileID: 0}
     - target: {fileID: 2145721635966703379, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23068,6 +23092,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Office_1
       objectReference: {fileID: 0}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: def5e4d45e58070418219241115f8355, type: 2}
+    - target: {fileID: 7198306073509252209, guid: 56813bef388bd9e4f9edc24f65b6b88d, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 2905c1936fc7c4549a56238147a09017, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23095,11 +23127,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.2896004
+      value: 2.93
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15.79504
+      value: 16.19
       objectReference: {fileID: 0}
     - target: {fileID: 2997000334999832817, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23137,6 +23169,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorTeleporter_toHallway_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6320200252469040019, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
+      propertyPath: id
+      value: 
+      objectReference: {fileID: 11400000, guid: da12a1b1891fca7439905cbada71681d, type: 2}
+    - target: {fileID: 6320200252469040019, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
+      propertyPath: connection
+      value: 
+      objectReference: {fileID: 11400000, guid: 1256bc8507acda14a80bfc2936c0fca6, type: 2}
     - target: {fileID: 7011842796644608666, guid: a2d3d5a42ad1b474db6d5ffa8c756be8, type: 3}
       propertyPath: m_Name
       value: Hallway_1

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1283839067161638943}
   - component: {fileID: 1625955836876842302}
   - component: {fileID: 1453237602239974844}
-  - component: {fileID: 6715618227540564031}
+  - component: {fileID: 2013973862638770315}
   m_Layer: 0
   m_Name: Computer
   m_TagString: Untagged
@@ -146,7 +146,7 @@ MonoBehaviour:
     - rid: 7935275765834711107
       type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
       data: 
---- !u!114 &6715618227540564031
+--- !u!114 &2013973862638770315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8513863128905836194}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c6b0b43a0fed8041b46602337bf971b, type: 3}
+  m_Script: {fileID: 11500000, guid: b6ce79c7c1ec98c43832d1ddf894f025, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PropAudioEmitter
-  propType: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PropAudio
+  sounds: {fileID: 11400000, guid: 9365106750b74224bbeac677d80a8d39, type: 2}
