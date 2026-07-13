@@ -1,27 +1,23 @@
 using UnityEngine;
 
-// One asset per connection between two doors. Both door prefabs reference the
-// SAME asset; each resolves its target as "the other endpoint" at runtime.
-// This replaces the paired targetSceneName/targetSpawnId strings that had to
-// be kept in sync manually on both sides.
+// One asset per connection between two doors. Both doors reference the SAME
+// asset; each door also carries its own DoorId, and the connection returns
+// "the other endpoint" as the teleport target.
 //
-// IMPORTANT: this asset is immutable config. Runtime state (is this
-// connection currently locked?) lives in DoorStateRegistry, NOT here -
-// mutating a ScriptableObject at runtime persists across play sessions in
-// the editor and behaves differently in builds.
+// Endpoints are DoorId assets (not scene objects / strings): identity is the
+// asset reference itself, so there is nothing to keep in sync and a rename
+// can't silently break a link. The destination scene name lives on the DoorId.
+//
+// IMPORTANT: this asset is immutable config. Runtime state (is this connection
+// currently locked?) lives in DoorStateRegistry, NOT here - mutating a
+// ScriptableObject at runtime persists across play sessions in the editor and
+// behaves differently in builds.
 [CreateAssetMenu(fileName = "DoorConnection", menuName = "Liminal/Door Connection")]
 public class DoorConnection : ScriptableObject
 {
-  [System.Serializable]
-  public struct Endpoint
-  {
-    public string sceneName;
-    public string spawnId;
-  }
-
-  [Header("Endpoints")]
-  [SerializeField] Endpoint endpointA;
-  [SerializeField] Endpoint endpointB;
+  [Header("Endpoints (each door in the scene carries the matching DoorId)")]
+  [SerializeField] DoorId endpointA;
+  [SerializeField] DoorId endpointB;
 
   [Header("Lock config (state lives in DoorStateRegistry)")]
   [SerializeField] bool startsLocked;
@@ -32,12 +28,12 @@ public class DoorConnection : ScriptableObject
   [SerializeField] DoorType doorType = DoorType.WoodenInterior;
   [Tooltip("One-way: traversal only allowed from endpoint A to endpoint B.")]
   [SerializeField] bool isOneWay;
-  [Tooltip("Optional fade duration override for this connection. <= 0 uses RoomLoader default. (Not yet wired - RoomLoader.TeleportTo takes no duration; reserved.)")]
+  [Tooltip("Optional fade duration override for this connection. <= 0 uses RoomTransitionManager default. (Not yet wired - RoomTransitionManager.TeleportTo takes no duration; reserved.)")]
   [SerializeField] float fadeDurationOverride = -1f;
 
-  public Endpoint EndpointA => endpointA;
+  public DoorId EndpointA => endpointA;
 
-  public Endpoint EndpointB => endpointB;
+  public DoorId EndpointB => endpointB;
 
   public bool StartsLocked => startsLocked;
 
@@ -49,22 +45,22 @@ public class DoorConnection : ScriptableObject
 
   public float FadeDurationOverride => fadeDurationOverride;
 
-  // Which endpoint is the door living in 'sceneName' with 'spawnId'?
-  // Returns the OTHER endpoint as the teleport target.
-  public bool TryGetTarget(string sceneName, string spawnId, out Endpoint target)
+  // Given the DoorId of the door being used, return the DoorId to teleport to
+  // (the OTHER endpoint).
+  public bool TryGetTarget(DoorId from, out DoorId target)
   {
-    if (Matches(endpointA, sceneName, spawnId))
+    if (from == endpointA)
     {
       target = endpointB;
       return true;
     }
 
-    if (Matches(endpointB, sceneName, spawnId))
+    if (from == endpointB)
     {
       // one-way connections cannot be traversed from the B side
       if (isOneWay)
       {
-        target = default;
+        target = null;
         return false;
       }
 
@@ -72,13 +68,8 @@ public class DoorConnection : ScriptableObject
       return true;
     }
 
-    Debug.LogError($"[DoorConnection] '{name}': no endpoint matches scene '{sceneName}' spawn '{spawnId}'. Check the asset wiring.", this);
-    target = default;
+    Debug.LogError($"[DoorConnection] '{name}': DoorId '{(from != null ? from.name : "null")}' is not an endpoint of this connection. Check the door's assigned DoorId.", this);
+    target = null;
     return false;
-  }
-
-  static bool Matches(Endpoint e, string sceneName, string spawnId)
-  {
-    return e.sceneName == sceneName && e.spawnId == spawnId;
   }
 }

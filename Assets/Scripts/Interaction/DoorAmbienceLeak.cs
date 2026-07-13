@@ -19,8 +19,8 @@ public class DoorAmbienceLeak : MonoBehaviour
 {
   [SerializeField] EventReference leakEvent;
   [SerializeField] DoorConnection connection;
-  [Tooltip("Spawn id of THIS door - used to resolve the destination room from the connection.")]
-  [SerializeField] string mySpawnId;
+  [Tooltip("DoorId of THIS door - used to resolve the destination room from the connection.")]
+  [SerializeField] DoorId myDoorId;
   [Tooltip("Leave empty to derive the Room label from the connection's other endpoint. Set to deliberately mismatch for a wrongness beat.")]
   [SerializeField] string overrideRoomLabel;
 
@@ -95,9 +95,9 @@ public class DoorAmbienceLeak : MonoBehaviour
     }
 
     if (connection != null
-        && connection.TryGetTarget(gameObject.scene.name, mySpawnId, out DoorConnection.Endpoint target))
+        && connection.TryGetTarget(myDoorId, out DoorId target))
     {
-      return target.sceneName;
+      return target.SceneName;
     }
 
     return null;

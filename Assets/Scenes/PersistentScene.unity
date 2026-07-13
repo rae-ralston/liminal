@@ -2921,7 +2921,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: -1}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.49999985, y: 0.000624074}
     oldSize: {x: 0.9375, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -3303,7 +3303,7 @@ GameObject:
   - component: {fileID: 1580081640}
   - component: {fileID: 1580081641}
   m_Layer: 0
-  m_Name: RoomLoader
+  m_Name: RoomTransitionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3335,11 +3335,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98890355377abee4091f500b06d27cf0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomLoader
+  m_EditorClassIdentifier: Assembly-CSharp::RoomTransitionManager
   player: {fileID: 1423616336}
   fadeController: {fileID: 1647222257}
-  initialRoomSceneName: Office_1
-  initialSpawnId: fromOpenSpace
+  initialDoor: {fileID: 11400000, guid: 1b2e5bcf1efc8944d8bb11f78d64e1ec, type: 2}
 --- !u!1 &1647222255
 GameObject:
   m_ObjectHideFlags: 0

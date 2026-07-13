@@ -8,7 +8,7 @@ using UnityEngine;
 // delegates to it, or (b) this class is dropped and its members move into
 // GameManager. Don't run both in parallel - one source of truth for the
 // count. Structured here as its own singleton (matching the existing
-// GameManager/AudioManager/RoomLoader singleton pattern) on the assumption
+// GameManager/AudioManager/RoomTransitionManager singleton pattern) on the assumption
 // of (a), since the clicker is a big enough system to deserve its own file.
 public class Incremental : MonoBehaviour
 {

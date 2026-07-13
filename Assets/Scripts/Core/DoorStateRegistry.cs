@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Owns the RUNTIME state of door connections (locked/unlocked). Lives in
-// PersistentScene next to the other managers (RoomLoader, GameManager).
-// Like RoomLoader, deliberately no DontDestroyOnLoad - it relies on
+// PersistentScene next to the other managers (RoomTransitionManager, GameManager).
+// Like RoomTransitionManager, deliberately no DontDestroyOnLoad - it relies on
 // PersistentScene never unloading.
 //
 // DoorConnection assets hold immutable config; this registry holds what can
