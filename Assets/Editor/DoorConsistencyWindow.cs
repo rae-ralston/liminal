@@ -15,6 +15,13 @@ using UnityEngine.SceneManagement;
 // its own connection, DoorIds used more than once (or never), and
 // DoorConnections that are one-sided, over-referenced, self-looping, missing
 // an endpoint, or duplicated (two assets sharing the same endpoint pair).
+//
+// Economy lints (Phase 6, 2026-07-15): negative clickCost, priced connections
+// that ALSO start locked (double gate - needs both a DoorUnlocker and a
+// purchase), priced connections with no DoorPurchaser keypad anywhere (door
+// can never be bought), keypads with no/unpriced connections or placed in a
+// scene that is neither endpoint's, DoorIndicatorLights that can't resolve a
+// connection, and rooms whose EVERY door is priced (progression smell).
 public class DoorConsistencyWindow : EditorWindow
 {
   private const string RoomSceneFolder = "Assets/Scenes/Rooms";
@@ -164,6 +171,12 @@ public class DoorConsistencyWindow : EditorWindow
     Dictionary<string, List<DoorInstance>> doorIdUsage = new Dictionary<string, List<DoorInstance>>();
     Dictionary<string, List<DoorInstance>> connectionUsage = new Dictionary<string, List<DoorInstance>>();
 
+    // DoorPurchaser keypads, keyed by their connection's GUID (same
+    // GUID-only discipline as DoorInstance). Doors grouped per scene feed
+    // the every-entrance-priced smell check.
+    Dictionary<string, List<DoorInstance>> keypadUsage = new Dictionary<string, List<DoorInstance>>();
+    List<DoorInstance> allDoors = new List<DoorInstance>();
+
     string[] scenePaths = AssetDatabase.FindAssets("t:Scene", new[] { RoomSceneFolder })
       .Select(AssetDatabase.GUIDToAssetPath)
       .OrderBy(p => p)
@@ -195,6 +208,7 @@ public class DoorConsistencyWindow : EditorWindow
           idGuid = id != null ? GetGuid(id) : null,
           connectionGuid = connection != null ? GetGuid(connection) : null,
         };
+        allDoors.Add(instance);
 
         string tag = $"{sceneName} :: {hierarchyPath}";
 
@@ -233,6 +247,55 @@ public class DoorConsistencyWindow : EditorWindow
               $"(endpoints: {NameOf(connection.EndpointA)} / {NameOf(connection.EndpointB)}).",
               assetGuid: instance.connectionGuid, scenePath: scenePath, hierarchyPath: hierarchyPath);
           }
+        }
+      }
+
+      // --- economy scene objects: keypads + indicator lights ---
+
+      DoorPurchaser[] keypads = Resources.FindObjectsOfTypeAll<DoorPurchaser>()
+        .Where(k => k.gameObject.scene == scene)
+        .ToArray();
+
+      foreach (DoorPurchaser keypad in keypads)
+      {
+        string hierarchyPath = GetHierarchyPath(keypad.transform);
+        DoorConnection connection = keypad.Connection;
+
+        if (connection == null)
+        {
+          AddIssue(Severity.Error, $"{sceneName} :: {hierarchyPath}: DoorPurchaser keypad has no DoorConnection assigned.",
+            scenePath: scenePath, hierarchyPath: hierarchyPath);
+          continue;
+        }
+
+        var instance = new DoorInstance
+        {
+          scenePath = scenePath,
+          sceneName = sceneName,
+          hierarchyPath = hierarchyPath,
+          connectionGuid = GetGuid(connection),
+        };
+        if (!keypadUsage.TryGetValue(instance.connectionGuid, out List<DoorInstance> uses))
+          keypadUsage[instance.connectionGuid] = uses = new List<DoorInstance>();
+        uses.Add(instance);
+      }
+
+      foreach (DoorIndicatorLight indicator in Resources.FindObjectsOfTypeAll<DoorIndicatorLight>()
+                 .Where(l => l.gameObject.scene == scene))
+      {
+        // mirror the component's own Awake fallback: explicit connection,
+        // else a DoorPurchaser or Door on itself or a parent
+        var so = new SerializedObject(indicator);
+        bool resolvable = so.FindProperty("connection").objectReferenceValue != null
+          || indicator.GetComponentInParent<DoorPurchaser>(true) != null
+          || indicator.GetComponentInParent<Door>(true) != null;
+
+        if (!resolvable)
+        {
+          string hierarchyPath = GetHierarchyPath(indicator.transform);
+          AddIssue(Severity.Warning,
+            $"{sceneName} :: {hierarchyPath}: DoorIndicatorLight can't resolve a connection (none assigned, no DoorPurchaser/Door on it or a parent) - it will stay dark.",
+            scenePath: scenePath, hierarchyPath: hierarchyPath);
         }
       }
     }
@@ -312,6 +375,73 @@ public class DoorConsistencyWindow : EditorWindow
     {
       if (kv.Value.Count > 1)
         AddIssue(Severity.Error, $"Duplicate DoorConnections share the same endpoint pair: {string.Join(", ", kv.Value)}.");
+    }
+
+    // --- economy checks (Phase 6: priced doors + keypads) ---
+
+    foreach (KeyValuePair<string, DoorConnection> kv in connectionsByGuid)
+    {
+      string guid = kv.Key;
+      DoorConnection conn = kv.Value;
+
+      if (conn.ClickCost < 0)
+        AddIssue(Severity.Error, $"DoorConnection '{conn.name}' has a negative clickCost ({conn.ClickCost}).", assetGuid: guid);
+
+      keypadUsage.TryGetValue(guid, out List<DoorInstance> keypads);
+
+      if (conn.IsPriced)
+      {
+        if (conn.StartsLocked)
+          AddIssue(Severity.Warning,
+            $"DoorConnection '{conn.name}' is priced (cost {conn.ClickCost}) AND startsLocked - double gate: it needs a DoorUnlocker AND a purchase. Intended?",
+            assetGuid: guid);
+
+        if (keypads == null || keypads.Count == 0)
+          AddIssue(Severity.Error,
+            $"DoorConnection '{conn.name}' is priced (cost {conn.ClickCost}) but NO DoorPurchaser keypad in any scene sells it - the door can never be purchased.",
+            assetGuid: guid);
+      }
+
+      if (keypads == null)
+        continue;
+
+      foreach (DoorInstance keypad in keypads)
+      {
+        if (!conn.IsPriced)
+        {
+          AddIssue(Severity.Warning,
+            $"{keypad.sceneName} :: {keypad.hierarchyPath}: keypad sells connection '{conn.name}', which has no clickCost - it does nothing.",
+            assetGuid: guid, scenePath: keypad.scenePath, hierarchyPath: keypad.hierarchyPath);
+        }
+
+        // a keypad in a room neither endpoint lives in is almost certainly
+        // a copy-paste artifact (the exact bug class this window exists for)
+        if (conn.EndpointA != null && conn.EndpointB != null
+            && keypad.sceneName != conn.EndpointA.SceneName && keypad.sceneName != conn.EndpointB.SceneName)
+        {
+          AddIssue(Severity.Warning,
+            $"{keypad.sceneName} :: {keypad.hierarchyPath}: keypad sells connection '{conn.name}', but that connection joins '{conn.EndpointA.SceneName}' and '{conn.EndpointB.SceneName}' - keypad is in an unrelated room.",
+            assetGuid: guid, scenePath: keypad.scenePath, hierarchyPath: keypad.hierarchyPath);
+        }
+      }
+    }
+
+    // every entrance priced = the player can only ever see this room's
+    // inside after buying in blind - flag it as a progression smell
+    foreach (IGrouping<string, DoorInstance> room in allDoors.GroupBy(d => d.sceneName))
+    {
+      List<DoorInstance> doors = room.ToList();
+      if (doors.Count == 0)
+        continue;
+
+      bool allPriced = doors.All(d =>
+        d.connectionGuid != null
+        && connectionsByGuid.TryGetValue(d.connectionGuid, out DoorConnection c)
+        && c.IsPriced);
+
+      if (allPriced)
+        AddIssue(Severity.Warning,
+          $"Room '{room.Key}': EVERY door ({doors.Count}) is priced - no free way in or out. Progression smell; make sure this is deliberate.");
     }
 
     hasRun = true;

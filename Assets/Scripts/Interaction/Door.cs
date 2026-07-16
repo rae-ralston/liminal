@@ -74,6 +74,17 @@ public class Door : InteractableTrigger
       return;
     }
 
+    if (DoorStateRegistry.Instance != null && DoorStateRegistry.Instance.IsPurchaseRequired(connection))
+    {
+      // priced and not yet bought: behaves like a locked door until the
+      // keypad purchase goes through. Once purchased it NEVER re-locks
+      // (permanent unlocks, decided 2026-07-15) - a low balance only ever
+      // changes the keypad light of UNPURCHASED doors.
+      Debug.Log($"[Incremental] Door '{name}' needs purchasing (cost {connection.ClickCost}) - use its keypad.");
+      if (audio != null) audio.PlayLocked(connection.DoorType);
+      return;
+    }
+
     if (!connection.TryGetTarget(id, out DoorId target))
     {
       // one-way from the wrong side behaves like a locked door

@@ -38,6 +38,14 @@ public class Incremental : MonoBehaviour
     // tiers / stats later - it is free to keep.
     public long TotalEarned { get; private set; }
 
+    // Highest balance ever held; never decreases. Exists for the door
+    // keypads' "Suspended" display state (yellow = "you could afford this
+    // once, not now"): could-afford-once is a fact about balance HISTORY,
+    // so deriving it from the peak works retroactively even for doors whose
+    // room was unloaded when the peak happened - no per-connection latch
+    // to store or poll.
+    public long PeakCount { get; private set; }
+
     public float Multiplier => 1f + multiplierBonusSum;
 
     readonly Dictionary<string, float> multiplierSources = new Dictionary<string, float>();
@@ -95,6 +103,7 @@ public class Incremental : MonoBehaviour
             tickAccumulator -= wholeTicks;
             Count += wholeTicks;
             TotalEarned += wholeTicks;
+            if (Count > PeakCount) PeakCount = Count;
         }
     }
 
@@ -129,6 +138,7 @@ public class Incremental : MonoBehaviour
 
         Count += amount;
         TotalEarned += amount;
+        if (Count > PeakCount) PeakCount = Count;
     }
 
     // Player spam-clicking a ClickSource prop. +1 flat - the multiplier
@@ -144,6 +154,7 @@ public class Incremental : MonoBehaviour
 
         Count += 1;
         TotalEarned += 1;
+        if (Count > PeakCount) PeakCount = Count;
     }
 
     // All purchases route through this - door keypads, upgrade props.
