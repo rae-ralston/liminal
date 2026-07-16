@@ -20,4 +20,8 @@ public class PropAudioDefinition : ScriptableObject
     public EventReference locked;        // interaction refused
     public EventReference turnOn;
     public EventReference turnOff;
+
+    [Header("Charge (light-fed props)")]
+    public EventReference chargeLoop;     // looping riser while charging, driven by a continuous "Charge" parameter (0-1)
+    public EventReference chargeComplete; // one-shot confirm at full charge
 }

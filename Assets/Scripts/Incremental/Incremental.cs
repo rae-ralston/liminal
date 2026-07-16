@@ -105,6 +105,8 @@ public class Incremental : MonoBehaviour
             TotalEarned += wholeTicks;
             if (Count > PeakCount) PeakCount = Count;
         }
+
+        DecayCharges((float)deltaSeconds);
     }
 
     // Called by IncrementalStarter (the special computer prop). Idempotent.
