@@ -35,6 +35,7 @@ Cross-reference with `GDD.md` for design intent.
 
 - [ ] Flashlight highlight — pointing at interactable object highlights it
 - [ ] Static overlays — for reading monitors, papers, close-up content
+- [ ] Trigger feel pass — buttons and doors are sometimes hard to trigger (effects / door transitions); review trigger collider sizes/placement on button prefabs and Doors before Day-7 playthroughs
 
 ## Central Computer & Counter
 
