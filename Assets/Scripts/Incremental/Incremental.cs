@@ -48,6 +48,12 @@ public class Incremental : MonoBehaviour
 
     public float Multiplier => 1f + multiplierBonusSum;
 
+    // Charge store for light-fed props (Phase 5) - a plain class on the
+    // economy's clock, exposed directly rather than through wrapper
+    // methods. Advance drives its decay; see ChargeRegistry for why it
+    // lives centrally.
+    public ChargeRegistry Charges { get; } = new ChargeRegistry();
+
     readonly Dictionary<string, float> multiplierSources = new Dictionary<string, float>();
     float multiplierBonusSum;
     int permanentSourceCounter;
@@ -106,7 +112,7 @@ public class Incremental : MonoBehaviour
             if (Count > PeakCount) PeakCount = Count;
         }
 
-        DecayCharges((float)deltaSeconds);
+        Charges.Decay((float)deltaSeconds);
     }
 
     // Called by IncrementalStarter (the special computer prop). Idempotent.

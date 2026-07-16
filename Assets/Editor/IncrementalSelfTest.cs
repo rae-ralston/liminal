@@ -32,6 +32,7 @@ public static class IncrementalSelfTest
         RunSection("Multiplier sources", MultiplierSources);
         RunSection("Multiplier drives the tick", MultiplierTick);
         RunSection("Consumed registry", ConsumedRegistry);
+        RunSection("Charge registry", ChargeRegistryChecks);
 
         if (failed == 0)
         {
@@ -199,5 +200,42 @@ public static class IncrementalSelfTest
         Check(inc.IsConsumed("office1_flatreward_a"), "IsConsumed true after consume");
         Check(!inc.TryConsume("office1_flatreward_a"), "duplicate TryConsume refused (the duplicate-propId case)");
         Check(!inc.IsConsumed("office1_flatreward_b"), "unrelated id stays unconsumed");
+    }
+
+    // Charge decay is driven by Advance (the same seam as the tick), so
+    // feeding via the registry and advancing simulated time covers the whole
+    // lit/unlit/unloaded contract without play mode.
+    static void ChargeRegistryChecks(Incremental inc)
+    {
+        inc.StartIncremental();
+        ChargeRegistry charges = inc.Charges;
+
+        Check(charges.GetCharge(null) == 0f, "GetCharge(null) is 0");
+        Check(charges.GetCharge("") == 0f, "GetCharge(empty) is 0");
+        Check(charges.GetCharge("unknown") == 0f, "unknown propId reads 0");
+        Check(charges.Feed(null, 0.5f, 0.1f) == 0f, "Feed(null propId) refused");
+
+        CheckApprox(charges.Feed("p", 0.25f, 0.5f), 0.25f, "Feed accumulates gain");
+        CheckApprox(charges.Feed("p", 0.25f, 0.5f), 0.5f, "second Feed stacks");
+        CheckApprox(charges.Feed("p", 0f, 0.5f), 0.5f, "zero gain is a no-op read");
+
+        inc.Advance(1.0);
+        CheckApprox(charges.GetCharge("p"), 0.5f, "a fed entry skips exactly one decay pass (the lit-frame contract)");
+        inc.Advance(0.5);
+        CheckApprox(charges.GetCharge("p"), 0.25f, "unfed entry decays at its stored rate (0.5/s for 0.5s)");
+
+        CheckApprox(charges.Feed("p", 5f, 0.5f), 1f, "charge clamps at 1");
+        charges.Clear("p");
+        Check(charges.GetCharge("p") == 0f, "Clear zeroes the entry");
+
+        charges.Feed("q", 0.3f, 1f);
+        inc.Advance(1.0); // fed -> skipped
+        inc.Advance(1.0); // decays 1.0 -> fully drained, entry removed
+        Check(charges.GetCharge("q") == 0f, "entry drains to zero and is removed");
+
+        // Decay only runs on the economy's clock.
+        charges.Feed("r", 0.5f, 1f);
+        inc.Advance(0.0);
+        CheckApprox(charges.GetCharge("r"), 0.5f, "zero/negative delta never decays");
     }
 }
