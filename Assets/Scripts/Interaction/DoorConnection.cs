@@ -24,6 +24,10 @@ public class DoorConnection : ScriptableObject
   [Tooltip("Optional key/item/switch id required to unlock. Empty = unlockable by any Unlock() call.")]
   [SerializeField] string unlockId;
 
+  [Header("Economy (purchase state lives in DoorStateRegistry)")]
+  [Tooltip("Click cost to purchase this connection at its keypad. 0 = free door, no purchase needed. Purchases are PERMANENT (decided 2026-07-15).")]
+  [SerializeField] long clickCost;
+
   [Header("Character")]
   [SerializeField] DoorType doorType = DoorType.WoodenInterior;
   [Tooltip("One-way: traversal only allowed from endpoint A to endpoint B.")]
@@ -38,6 +42,11 @@ public class DoorConnection : ScriptableObject
   public bool StartsLocked => startsLocked;
 
   public string UnlockId => unlockId;
+
+  public long ClickCost => clickCost;
+
+  // A priced connection blocks traversal until purchased (at a keypad prop).
+  public bool IsPriced => clickCost > 0;
 
   public DoorType DoorType => doorType;
 

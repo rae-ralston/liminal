@@ -15,6 +15,12 @@ public class DoorStateRegistry : MonoBehaviour
 
   readonly Dictionary<DoorConnection, bool> lockedState = new Dictionary<DoorConnection, bool>();
 
+  // Economy state (2026-07-15): the ONLY stored fact per priced connection
+  // is "has it been purchased" - purchases are permanent by design. The
+  // red/orange/yellow/green keypad status is derived per query from this
+  // plus Incremental's current/peak balance (see GetEconomyStatus).
+  readonly HashSet<DoorConnection> purchased = new HashSet<DoorConnection>();
+
   void Awake()
   {
     if (Instance != null && Instance != this)
@@ -80,5 +86,84 @@ public class DoorStateRegistry : MonoBehaviour
     }
 
     lockedState[connection] = locked;
+  }
+
+  // ------------------------------------------------------------------
+  // Economy (door purchases - permanent, keypad-driven)
+  // ------------------------------------------------------------------
+
+  public bool IsPurchased(DoorConnection connection)
+  {
+    return connection != null && purchased.Contains(connection);
+  }
+
+  // True when money still stands between the player and this connection.
+  // This is the traversal-blocking check Door uses, alongside IsLocked.
+  public bool IsPurchaseRequired(DoorConnection connection)
+  {
+    return connection != null && connection.IsPriced && !purchased.Contains(connection);
+  }
+
+  // The one purchase path: spends via Incremental.TrySpend, marks the
+  // connection purchased on success. Idempotent - buying twice is refused
+  // as already-owned (true, no second charge).
+  public bool TryPurchase(DoorConnection connection)
+  {
+    if (connection == null || !connection.IsPriced)
+    {
+      return false;
+    }
+
+    if (purchased.Contains(connection))
+    {
+      return true;
+    }
+
+    if (Incremental.Instance == null)
+    {
+      Debug.LogError("[DoorStateRegistry] TryPurchase failed - no Incremental in scene.", this);
+      return false;
+    }
+
+    if (!Incremental.Instance.TrySpend(connection.ClickCost))
+    {
+      return false;
+    }
+
+    purchased.Add(connection);
+    Debug.Log($"[Incremental] Door connection '{connection.name}' purchased for {connection.ClickCost}. Permanent.");
+    return true;
+  }
+
+  // Derived per query, never stored (aside from the purchased set): the
+  // keypad light state. Yellow ("could afford this once") falls out of
+  // Incremental.PeakCount, so it is correct even for connections whose
+  // room was unloaded when the balance peaked.
+  public DoorEconomyStatus GetEconomyStatus(DoorConnection connection)
+  {
+    if (connection == null || !connection.IsPriced)
+    {
+      return DoorEconomyStatus.NotPriced;
+    }
+
+    if (purchased.Contains(connection))
+    {
+      return DoorEconomyStatus.Purchased;
+    }
+
+    Incremental incremental = Incremental.Instance;
+    if (incremental == null || !incremental.Running)
+    {
+      return DoorEconomyStatus.Locked;
+    }
+
+    if (incremental.Count >= connection.ClickCost)
+    {
+      return DoorEconomyStatus.Unlockable;
+    }
+
+    return incremental.PeakCount >= connection.ClickCost
+      ? DoorEconomyStatus.Suspended
+      : DoorEconomyStatus.Locked;
   }
 }

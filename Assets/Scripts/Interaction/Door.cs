@@ -69,7 +69,21 @@ public class Door : InteractableTrigger
 
     if (DoorStateRegistry.Instance != null && DoorStateRegistry.Instance.IsLocked(connection))
     {
-      // locked: rattle, no traversal
+      // locked: rattle, no traversal. Checked BEFORE the purchase gate, so
+      // a (checker-flagged) priced+locked door reads as locked here, not
+      // as purchasable.
+      Debug.Log($"[Door] '{name}' is locked - needs its DoorUnlocker.");
+      if (audio != null) audio.PlayLocked(connection.DoorType);
+      return;
+    }
+
+    if (DoorStateRegistry.Instance != null && DoorStateRegistry.Instance.IsPurchaseRequired(connection))
+    {
+      // priced and not yet bought: behaves like a locked door until the
+      // keypad purchase goes through. Once purchased it NEVER re-locks
+      // (permanent unlocks, decided 2026-07-15) - a low balance only ever
+      // changes the keypad light of UNPURCHASED doors.
+      Debug.Log($"[Incremental] Door '{name}' needs purchasing (cost {connection.ClickCost}) - use its keypad.");
       if (audio != null) audio.PlayLocked(connection.DoorType);
       return;
     }
@@ -77,6 +91,7 @@ public class Door : InteractableTrigger
     if (!connection.TryGetTarget(id, out DoorId target))
     {
       // one-way from the wrong side behaves like a locked door
+      Debug.Log($"[Door] '{name}' refuses - one-way connection entered from the wrong side.");
       if (audio != null) audio.PlayLocked(connection.DoorType);
       return;
     }

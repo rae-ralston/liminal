@@ -1,11 +1,15 @@
 using UnityEngine;
 
+// Game-flow flags ONLY. The count/economy is Incremental
+// (Assets/Scripts/Incremental/Incremental.cs) - the one source of truth,
+// decided 2026-07-13. Never grow a second counter here.
+//
+// Lives in PersistentScene; like the other manager singletons there,
+// deliberately no DontDestroyOnLoad (the scene never unloads, and the call
+// warns on non-root objects).
 public class GameManager : MonoBehaviour
 {
   public static GameManager Instance { get; private set; }
-  [SerializeField] private float counterThreshold = 100f;
-  [SerializeField] private float counterIncrement = 1f;
-  public float Counter { get; private set; } = 0f;
   public bool GameStarted { get; private set; } = false;
   public bool FinalButtonSummoned { get; private set; } = false;
 
@@ -18,29 +22,13 @@ public class GameManager : MonoBehaviour
     }
 
     Instance = this;
-    DontDestroyOnLoad(gameObject);
   }
 
-  private void Update()
-  {
-    if (GameStarted && !FinalButtonSummoned)
-    {
-      Counter += counterIncrement * Time.deltaTime;
-    }
-  }
-
+  // Called by SecurityStation. The old threshold branch that summoned the
+  // final button from here is now EndButtonSummoner's job.
   public void StartGame()
   {
-    if (!GameStarted)
-      GameStarted = true;
-    else if (Counter >= counterThreshold)
-      SummonFinalButton();
-  }
-
-  public void IncrementCounter(float amount)
-  {
-    if (GameStarted)
-      Counter += amount;
+    GameStarted = true;
   }
 
   public void SummonFinalButton()
