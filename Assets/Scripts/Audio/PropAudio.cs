@@ -25,6 +25,9 @@ public class PropAudio : MonoBehaviour
     private EventInstance chargeInstance;
     private bool chargePlaying;
 
+    private const string DoorTypeParameter = "DoorType";
+    private const string ChargeParameter = "Charge";
+
     private void OnEnable()
     {
         StartAmbientLoop();
@@ -49,8 +52,6 @@ public class PropAudio : MonoBehaviour
     // labels must match the enum members exactly.
     public void PlayOpen(DoorType doorType)   => PlayOneShotWithLabel(sounds != null ? sounds.interact : default, DoorTypeParameter, doorType.ToString());
     public void PlayLocked(DoorType doorType) => PlayOneShotWithLabel(sounds != null ? sounds.locked : default, DoorTypeParameter, doorType.ToString());
-
-    private const string DoorTypeParameter = "DoorType";
 
     public void StartAmbientLoop()
     {
@@ -125,8 +126,6 @@ public class PropAudio : MonoBehaviour
             PlayOneShot(sounds != null ? sounds.chargeComplete : default);
         }
     }
-
-    private const string ChargeParameter = "Charge";
 
     private void PlayOneShot(EventReference eventReference)
     {

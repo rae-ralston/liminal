@@ -21,11 +21,29 @@ using UnityEngine;
 // manager object): room scenes fully unload on transitions, so consumed
 // state keyed by Prop.propId must sit in this persistent singleton or
 // one-shot props would re-farm on every reload.
+//
+// The Circuit (2026-07-16): charge is capped by MaxCapacity, which ONLY
+// rises - room activation (Terminal) and collected CapacityUpgrade props
+// add capacity segments; nothing ever lowers it (the no-drain ruling at
+// the capacity level). Charge stays ONE global number: gauges are derived
+// views over Count / MaxCapacity, never per-room storage. The activation
+// registry lives here too, same shape as the consumed registry.
 public class Incremental : MonoBehaviour
 {
     public static Incremental Instance { get; private set; }
 
     [SerializeField] float baseTicksPerSecond = 1f;
+
+    [Header("The Circuit")]
+    [Tooltip("The SecurityRoom - Start seeds the residue charge (exactly this room's activationCost) and the initial capacity floor so the residue fits. Unassigned = capacity layer disabled (uncapped legacy economy).")]
+    [SerializeField] RoomId bootstrapRoom;
+
+    [Tooltip("Every RoomId asset in the game. AllRoomsActivated checks against this explicit list - no asset-folder scanning at runtime. Tools > Circuit > Generate Room Terminals fills it.")]
+    [SerializeField] List<RoomId> allRooms = new List<RoomId>();
+
+    [Tooltip("Fraction of a new capacity segment's size granted as charge when the segment lands. 1 = the fill fraction holds (no visible sag on gauges); 0 = every bar in the building sags together. A balancing knob, not a system.")]
+    [Range(0f, 1f)]
+    [SerializeField] float chargeDumpFraction = 1f;
 
     public bool Running { get; private set; }
 
@@ -46,6 +64,16 @@ public class Incremental : MonoBehaviour
     // to store or poll.
     public long PeakCount { get; private set; }
 
+    // Charge cap (The Circuit): capacity floor + every collected segment.
+    // Only ever rises. 0 means the Circuit isn't wired yet (no bootstrap
+    // room, no segments) - credit paths treat that as uncapped so the
+    // pre-Circuit game keeps working until the editor wiring lands.
+    public long MaxCapacity { get; private set; }
+
+    // Gauge/debug ledger only - fill math never iterates this (proportional
+    // fill everywhere is just Count / MaxCapacity).
+    public IReadOnlyList<CapacitySegment> Segments => segments;
+
     public float Multiplier => 1f + multiplierBonusSum;
 
     // Charge store for light-fed props (Phase 5) - a plain class on the
@@ -63,6 +91,14 @@ public class Incremental : MonoBehaviour
     double tickAccumulator;
 
     readonly HashSet<string> consumedPropIds = new HashSet<string>();
+
+    // MaxCapacity independent of segments - the bootstrap residue must fit
+    // before any room is activated (segments alone would leave the cap at 0).
+    long capacityFloor;
+    bool residueSeeded;
+
+    readonly List<CapacitySegment> segments = new List<CapacitySegment>();
+    readonly HashSet<RoomId> activatedRooms = new HashSet<RoomId>();
 
     void Awake()
     {
@@ -86,6 +122,38 @@ public class Incremental : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        SeedBootstrapResidue();
+    }
+
+    // Runs once from Start; public only so the editor self-test can drive it
+    // (Start does not run in edit mode). The residue charge is EXACTLY the
+    // bootstrap room's activation cost, so pre-start it can only ever buy
+    // that one activation (every other terminal requires Running - the
+    // pre-start softlock is impossible by construction). Deliberately not
+    // via Credit: residue is found in the bank, not generated, so
+    // TotalEarned stays 0.
+    public void SeedBootstrapResidue()
+    {
+        if (residueSeeded)
+        {
+            return;
+        }
+
+        if (bootstrapRoom == null)
+        {
+            Debug.LogWarning("[Circuit] No bootstrap RoomId assigned - capacity layer disabled, economy runs uncapped.", this);
+            return;
+        }
+
+        residueSeeded = true;
+        RaiseCapacityFloor(bootstrapRoom.ActivationCost);
+        Count = System.Math.Min(bootstrapRoom.ActivationCost, MaxCapacity);
+        if (Count > PeakCount) PeakCount = Count;
+        Debug.Log($"[Circuit] Residue charge seeded: {Count} (bootstrap room '{bootstrapRoom.name}').");
+    }
+
     void Update()
     {
         Advance(Time.deltaTime);
@@ -106,10 +174,12 @@ public class Incremental : MonoBehaviour
         long wholeTicks = (long)tickAccumulator;
         if (wholeTicks > 0)
         {
+            // Drain whole ticks from the accumulator BEFORE the clamp:
+            // generation at cap is simply wasted (the generator idles), never
+            // silently banked - a banked backlog would dump the instant
+            // capacity next rises, cheating the chargeDumpFraction knob.
             tickAccumulator -= wholeTicks;
-            Count += wholeTicks;
-            TotalEarned += wholeTicks;
-            if (Count > PeakCount) PeakCount = Count;
+            Credit(wholeTicks);
         }
 
         Charges.Decay((float)deltaSeconds);
@@ -144,9 +214,7 @@ public class Incremental : MonoBehaviour
             return;
         }
 
-        Count += amount;
-        TotalEarned += amount;
-        if (Count > PeakCount) PeakCount = Count;
+        Credit(amount);
     }
 
     // Player spam-clicking a ClickSource prop. +1 flat - the multiplier
@@ -160,13 +228,36 @@ public class Incremental : MonoBehaviour
             return;
         }
 
-        Count += 1;
-        TotalEarned += 1;
+        Credit(1);
+    }
+
+    // The one credit path: clamps to MaxCapacity (uncapped while the Circuit
+    // is unwired, MaxCapacity == 0) and banks the post-clamp delta into
+    // TotalEarned - the meter counts what was actually stored, not what the
+    // generator produced. Returns the banked amount.
+    long Credit(long amount)
+    {
+        long banked = amount;
+        if (MaxCapacity > 0)
+        {
+            banked = System.Math.Min(amount, MaxCapacity - Count);
+        }
+
+        if (banked <= 0)
+        {
+            return 0;
+        }
+
+        Count += banked;
+        TotalEarned += banked;
         if (Count > PeakCount) PeakCount = Count;
+        return banked;
     }
 
     // All purchases route through this - door keypads, upgrade props.
-    // Refusal feedback (sound, PA sneer) is the caller's job.
+    // Refusal feedback (sound, PA sneer) is the caller's job. Refuses while
+    // not running; the ONE exception to that gate is the bootstrap terminal,
+    // which goes through TryActivateRoom instead.
     public bool TrySpend(long cost)
     {
         if (!Running)
@@ -175,6 +266,11 @@ public class Incremental : MonoBehaviour
             return false;
         }
 
+        return SpendInternal(cost);
+    }
+
+    bool SpendInternal(long cost)
+    {
         if (cost < 0)
         {
             Debug.LogWarning($"[Incremental] TrySpend refused - negative cost {cost}.");
@@ -197,6 +293,121 @@ public class Incremental : MonoBehaviour
     public bool HasReached(long threshold)
     {
         return Running && Count >= threshold;
+    }
+
+    // ------------------------------------------------------------------
+    // The Circuit: capacity & room activation
+    // ------------------------------------------------------------------
+
+    public bool IsRoomActivated(RoomId room)
+    {
+        return room != null && activatedRooms.Contains(room);
+    }
+
+    // One half of the end condition (the other is the charge threshold).
+    // False while the serialized list is empty, so an unwired build can
+    // never accidentally satisfy the end condition.
+    public bool AllRoomsActivated
+    {
+        get
+        {
+            if (allRooms.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (RoomId room in allRooms)
+            {
+                if (room != null && !activatedRooms.Contains(room))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    // The one activation path (called by Terminal). bootstrap bypasses the
+    // Running gate for exactly one caller: the SecurityRoom terminal must
+    // spend the residue charge BEFORE the start lever fires Running.
+    // TrySpend itself keeps refusing pre-start for everyone else.
+    public bool TryActivateRoom(RoomId room, bool bootstrap = false)
+    {
+        if (room == null)
+        {
+            Debug.LogWarning("[Circuit] TryActivateRoom refused - null RoomId.");
+            return false;
+        }
+
+        if (activatedRooms.Contains(room))
+        {
+            Debug.Log($"[Circuit] Room '{room.name}' already activated - no second charge.");
+            return false;
+        }
+
+        if (!Running && !bootstrap)
+        {
+            Debug.Log("[Circuit] TryActivateRoom refused - not running (bootstrap terminal only).");
+            return false;
+        }
+
+        if (!SpendInternal(room.ActivationCost))
+        {
+            return false;
+        }
+
+        activatedRooms.Add(room);
+        AddCapacitySegment(room, room.name, room.BaseCapacity);
+        Debug.Log($"[Circuit] Room activated: {room.name} (+{room.BaseCapacity} capacity).");
+        return true;
+    }
+
+    // Every capacity gain routes through here: room base segments (via
+    // TryActivateRoom) and collected CapacityUpgrade props. Adds the segment
+    // to the ledger, raises MaxCapacity, and dumps chargeDumpFraction of the
+    // segment's size into the bank (clamped, banked into TotalEarned).
+    public void AddCapacitySegment(RoomId room, string sourceId, long size)
+    {
+        if (size <= 0)
+        {
+            Debug.LogWarning($"[Circuit] AddCapacitySegment ignored - non-positive size {size} ('{sourceId}').");
+            return;
+        }
+
+        segments.Add(new CapacitySegment(room, sourceId, size));
+        MaxCapacity += size;
+
+        long dumped = Credit((long)System.Math.Round(chargeDumpFraction * (double)size));
+        Debug.Log($"[Circuit] Capacity +{size} ('{sourceId}') - MaxCapacity {MaxCapacity}, charge dumped {dumped}, balance {Count}.");
+    }
+
+    // Raises MaxCapacity independent of segments. Used by the bootstrap seed
+    // (the residue must fit before any room is activated) and by the editor
+    // self-test to opt into clamping. Never lowers - capacity only rises.
+    public void RaiseCapacityFloor(long amount)
+    {
+        if (amount <= capacityFloor)
+        {
+            return;
+        }
+
+        MaxCapacity += amount - capacityFloor;
+        capacityFloor = amount;
+    }
+
+    // Debug/self-test hook: re-derives what MaxCapacity should be from the
+    // floor + segment ledger, so drift between the maintained value and the
+    // ledger is an assertable bug rather than a silent one.
+    public long RecalculateCapacity()
+    {
+        long sum = capacityFloor;
+        foreach (CapacitySegment segment in segments)
+        {
+            sum += segment.Size;
+        }
+
+        return sum;
     }
 
     // ------------------------------------------------------------------

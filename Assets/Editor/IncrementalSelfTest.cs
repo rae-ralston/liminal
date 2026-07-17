@@ -33,6 +33,9 @@ public static class IncrementalSelfTest
         RunSection("Multiplier drives the tick", MultiplierTick);
         RunSection("Consumed registry", ConsumedRegistry);
         RunSection("Charge registry", ChargeRegistryChecks);
+        RunSection("Circuit: capacity clamp", CircuitCapacityClamp);
+        RunSection("Circuit: segments & charge dump", CircuitSegmentsAndDump);
+        RunSection("Circuit: room activation & bootstrap", CircuitActivation);
 
         if (failed == 0)
         {
@@ -237,5 +240,147 @@ public static class IncrementalSelfTest
         charges.Feed("r", 0.5f, 1f);
         inc.Advance(0.0);
         CheckApprox(charges.GetCharge("r"), 0.5f, "zero/negative delta never decays");
+    }
+
+    // ------------------------------------------------------------------
+    // The Circuit (2026-07-16). All pre-Circuit sections above run with
+    // MaxCapacity == 0 (unwired) and must keep passing unchanged - that IS
+    // the uncapped-legacy contract. Note the pre-start TrySpend refusal
+    // still stands: only TryActivateRoom's bootstrap flag bypasses the
+    // Running gate, TrySpend itself never does.
+    // ------------------------------------------------------------------
+
+    // Serialized private fields (chargeDumpFraction, bootstrapRoom, allRooms)
+    // are set the same way the Inspector would - via SerializedObject.
+    static SerializedObject Serialized(Object target)
+    {
+        return new SerializedObject(target);
+    }
+
+    static void SetDumpFraction(Incremental inc, float value)
+    {
+        SerializedObject so = Serialized(inc);
+        so.FindProperty("chargeDumpFraction").floatValue = value;
+        so.ApplyModifiedPropertiesWithoutUndo();
+    }
+
+    static RoomId MakeRoom(string name, long activationCost, long baseCapacity)
+    {
+        RoomId room = ScriptableObject.CreateInstance<RoomId>();
+        room.name = name;
+        room.hideFlags = HideFlags.HideAndDontSave;
+        SerializedObject so = Serialized(room);
+        so.FindProperty("activationCost").longValue = activationCost;
+        so.FindProperty("baseCapacity").longValue = baseCapacity;
+        so.ApplyModifiedPropertiesWithoutUndo();
+        return room;
+    }
+
+    static void CircuitCapacityClamp(Incremental inc)
+    {
+        inc.RaiseCapacityFloor(10);
+        Check(inc.MaxCapacity == 10, "capacity floor raises MaxCapacity");
+        inc.StartIncremental();
+
+        inc.Advance(15.0);
+        Check(inc.Count == 10, "Count pins at MaxCapacity");
+        Check(inc.TotalEarned == 10, "TotalEarned banks the post-clamp delta only (wasted generation is not earned)");
+
+        // Collision #3: whole ticks at cap are drained, never banked as a
+        // backlog that dumps when capacity next rises.
+        inc.Advance(3.7);
+        Check(inc.Count == 10, "generation at cap is wasted");
+        inc.RaiseCapacityFloor(20);
+        Check(inc.MaxCapacity == 20 && inc.Count == 10, "raising the floor adds headroom without granting charge");
+        inc.Advance(0.3);
+        Check(inc.Count == 11, "only the fractional remainder survived the cap (0.7 + 0.3 = 1 tick, no 3-tick backlog dump)");
+        Check(inc.TotalEarned == 11, "TotalEarned tracks banked ticks only");
+
+        inc.RaiseCapacityFloor(5);
+        Check(inc.MaxCapacity == 20, "capacity never lowers (floor raise below current is a no-op)");
+        Check(inc.RecalculateCapacity() == inc.MaxCapacity, "re-derived capacity matches maintained MaxCapacity (floor only)");
+        Check(inc.Count <= inc.MaxCapacity, "Count <= MaxCapacity invariant");
+    }
+
+    static void CircuitSegmentsAndDump(Incremental inc)
+    {
+        // Credit (and therefore the dump) deliberately works pre-start: the
+        // bootstrap activation happens before the lever fires Running.
+        inc.AddCapacitySegment(null, "seg_a", 10);
+        Check(inc.MaxCapacity == 10, "segment raises MaxCapacity by its size");
+        Check(inc.Count == 10, "default dump fraction 1.0 grants the full segment size as charge");
+        Check(inc.TotalEarned == 10, "dumped charge banks into TotalEarned");
+
+        SetDumpFraction(inc, 0.5f);
+        inc.AddCapacitySegment(null, "seg_b", 10);
+        Check(inc.MaxCapacity == 20 && inc.Count == 15, "dump fraction 0.5 grants half the segment size");
+
+        SetDumpFraction(inc, 0f);
+        inc.AddCapacitySegment(null, "seg_c", 10);
+        Check(inc.MaxCapacity == 30 && inc.Count == 15, "dump fraction 0 grants capacity only (all bars sag together)");
+
+        inc.AddCapacitySegment(null, "seg_bad", 0);
+        inc.AddCapacitySegment(null, "seg_bad", -5);
+        Check(inc.MaxCapacity == 30 && inc.Segments.Count == 3, "non-positive segment sizes are refused");
+
+        Check(inc.RecalculateCapacity() == inc.MaxCapacity, "re-derived capacity matches after a segment sequence");
+        Check(inc.Count <= inc.MaxCapacity, "Count <= MaxCapacity invariant");
+    }
+
+    static void CircuitActivation(Incremental inc)
+    {
+        RoomId roomA = MakeRoom("TestRoom_Bootstrap", 5, 10);
+        RoomId roomB = MakeRoom("TestRoom_B", 100, 50);
+
+        try
+        {
+            Check(!inc.AllRoomsActivated, "AllRoomsActivated false while the all-rooms list is empty (unwired build can't satisfy the end condition)");
+
+            SerializedObject so = Serialized(inc);
+            so.FindProperty("bootstrapRoom").objectReferenceValue = roomA;
+            SerializedProperty rooms = so.FindProperty("allRooms");
+            rooms.arraySize = 2;
+            rooms.GetArrayElementAtIndex(0).objectReferenceValue = roomA;
+            rooms.GetArrayElementAtIndex(1).objectReferenceValue = roomB;
+            so.ApplyModifiedPropertiesWithoutUndo();
+
+            inc.SeedBootstrapResidue();
+            Check(inc.Count == 5, "residue seeds exactly the bootstrap room's activation cost");
+            Check(inc.MaxCapacity == 5, "capacity floor makes the residue fit (Count <= MaxCapacity at seed)");
+            Check(inc.TotalEarned == 0, "residue is found, not earned - TotalEarned stays 0");
+            inc.SeedBootstrapResidue();
+            Check(inc.Count == 5, "double seed is a no-op");
+
+            Check(!inc.IsRoomActivated(null), "IsRoomActivated(null) is false");
+            Check(!inc.TryActivateRoom(null, true), "TryActivateRoom(null) refused");
+            Check(!inc.TryActivateRoom(roomA), "non-bootstrap activation refused pre-start");
+            Check(!inc.TryActivateRoom(roomB, true), "bootstrap flag still refuses an unaffordable cost");
+
+            Check(inc.TryActivateRoom(roomA, true), "bootstrap activation works pre-start (residue exactly affords it)");
+            Check(inc.IsRoomActivated(roomA), "room registers as activated");
+            Check(inc.MaxCapacity == 15, "activation adds the room's base capacity segment (5 floor + 10 base)");
+            Check(inc.Count == 10, "residue spent, then the base segment's dump landed (0 + 10 at fraction 1.0)");
+            Check(!inc.TryActivateRoom(roomA, true), "re-activation refused - no second charge");
+            Check(inc.Count == 10, "refused re-activation leaves balance untouched");
+
+            Check(!inc.AllRoomsActivated, "AllRoomsActivated false while a listed room is unactivated");
+
+            inc.RaiseCapacityFloor(200);
+            inc.StartIncremental();
+            inc.AddClicks(140);
+            Check(inc.Count == 150, "setup: affordable balance for the second room");
+            Check(inc.TryActivateRoom(roomB), "post-start activation needs no bootstrap flag");
+            Check(inc.Count == 100, "cost spent, then the base segment dumped (150 - 100 + 50)");
+            Check(inc.MaxCapacity == 260, "second room's capacity landed (200 floor + 10 + 50)");
+
+            Check(inc.AllRoomsActivated, "AllRoomsActivated true once every listed room is activated");
+            Check(inc.RecalculateCapacity() == inc.MaxCapacity, "re-derived capacity matches after activations");
+            Check(inc.Count <= inc.MaxCapacity, "Count <= MaxCapacity invariant");
+        }
+        finally
+        {
+            Object.DestroyImmediate(roomA);
+            Object.DestroyImmediate(roomB);
+        }
     }
 }
