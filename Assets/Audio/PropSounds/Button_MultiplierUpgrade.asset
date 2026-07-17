@@ -47,3 +47,17 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  chargeLoop:
+    Guid:
+      Data1: 1112712509
+      Data2: 1176822364
+      Data3: 651994526
+      Data4: -1502233632
+    Path: event:/Props/Interact/PROP_interact_charge_small
+  chargeComplete:
+    Guid:
+      Data1: 1569041131
+      Data2: 1148538331
+      Data3: 1332300208
+      Data4: -271685052
+    Path: event:/Props/Interact/PROP_interact_doorbell
