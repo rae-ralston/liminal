@@ -36,6 +36,7 @@ public static class IncrementalSelfTest
         RunSection("Circuit: capacity clamp", CircuitCapacityClamp);
         RunSection("Circuit: segments & charge dump", CircuitSegmentsAndDump);
         RunSection("Circuit: room activation & bootstrap", CircuitActivation);
+        RunSection("Circuit: randomized op invariants", CircuitRandomizedInvariants);
 
         if (failed == 0)
         {
@@ -364,6 +365,7 @@ public static class IncrementalSelfTest
             Check(inc.Count == 10, "refused re-activation leaves balance untouched");
 
             Check(!inc.AllRoomsActivated, "AllRoomsActivated false while a listed room is unactivated");
+            Check(inc.UnpoweredRoomCount == 1, "UnpoweredRoomCount counts the remaining listed room");
 
             inc.RaiseCapacityFloor(200);
             inc.StartIncremental();
@@ -374,6 +376,7 @@ public static class IncrementalSelfTest
             Check(inc.MaxCapacity == 260, "second room's capacity landed (200 floor + 10 + 50)");
 
             Check(inc.AllRoomsActivated, "AllRoomsActivated true once every listed room is activated");
+            Check(inc.UnpoweredRoomCount == 0, "UnpoweredRoomCount 0 once every listed room is activated");
             Check(inc.RecalculateCapacity() == inc.MaxCapacity, "re-derived capacity matches after activations");
             Check(inc.Count <= inc.MaxCapacity, "Count <= MaxCapacity invariant");
         }
@@ -382,5 +385,58 @@ public static class IncrementalSelfTest
             Object.DestroyImmediate(roomA);
             Object.DestroyImmediate(roomB);
         }
+    }
+
+    // C7: Count <= MaxCapacity and ledger/maintained-capacity agreement must
+    // hold under ANY op sequence, not just the hand-picked ones above. Seeded
+    // System.Random keeps a failure reproducible.
+    static void CircuitRandomizedInvariants(Incremental inc)
+    {
+        System.Random rng = new System.Random(20260716);
+
+        inc.RaiseCapacityFloor(50);
+        inc.StartIncremental();
+
+        bool invariantsHeld = true;
+        int brokeAtOp = -1;
+
+        // The economy logs every spend/segment - 500 ops would flood the
+        // console, so the logger is off for the loop and restored after.
+        bool loggerWasEnabled = Debug.unityLogger.logEnabled;
+        try
+        {
+            Debug.unityLogger.logEnabled = false;
+            for (int i = 0; i < 500; i++)
+            {
+                switch (rng.Next(6))
+                {
+                    case 0: inc.AddClicks(rng.Next(1, 40)); break;
+                    case 1: inc.TrySpend(rng.Next(0, 60)); break;
+                    case 2: inc.Advance(rng.NextDouble() * 5.0); break;
+                    case 3: inc.AddCapacitySegment(null, $"rand_seg_{i}", rng.Next(1, 30)); break;
+                    case 4: inc.RaiseCapacityFloor(rng.Next(0, 200)); break;
+                    case 5: inc.ManualClick(); break;
+                }
+
+                if (inc.Count > inc.MaxCapacity || inc.RecalculateCapacity() != inc.MaxCapacity)
+                {
+                    invariantsHeld = false;
+                    brokeAtOp = i;
+                    break;
+                }
+            }
+        }
+        finally
+        {
+            Debug.unityLogger.logEnabled = loggerWasEnabled;
+        }
+
+        if (!invariantsHeld)
+        {
+            Debug.LogError($"[Incremental] Randomized invariant broke at op {brokeAtOp}: Count {inc.Count}, MaxCapacity {inc.MaxCapacity}, re-derived {inc.RecalculateCapacity()}.");
+        }
+
+        Check(invariantsHeld, "Count <= MaxCapacity and ledger agreement hold across 500 randomized ops");
+        Check(inc.TotalEarned >= inc.Count, "TotalEarned >= Count after arbitrary spending");
     }
 }

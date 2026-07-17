@@ -77,7 +77,14 @@ public class Door : InteractableTrigger
       return;
     }
 
-    if (DoorStateRegistry.Instance != null && DoorStateRegistry.Instance.IsPurchaseRequired(connection))
+    // The Circuit C4: priced doors enforce ONLY while the Incremental runs.
+    // Pre-start the whole building is open (the dead-building wander); the
+    // instant the lever fires Running, every priced door locks building-wide
+    // in the same beat as the camera shake. The player is guaranteed to be
+    // in SecurityRoom at that moment, so they can never be locked in deep.
+    bool economyLive = Incremental.Instance != null && Incremental.Instance.Running;
+
+    if (economyLive && DoorStateRegistry.Instance != null && DoorStateRegistry.Instance.IsPurchaseRequired(connection))
     {
       // priced and not yet bought: behaves like a locked door until the
       // keypad purchase goes through. Once purchased it NEVER re-locks

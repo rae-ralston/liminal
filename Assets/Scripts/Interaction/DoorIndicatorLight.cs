@@ -27,8 +27,11 @@ public class DoorIndicatorLight : MonoBehaviour
   [SerializeField] Color unlockableColor = new Color(1f, 0.55f, 0.1f);
   [SerializeField] Color suspendedColor = new Color(0.95f, 0.85f, 0.2f);
   [SerializeField] Color purchasedColor = new Color(0.2f, 0.85f, 0.3f);
+  [Tooltip("Pre-start color (The Circuit C4): priced doors don't enforce until the lever fires Running, and a dead building has no lit LEDs - the light stays dark instead of advertising a lock that isn't there.")]
+  [SerializeField] Color offColor = new Color(0.1f, 0.1f, 0.1f);
 
   bool hasStatus;
+  bool isDark;
   DoorEconomyStatus lastStatus;
 
   void Awake()
@@ -62,6 +65,21 @@ public class DoorIndicatorLight : MonoBehaviour
     {
       return;
     }
+
+    // The Circuit C4: dark until Running (see offColor tooltip). Clearing
+    // hasStatus on the way dark forces a fresh apply when the economy fires.
+    if (Incremental.Instance == null || !Incremental.Instance.Running)
+    {
+      if (!isDark)
+      {
+        isDark = true;
+        hasStatus = false;
+        Apply(offColor);
+      }
+      return;
+    }
+
+    isDark = false;
 
     DoorEconomyStatus status = DoorStateRegistry.Instance.GetEconomyStatus(connection);
     if (hasStatus && status == lastStatus)

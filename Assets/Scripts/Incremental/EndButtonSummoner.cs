@@ -1,16 +1,24 @@
 using UnityEngine;
 
-// Summons the huge end-of-game button once the count threshold is reached.
+// Summons the huge end-of-game button once the end condition is reached.
 // Lives on whatever prop/trigger performs the summoning; the end button
 // itself is just a Prop (PropKind.EndButton) + an effect that calls into
 // GameManager to end the game.
 //
 // No propId gate here - persistence comes free from
-// GameManager.FinalButtonSummoned. The threshold reads the CURRENT BALANCE
-// (decided 2026-07-15), so spending can delay the ending on purpose.
+// GameManager.FinalButtonSummoned.
+//
+// The Circuit C6: the condition is AllRoomsActivated AND the charge at
+// endFraction of MaxCapacity. Still reads the CURRENT BALANCE (decided
+// 2026-07-15), so spending can delay the ending on purpose. An unwired
+// build can never fire it: AllRoomsActivated is false while the room list
+// is empty. endFraction is a Day-7 balancing knob (if "sit and wait at
+// cap" feels flat, drop it - don't add mechanics).
 public class EndButtonSummoner : MonoBehaviour, IIncrementalEffect
 {
-    [SerializeField] long summonThreshold;
+    [Tooltip("Fraction of MaxCapacity the charge must reach (with every room activated) to summon the end button. Day-7 balancing knob.")]
+    [Range(0f, 1f)]
+    [SerializeField] float endFraction = 1f;
     [SerializeField] GameObject endButtonPrefab;
 
     public void Apply()
@@ -35,9 +43,21 @@ public class EndButtonSummoner : MonoBehaviour, IIncrementalEffect
             return;
         }
 
-        if (!incremental.HasReached(summonThreshold))
+        long chargeThreshold = (long)System.Math.Ceiling(endFraction * (double)incremental.MaxCapacity);
+        if (!incremental.AllRoomsActivated || !incremental.HasReached(chargeThreshold))
         {
-            Debug.Log($"[Incremental] End button locked: need {summonThreshold}, have {incremental.Count}.", this);
+            // distinguish the two failures in the log - rooms first, since
+            // charge percent is meaningless while capacity is still missing
+            if (!incremental.AllRoomsActivated)
+            {
+                Debug.Log($"[Incremental] End locked: {incremental.UnpoweredRoomCount} rooms unpowered.", this);
+            }
+            else
+            {
+                long percent = incremental.MaxCapacity > 0 ? incremental.Count * 100 / incremental.MaxCapacity : 0;
+                Debug.Log($"[Incremental] End locked: charge at {percent}% (need {chargeThreshold}, have {incremental.Count}).", this);
+            }
+
             PropAudio audio = GetComponent<PropAudio>();
             if (audio != null) audio.PlayLocked();
             return;

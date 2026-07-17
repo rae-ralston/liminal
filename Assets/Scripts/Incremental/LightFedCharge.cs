@@ -16,8 +16,10 @@ using UnityEngine.Rendering.Universal;
 // falls back to an instance-local value (warned once): its charge resets on
 // room reload, same contract as the consumed-state fallback.
 //
-// NOTE (Circuit C3): once room activation lands, this gains the same
-// "room not powered -> refuse light" check as PropInteraction.
+// The Circuit C3: gated the same as PropInteraction - a dead room's props
+// refuse to charge at all (silent refusal, not a discrete PlayLocked() cue -
+// there is no click to react to). Room activation is permanent, so this
+// only ever matters before the room's terminal has fired.
 public class LightFedCharge : MonoBehaviour
 {
     [Tooltip("Seconds of sustained flashlight exposure to reach full charge.")]
@@ -84,6 +86,12 @@ public class LightFedCharge : MonoBehaviour
         // A consumed one-shot refuses light instead of charging up to a
         // payout that would no-op.
         if (incremental.IsConsumed(PropId))
+        {
+            return;
+        }
+
+        RoomId currentRoom = Terminal.Current != null ? Terminal.Current.RoomId : null;
+        if (!incremental.IsRoomActivated(currentRoom))
         {
             return;
         }

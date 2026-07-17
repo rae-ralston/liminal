@@ -24,6 +24,13 @@ using UnityEngine.SceneManagement;
 //    LightFedCharge - the effect can never fire)
 //  - an InteractableTrigger with no trigger-enabled Collider2D on the same
 //    GameObject (enter/exit callbacks can never fire)
+// Checks (The Circuit, C7):
+//  - exactly one Terminal per room scene (0 = dead room, 2+ = ambiguous)
+//  - Terminal.roomId null, or its sceneName mismatching the scene it's in
+//  - the same RoomId asset on terminals in different scenes
+//  - exactly one isBootstrap terminal project-wide, and it's in SecurityRoom
+//  - CapacityUpgrade with capacityAmount <= 0
+//  - TerminalGauge slot referencing a prop with no CapacityUpgrade
 // Checks (prefab assets under Assets/Prefabs):
 //  - a NON-empty propId serialized in the prefab itself (rule: propId stays
 //    empty in prefabs, set per placed instance - a shared id would consume
@@ -33,6 +40,7 @@ public class PropConsistencyWindow : EditorWindow
   private const string RoomSceneFolder = "Assets/Scenes/Rooms";
   private const string PrefabFolder = "Assets/Prefabs";
   private const string ChargeGateClassName = "LightFedCharge"; // Phase 5, may not exist yet
+  private const string BootstrapSceneName = "SecurityRoom";
 
   private enum Severity { Warning, Error }
 
@@ -53,6 +61,20 @@ public class PropConsistencyWindow : EditorWindow
     public string scenePath;
     public string sceneName;
     public string hierarchyPath;
+  }
+
+  // Terminal facts extracted while each scene is open - strings/bools only,
+  // never live RoomId references (GUID discipline, see Known Gotchas).
+  private class TerminalInfo
+  {
+    public string scenePath;
+    public string sceneName;
+    public string hierarchyPath;
+    public bool hasRoomId;
+    public string roomIdName;
+    public string roomIdGuid;
+    public string roomSceneName;
+    public bool isBootstrap;
   }
 
   private Vector2 scroll;
@@ -168,6 +190,7 @@ public class PropConsistencyWindow : EditorWindow
     propCount = 0;
 
     Dictionary<string, List<PropIdUse>> propIdUsage = new Dictionary<string, List<PropIdUse>>();
+    List<TerminalInfo> terminals = new List<TerminalInfo>();
 
     string[] scenePaths = AssetDatabase.FindAssets("t:Scene", new[] { RoomSceneFolder })
       .Select(AssetDatabase.GUIDToAssetPath)
@@ -209,6 +232,48 @@ public class PropConsistencyWindow : EditorWindow
             scenePath: scenePath, hierarchyPath: hierarchyPath);
         }
       }
+
+      // Circuit C7: extract terminal facts as plain strings while the scene
+      // is open; the aggregate lints run after the loop.
+      foreach (Terminal terminal in Resources.FindObjectsOfTypeAll<Terminal>()
+        .Where(t => t != null && t.gameObject.scene == scene))
+      {
+        RoomId roomId = terminal.RoomId;
+        terminals.Add(new TerminalInfo
+        {
+          scenePath = scenePath,
+          sceneName = sceneName,
+          hierarchyPath = GetHierarchyPath(terminal.transform),
+          hasRoomId = roomId != null,
+          roomIdName = roomId != null ? roomId.name : null,
+          roomIdGuid = roomId != null ? AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(roomId)) : null,
+          roomSceneName = roomId != null ? roomId.SceneName : null,
+          isBootstrap = terminal.IsBootstrap,
+        });
+      }
+
+      // Circuit C7: gauge slots must point at CapacityUpgrade props. Scene
+      // references can't cross scenes, so "different room" is impossible for
+      // placed instances - a slot is either empty, valid, or mis-typed.
+      foreach (TerminalGauge gauge in Resources.FindObjectsOfTypeAll<TerminalGauge>()
+        .Where(g => g != null && g.gameObject.scene == scene))
+      {
+        string gaugePath = GetHierarchyPath(gauge.transform);
+        SerializedProperty slots = new SerializedObject(gauge).FindProperty("slots");
+        for (int i = 0; slots != null && i < slots.arraySize; i++)
+        {
+          SerializedProperty propRef = slots.GetArrayElementAtIndex(i).FindPropertyRelative("prop");
+          if (propRef == null || propRef.objectReferenceValue == null) continue;
+
+          Prop slotProp = propRef.objectReferenceValue as Prop;
+          if (slotProp == null || slotProp.GetComponent<CapacityUpgrade>() == null)
+          {
+            AddIssue(Severity.Error,
+              $"{sceneName} :: {gaugePath} gauge slot {i + 1} references '{propRef.objectReferenceValue.name}' which has no CapacityUpgrade - the bar can never go live.",
+              scenePath: scenePath, hierarchyPath: gaugePath);
+          }
+        }
+      }
     }
 
     bool restored = false;
@@ -229,6 +294,8 @@ public class PropConsistencyWindow : EditorWindow
           scenePath: kv.Value[0].scenePath, hierarchyPath: kv.Value[0].hierarchyPath);
       }
     }
+
+    CheckTerminals(terminals, scenePaths);
 
     // Prefab pass - after all scene opens, so loaded assets can't be swept
     // out from under us by an implicit unload mid-loop.
@@ -265,6 +332,76 @@ public class PropConsistencyWindow : EditorWindow
     Repaint();
   }
 
+  // Circuit C7 aggregate lints over the terminal facts collected during the
+  // scene loop.
+  private void CheckTerminals(List<TerminalInfo> terminals, string[] scenePaths)
+  {
+    foreach (string scenePath in scenePaths)
+    {
+      string sceneName = Path.GetFileNameWithoutExtension(scenePath);
+      List<TerminalInfo> inScene = terminals.Where(t => t.scenePath == scenePath).ToList();
+
+      if (inScene.Count == 0)
+      {
+        AddIssue(Severity.Error,
+          $"{sceneName} has NO Terminal - the room can never be activated (dead room). Run Tools > Circuit > Generate Room Terminals.",
+          scenePath: scenePath);
+      }
+      else if (inScene.Count > 1)
+      {
+        AddIssue(Severity.Error,
+          $"{sceneName} has {inScene.Count} Terminals ({string.Join(", ", inScene.Select(t => t.hierarchyPath))}) - exactly one per room scene.",
+          scenePath: scenePath, hierarchyPath: inScene[0].hierarchyPath);
+      }
+    }
+
+    foreach (TerminalInfo terminal in terminals)
+    {
+      if (!terminal.hasRoomId)
+      {
+        AddIssue(Severity.Error,
+          $"{terminal.sceneName} :: {terminal.hierarchyPath} has no RoomId assigned - the terminal can never activate anything.",
+          scenePath: terminal.scenePath, hierarchyPath: terminal.hierarchyPath);
+      }
+      else if (terminal.roomSceneName != terminal.sceneName)
+      {
+        AddIssue(Severity.Error,
+          $"{terminal.sceneName} :: {terminal.hierarchyPath} has RoomId '{terminal.roomIdName}' whose sceneName is '{terminal.roomSceneName}' - it must match the scene the terminal lives in.",
+          scenePath: terminal.scenePath, hierarchyPath: terminal.hierarchyPath);
+      }
+    }
+
+    foreach (IGrouping<string, TerminalInfo> group in terminals
+      .Where(t => !string.IsNullOrEmpty(t.roomIdGuid))
+      .GroupBy(t => t.roomIdGuid)
+      .Where(g => g.Count() > 1))
+    {
+      TerminalInfo first = group.First();
+      AddIssue(Severity.Error,
+        $"RoomId '{first.roomIdName}' is assigned to {group.Count()} terminals ({string.Join(", ", group.Select(t => $"{t.sceneName} :: {t.hierarchyPath}"))}) - activating one would activate them all.",
+        assetGuid: first.roomIdGuid, scenePath: first.scenePath, hierarchyPath: first.hierarchyPath);
+    }
+
+    List<TerminalInfo> bootstraps = terminals.Where(t => t.isBootstrap).ToList();
+    if (terminals.Count > 0 && bootstraps.Count == 0)
+    {
+      AddIssue(Severity.Error,
+        "No isBootstrap terminal anywhere - the residue charge can never be spent and the game can never start.");
+    }
+    else if (bootstraps.Count > 1)
+    {
+      AddIssue(Severity.Error,
+        $"{bootstraps.Count} isBootstrap terminals ({string.Join(", ", bootstraps.Select(t => $"{t.sceneName} :: {t.hierarchyPath}"))}) - exactly one exists, in {BootstrapSceneName}.",
+        scenePath: bootstraps[0].scenePath, hierarchyPath: bootstraps[0].hierarchyPath);
+    }
+    else if (bootstraps.Count == 1 && bootstraps[0].sceneName != BootstrapSceneName)
+    {
+      AddIssue(Severity.Error,
+        $"The isBootstrap terminal is in {bootstraps[0].sceneName}, not {BootstrapSceneName} - the pre-start softlock guarantee only holds from the starting room.",
+        scenePath: bootstraps[0].scenePath, hierarchyPath: bootstraps[0].hierarchyPath);
+    }
+  }
+
   // Shared per-GameObject rules (used for both scene instances and prefabs):
   // XOR law, effect-with-no-applier, trigger-without-trigger-collider.
   private void CheckObject(GameObject go, string tag, string scenePath, string hierarchyPath, string assetGuid = null)
@@ -292,6 +429,21 @@ public class PropConsistencyWindow : EditorWindow
       AddIssue(Severity.Error,
         $"{tag} has an InteractableTrigger but no trigger-enabled Collider2D - enter/exit (and interact) can never fire.",
         assetGuid: assetGuid, scenePath: scenePath, hierarchyPath: hierarchyPath);
+    }
+
+    // Circuit C7: a non-positive capacityAmount is refused at runtime, so the
+    // prop would consume its one-shot for nothing. Warning on prefabs (the
+    // template may leave it unset), error on placed instances.
+    CapacityUpgrade capacityUpgrade = go.GetComponent<CapacityUpgrade>();
+    if (capacityUpgrade != null)
+    {
+      SerializedProperty amount = new SerializedObject(capacityUpgrade).FindProperty("capacityAmount");
+      if (amount != null && amount.longValue <= 0)
+      {
+        AddIssue(scenePath != null ? Severity.Error : Severity.Warning,
+          $"{tag} has a CapacityUpgrade with capacityAmount {amount.longValue} - it must be positive (AddCapacitySegment refuses it).",
+          assetGuid: assetGuid, scenePath: scenePath, hierarchyPath: hierarchyPath);
+      }
     }
   }
 

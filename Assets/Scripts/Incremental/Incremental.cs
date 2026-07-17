@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 // Core state of The Incremental: the ONE source of truth for the count
@@ -44,6 +45,9 @@ public class Incremental : MonoBehaviour
     [Tooltip("Fraction of a new capacity segment's size granted as charge when the segment lands. 1 = the fill fraction holds (no visible sag on gauges); 0 = every bar in the building sags together. A balancing knob, not a system.")]
     [Range(0f, 1f)]
     [SerializeField] float chargeDumpFraction = 1f;
+
+    [Tooltip("Fires one impulse on StartIncremental() - the lever's camera-shake beat. Editor wiring: add this component here, add a CinemachineImpulseListener on the vCam. Unassigned = shake skipped, logged as a WOULD hook - doesn't block the phase.")]
+    [SerializeField] CinemachineImpulseSource startImpulseSource;
 
     public bool Running { get; private set; }
 
@@ -196,6 +200,16 @@ public class Incremental : MonoBehaviour
 
         Running = true;
         Debug.Log("[Incremental] Started.");
+
+        if (startImpulseSource != null)
+        {
+            startImpulseSource.GenerateImpulse();
+        }
+        else
+        {
+            Debug.Log("[Incremental] WOULD: camera shake on start (no CinemachineImpulseSource wired).");
+        }
+
         Debug.Log("[Incremental] WOULD: notify ViR system that The Incremental has begun.");
     }
 
@@ -325,6 +339,25 @@ public class Incremental : MonoBehaviour
             }
 
             return true;
+        }
+    }
+
+    // Refusal-log detail for EndButtonSummoner ("N rooms unpowered").
+    // Counts against the serialized list, same source as AllRoomsActivated.
+    public int UnpoweredRoomCount
+    {
+        get
+        {
+            int count = 0;
+            foreach (RoomId room in allRooms)
+            {
+                if (room != null && !activatedRooms.Contains(room))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 

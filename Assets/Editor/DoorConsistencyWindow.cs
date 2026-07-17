@@ -25,6 +25,7 @@ using UnityEngine.SceneManagement;
 public class DoorConsistencyWindow : EditorWindow
 {
   private const string RoomSceneFolder = "Assets/Scenes/Rooms";
+  private const string BootstrapSceneName = "SecurityRoom";
 
   private enum Severity { Warning, Error }
 
@@ -177,6 +178,10 @@ public class DoorConsistencyWindow : EditorWindow
     Dictionary<string, List<DoorInstance>> keypadUsage = new Dictionary<string, List<DoorInstance>>();
     List<DoorInstance> allDoors = new List<DoorInstance>();
 
+    // Collectible CapacityUpgrade totals per scene, for the Circuit C7
+    // reachability lint - plain longs, gathered while each scene is open.
+    Dictionary<string, long> upgradeCapacityByScene = new Dictionary<string, long>();
+
     string[] scenePaths = AssetDatabase.FindAssets("t:Scene", new[] { RoomSceneFolder })
       .Select(AssetDatabase.GUIDToAssetPath)
       .OrderBy(p => p)
@@ -279,6 +284,16 @@ public class DoorConsistencyWindow : EditorWindow
           keypadUsage[instance.connectionGuid] = uses = new List<DoorInstance>();
         uses.Add(instance);
       }
+
+      long upgradeSum = 0;
+      foreach (CapacityUpgrade upgrade in Resources.FindObjectsOfTypeAll<CapacityUpgrade>()
+                 .Where(c => c.gameObject.scene == scene))
+      {
+        SerializedProperty amount = new SerializedObject(upgrade).FindProperty("capacityAmount");
+        if (amount != null && amount.longValue > 0)
+          upgradeSum += amount.longValue;
+      }
+      upgradeCapacityByScene[sceneName] = upgradeSum;
 
       foreach (DoorIndicatorLight indicator in Resources.FindObjectsOfTypeAll<DoorIndicatorLight>()
                  .Where(l => l.gameObject.scene == scene))
@@ -444,9 +459,123 @@ public class DoorConsistencyWindow : EditorWindow
           $"Room '{room.Key}': EVERY door ({doors.Count}) is priced - no free way in or out. Progression smell; make sure this is deliberate.");
     }
 
+    CheckReachability(connectionsByGuid, upgradeCapacityByScene);
+
     hasRun = true;
     Debug.Log($"[DoorConsistencyChecker] Checked {doorCount} door instances across {sceneCount} scenes: {issues.Count} problem(s) found.");
     Repaint();
+  }
+
+  // --- Circuit C7: the reachability lint ---
+  //
+  // A purchase is EVER affordable iff its cost fits under the MaxCapacity
+  // attainable without it (Count <= MaxCapacity, and charge regenerates up to
+  // the cap - so capacity, not income, is the binding resource). This uses the
+  // OPTIMISTIC bound: every reachable room's baseCapacity plus every
+  // CapacityUpgrade in reachable scenes counts, ignoring that those rooms'
+  // own activation costs might gate some of it. A cost above even that bound
+  // is provably unbuyable forever -> ERROR. Tighter (recursive) feasibility
+  // is Day-7 balancing territory, not a lint.
+  private void CheckReachability(Dictionary<string, DoorConnection> connectionsByGuid, Dictionary<string, long> upgradeCapacityByScene)
+  {
+    // RoomId config lives on the assets, so this lint works before any
+    // terminal is placed. No RoomId assets = Circuit not wired yet; skip
+    // silently rather than flooding a pre-Circuit project with errors.
+    Dictionary<string, RoomId> roomsByGuid = LoadAssets<RoomId>(AssetDatabase.FindAssets("t:RoomId"));
+    if (roomsByGuid.Count == 0)
+      return;
+
+    Dictionary<string, long> baseCapacityByScene = new Dictionary<string, long>();
+    foreach (RoomId room in roomsByGuid.Values)
+    {
+      if (!string.IsNullOrEmpty(room.SceneName))
+        baseCapacityByScene[room.SceneName] = room.BaseCapacity;
+    }
+
+    // Priced doors: capacity attainable without crossing that connection.
+    foreach (KeyValuePair<string, DoorConnection> kv in connectionsByGuid)
+    {
+      DoorConnection conn = kv.Value;
+      if (!conn.IsPriced || conn.EndpointA == null || conn.EndpointB == null)
+        continue;
+
+      long attainable = SumCapacity(ReachableScenes(connectionsByGuid.Values, conn), null, baseCapacityByScene, upgradeCapacityByScene);
+      if (conn.ClickCost > attainable)
+        AddIssue(Severity.Error,
+          $"DoorConnection '{conn.name}' clickCost {conn.ClickCost} exceeds the {attainable} capacity attainable without crossing it - unbuyable FOREVER.",
+          assetGuid: kv.Key);
+    }
+
+    // Terminals: capacity attainable without the room's own contribution
+    // (its base segment and its upgrades only exist after it activates).
+    // The bootstrap room is exempt: its residue seed affords its activation
+    // exactly, by construction.
+    HashSet<string> fullReach = ReachableScenes(connectionsByGuid.Values, null);
+    foreach (KeyValuePair<string, RoomId> kv in roomsByGuid)
+    {
+      RoomId room = kv.Value;
+      if (string.IsNullOrEmpty(room.SceneName) || room.SceneName == BootstrapSceneName)
+        continue;
+
+      if (!fullReach.Contains(room.SceneName))
+      {
+        AddIssue(Severity.Error,
+          $"RoomId '{room.name}' (scene '{room.SceneName}') is not reachable from {BootstrapSceneName} through the door graph at all.",
+          assetGuid: kv.Key);
+        continue;
+      }
+
+      long attainable = SumCapacity(fullReach, room.SceneName, baseCapacityByScene, upgradeCapacityByScene);
+      if (room.ActivationCost > attainable)
+        AddIssue(Severity.Error,
+          $"RoomId '{room.name}' activationCost {room.ActivationCost} exceeds the {attainable} capacity attainable without activating it - the room can NEVER be powered.",
+          assetGuid: kv.Key);
+    }
+  }
+
+  private static long SumCapacity(HashSet<string> scenes, string excludedScene,
+    Dictionary<string, long> baseCapacityByScene, Dictionary<string, long> upgradeCapacityByScene)
+  {
+    long sum = 0;
+    foreach (string sceneName in scenes)
+    {
+      if (sceneName == excludedScene)
+        continue;
+      if (baseCapacityByScene.TryGetValue(sceneName, out long baseCapacity))
+        sum += baseCapacity;
+      if (upgradeCapacityByScene.TryGetValue(sceneName, out long upgrades))
+        sum += upgrades;
+    }
+    return sum;
+  }
+
+  // BFS over scene names; one-way connections only traverse A -> B (matching
+  // DoorConnection.TryGetTarget).
+  private static HashSet<string> ReachableScenes(IEnumerable<DoorConnection> connections, DoorConnection excluded)
+  {
+    List<KeyValuePair<string, string>> edges = new List<KeyValuePair<string, string>>();
+    foreach (DoorConnection conn in connections)
+    {
+      if (conn == excluded || conn.EndpointA == null || conn.EndpointB == null)
+        continue;
+      edges.Add(new KeyValuePair<string, string>(conn.EndpointA.SceneName, conn.EndpointB.SceneName));
+      if (!conn.IsOneWay)
+        edges.Add(new KeyValuePair<string, string>(conn.EndpointB.SceneName, conn.EndpointA.SceneName));
+    }
+
+    HashSet<string> reachable = new HashSet<string> { BootstrapSceneName };
+    Queue<string> queue = new Queue<string>();
+    queue.Enqueue(BootstrapSceneName);
+    while (queue.Count > 0)
+    {
+      string current = queue.Dequeue();
+      foreach (KeyValuePair<string, string> edge in edges)
+      {
+        if (edge.Key == current && reachable.Add(edge.Value))
+          queue.Enqueue(edge.Value);
+      }
+    }
+    return reachable;
   }
 
   private void AddIssue(Severity severity, string message, string assetGuid = null, string scenePath = null, string hierarchyPath = null)
