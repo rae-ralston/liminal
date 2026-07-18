@@ -3489,7 +3489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransitionManager
   player: {fileID: 1423616336}
   fadeController: {fileID: 1647222257}
-  initialDoor: {fileID: 11400000, guid: 1b2e5bcf1efc8944d8bb11f78d64e1ec, type: 2}
+  initialDoor: {fileID: 11400000, guid: 294648cf7c2a3f04892d869cf07d0057, type: 2}
 --- !u!1 &1647222255
 GameObject:
   m_ObjectHideFlags: 0
