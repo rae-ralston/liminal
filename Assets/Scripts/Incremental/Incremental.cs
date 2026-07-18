@@ -78,6 +78,13 @@ public class Incremental : MonoBehaviour
     // fill everywhere is just Count / MaxCapacity).
     public IReadOnlyList<CapacitySegment> Segments => segments;
 
+    // True when the bank is full and any credit would bank zero. One-shot
+    // reward effects check this BEFORE claiming their consume - same
+    // reasoning as their Running check: never burn a one-shot on a no-op.
+    // Deliberately NOT checked by streams (tick/ManualClick): waste-at-cap
+    // for generation is the ruling; this only protects total-loss presses.
+    public bool AtCapacity => MaxCapacity > 0 && Count >= MaxCapacity;
+
     public float Multiplier => 1f + multiplierBonusSum;
 
     // Charge store for light-fed props (Phase 5) - a plain class on the

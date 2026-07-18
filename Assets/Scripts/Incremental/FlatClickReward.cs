@@ -34,6 +34,16 @@ public class FlatClickReward : MonoBehaviour, IIncrementalEffect
             return;
         }
 
+        // Same reasoning at the other end: a full bank credits zero, so the
+        // press is refused instead of consuming the prop for nothing. A
+        // PARTIALLY fitting reward still claims and clamps (waste-at-cap
+        // ruling) - only the total-loss press is protected.
+        if (incremental.AtCapacity)
+        {
+            Debug.Log("[Incremental] FlatClickReward refused - bank at capacity, spend some charge first.", this);
+            return;
+        }
+
         if (oneShot && !IncrementalOneShotGate.TryClaim(this, ref instanceConsumedFallback))
         {
             return;

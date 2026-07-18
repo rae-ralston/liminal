@@ -466,16 +466,28 @@ public class DoorConsistencyWindow : EditorWindow
     Repaint();
   }
 
-  // --- Circuit C7: the reachability lint ---
+  // --- Circuit C7: the reachability lint (exact feasibility) ---
   //
-  // A purchase is EVER affordable iff its cost fits under the MaxCapacity
-  // attainable without it (Count <= MaxCapacity, and charge regenerates up to
-  // the cap - so capacity, not income, is the binding resource). This uses the
-  // OPTIMISTIC bound: every reachable room's baseCapacity plus every
-  // CapacityUpgrade in reachable scenes counts, ignoring that those rooms'
-  // own activation costs might gate some of it. A cost above even that bound
-  // is provably unbuyable forever -> ERROR. Tighter (recursive) feasibility
-  // is Day-7 balancing territory, not a lint.
+  // A purchase is EVER affordable iff its cost fits under an attainable
+  // MaxCapacity (Count <= MaxCapacity, and charge regenerates up to the cap -
+  // capacity, not income, is the binding resource). Because the economy is
+  // fully MONOTONE (capacity only rises, unlocks are permanent, charge
+  // refills for free), greedy simulation is exact: simulate progression from
+  // SecurityRoom to a fixpoint - cross every door whose cost fits, activate
+  // every entered room whose cost fits, repeat until nothing changes.
+  // Anything still locked out at the fixpoint is unbuyable FOREVER -> ERROR.
+  //
+  // The earlier OPTIMISTIC bound (sum all reachable capacity, assume other
+  // priced doors are crossable) missed the mutual-lockout case a real
+  // playtest hit on 2026-07-18: every exit of SecurityRoom priced above the
+  // starting cap - each door's bound counted rooms behind the OTHER
+  // unaffordable doors. The fixpoint catches it.
+  //
+  // Model notes: pre-start wandering (C4: doors free before Running) grants
+  // no ECONOMIC access - all purchases/activations happen post-lever with
+  // locks enforced, so simulating from SecurityRoom with locks on is right.
+  // startsLocked (DoorUnlocker) doors are treated as crossable - lock-puzzle
+  // solvability is not this lint's job.
   private void CheckReachability(Dictionary<string, DoorConnection> connectionsByGuid, Dictionary<string, long> upgradeCapacityByScene)
   {
     // RoomId config lives on the assets, so this lint works before any
@@ -485,97 +497,99 @@ public class DoorConsistencyWindow : EditorWindow
     if (roomsByGuid.Count == 0)
       return;
 
-    Dictionary<string, long> baseCapacityByScene = new Dictionary<string, long>();
-    foreach (RoomId room in roomsByGuid.Values)
+    Dictionary<string, RoomId> roomsByScene = new Dictionary<string, RoomId>();
+    Dictionary<string, string> roomGuidByScene = new Dictionary<string, string>();
+    foreach (KeyValuePair<string, RoomId> kv in roomsByGuid)
     {
-      if (!string.IsNullOrEmpty(room.SceneName))
-        baseCapacityByScene[room.SceneName] = room.BaseCapacity;
+      if (!string.IsNullOrEmpty(kv.Value.SceneName) && !roomsByScene.ContainsKey(kv.Value.SceneName))
+      {
+        roomsByScene[kv.Value.SceneName] = kv.Value;
+        roomGuidByScene[kv.Value.SceneName] = kv.Key;
+      }
     }
 
-    // Priced doors: capacity attainable without crossing that connection.
+    if (!roomsByScene.TryGetValue(BootstrapSceneName, out RoomId bootstrap))
+    {
+      AddIssue(Severity.Warning,
+        $"No RoomId for '{BootstrapSceneName}' - the reachability lint can't run without the bootstrap room.");
+      return;
+    }
+
+    long UpgradesIn(string sceneName) =>
+      upgradeCapacityByScene.TryGetValue(sceneName, out long u) ? u : 0;
+
+    // Start state: bootstrap room activated via the residue seed - capacity
+    // floor (== its activationCost) + its base segment + its upgrades.
+    HashSet<string> entered = new HashSet<string> { BootstrapSceneName };
+    HashSet<string> activated = new HashSet<string> { BootstrapSceneName };
+    long capacity = bootstrap.ActivationCost + bootstrap.BaseCapacity + UpgradesIn(BootstrapSceneName);
+
+    List<DoorConnection> connections = connectionsByGuid.Values
+      .Where(c => c.EndpointA != null && c.EndpointB != null)
+      .ToList();
+
+    bool changed = true;
+    while (changed)
+    {
+      changed = false;
+
+      foreach (DoorConnection conn in connections)
+      {
+        if (conn.IsPriced && conn.ClickCost > capacity)
+          continue;
+
+        string sceneA = conn.EndpointA.SceneName;
+        string sceneB = conn.EndpointB.SceneName;
+        if (entered.Contains(sceneA) && entered.Add(sceneB))
+          changed = true;
+        if (!conn.IsOneWay && entered.Contains(sceneB) && entered.Add(sceneA))
+          changed = true;
+      }
+
+      foreach (string sceneName in entered.ToList())
+      {
+        if (activated.Contains(sceneName) || !roomsByScene.TryGetValue(sceneName, out RoomId room))
+          continue;
+        if (room.ActivationCost > capacity)
+          continue;
+
+        activated.Add(sceneName);
+        capacity += room.BaseCapacity + UpgradesIn(sceneName);
+        changed = true;
+      }
+    }
+
+    // Fixpoint reached: 'capacity' is the maximum attainable MaxCapacity.
+
     foreach (KeyValuePair<string, DoorConnection> kv in connectionsByGuid)
     {
       DoorConnection conn = kv.Value;
       if (!conn.IsPriced || conn.EndpointA == null || conn.EndpointB == null)
         continue;
 
-      long attainable = SumCapacity(ReachableScenes(connectionsByGuid.Values, conn), null, baseCapacityByScene, upgradeCapacityByScene);
-      if (conn.ClickCost > attainable)
+      bool anyEndpointEntered = entered.Contains(conn.EndpointA.SceneName) || entered.Contains(conn.EndpointB.SceneName);
+      if (anyEndpointEntered && conn.ClickCost > capacity)
         AddIssue(Severity.Error,
-          $"DoorConnection '{conn.name}' clickCost {conn.ClickCost} exceeds the {attainable} capacity attainable without crossing it - unbuyable FOREVER.",
+          $"DoorConnection '{conn.name}' clickCost {conn.ClickCost} exceeds the {capacity} max attainable capacity - unbuyable FOREVER.",
           assetGuid: kv.Key);
+      // both endpoints unreachable -> the room errors below already cover it
     }
 
-    // Terminals: capacity attainable without the room's own contribution
-    // (its base segment and its upgrades only exist after it activates).
-    // The bootstrap room is exempt: its residue seed affords its activation
-    // exactly, by construction.
-    HashSet<string> fullReach = ReachableScenes(connectionsByGuid.Values, null);
-    foreach (KeyValuePair<string, RoomId> kv in roomsByGuid)
+    foreach (KeyValuePair<string, RoomId> kv in roomsByScene)
     {
-      RoomId room = kv.Value;
-      if (string.IsNullOrEmpty(room.SceneName) || room.SceneName == BootstrapSceneName)
+      if (activated.Contains(kv.Key))
         continue;
 
-      if (!fullReach.Contains(room.SceneName))
-      {
+      string guid = roomGuidByScene[kv.Key];
+      if (!entered.Contains(kv.Key))
         AddIssue(Severity.Error,
-          $"RoomId '{room.name}' (scene '{room.SceneName}') is not reachable from {BootstrapSceneName} through the door graph at all.",
-          assetGuid: kv.Key);
-        continue;
-      }
-
-      long attainable = SumCapacity(fullReach, room.SceneName, baseCapacityByScene, upgradeCapacityByScene);
-      if (room.ActivationCost > attainable)
+          $"RoomId '{kv.Value.name}' (scene '{kv.Key}') can never be REACHED from {BootstrapSceneName} - every route is blocked by doors that can never be afforded.",
+          assetGuid: guid);
+      else
         AddIssue(Severity.Error,
-          $"RoomId '{room.name}' activationCost {room.ActivationCost} exceeds the {attainable} capacity attainable without activating it - the room can NEVER be powered.",
-          assetGuid: kv.Key);
+          $"RoomId '{kv.Value.name}' activationCost {kv.Value.ActivationCost} exceeds the {capacity} max attainable capacity - the room can NEVER be powered.",
+          assetGuid: guid);
     }
-  }
-
-  private static long SumCapacity(HashSet<string> scenes, string excludedScene,
-    Dictionary<string, long> baseCapacityByScene, Dictionary<string, long> upgradeCapacityByScene)
-  {
-    long sum = 0;
-    foreach (string sceneName in scenes)
-    {
-      if (sceneName == excludedScene)
-        continue;
-      if (baseCapacityByScene.TryGetValue(sceneName, out long baseCapacity))
-        sum += baseCapacity;
-      if (upgradeCapacityByScene.TryGetValue(sceneName, out long upgrades))
-        sum += upgrades;
-    }
-    return sum;
-  }
-
-  // BFS over scene names; one-way connections only traverse A -> B (matching
-  // DoorConnection.TryGetTarget).
-  private static HashSet<string> ReachableScenes(IEnumerable<DoorConnection> connections, DoorConnection excluded)
-  {
-    List<KeyValuePair<string, string>> edges = new List<KeyValuePair<string, string>>();
-    foreach (DoorConnection conn in connections)
-    {
-      if (conn == excluded || conn.EndpointA == null || conn.EndpointB == null)
-        continue;
-      edges.Add(new KeyValuePair<string, string>(conn.EndpointA.SceneName, conn.EndpointB.SceneName));
-      if (!conn.IsOneWay)
-        edges.Add(new KeyValuePair<string, string>(conn.EndpointB.SceneName, conn.EndpointA.SceneName));
-    }
-
-    HashSet<string> reachable = new HashSet<string> { BootstrapSceneName };
-    Queue<string> queue = new Queue<string>();
-    queue.Enqueue(BootstrapSceneName);
-    while (queue.Count > 0)
-    {
-      string current = queue.Dequeue();
-      foreach (KeyValuePair<string, string> edge in edges)
-      {
-        if (edge.Key == current && reachable.Add(edge.Value))
-          queue.Enqueue(edge.Value);
-      }
-    }
-    return reachable;
   }
 
   private void AddIssue(Severity severity, string message, string assetGuid = null, string scenePath = null, string hierarchyPath = null)

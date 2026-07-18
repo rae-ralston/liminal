@@ -13,6 +13,7 @@ public class IncrementalHud : MonoBehaviour
     TMP_Text text;
 
     long lastCount = -1;
+    long lastMaxCapacity = -1;
     float lastMultiplier = -1f;
     bool lastRunning;
 
@@ -36,15 +37,21 @@ public class IncrementalHud : MonoBehaviour
         }
 
         Incremental incremental = Incremental.Instance;
-        bool running = incremental != null && incremental.Running;
 
-        if (!running)
+        // Pre-start the HUD used to be blank, which made the seeded residue
+        // and the bootstrap spend invisible (confused a real playtest,
+        // 2026-07-18). Dev-only display: show as soon as the Circuit holds
+        // any state; only a truly untouched game keeps the clean screen.
+        bool visible = incremental != null && (incremental.Running || incremental.Count > 0 || incremental.MaxCapacity > 0);
+
+        if (!visible)
         {
             if (lastRunning)
             {
                 text.text = string.Empty;
                 lastRunning = false;
                 lastCount = -1;
+                lastMaxCapacity = -1;
                 lastMultiplier = -1f;
             }
 
@@ -53,11 +60,15 @@ public class IncrementalHud : MonoBehaviour
 
         lastRunning = true;
 
-        if (incremental.Count != lastCount || !Mathf.Approximately(incremental.Multiplier, lastMultiplier))
+        if (incremental.Count != lastCount
+            || incremental.MaxCapacity != lastMaxCapacity
+            || !Mathf.Approximately(incremental.Multiplier, lastMultiplier))
         {
             lastCount = incremental.Count;
+            lastMaxCapacity = incremental.MaxCapacity;
             lastMultiplier = incremental.Multiplier;
-            text.text = $"Count: {lastCount:N0}   x{lastMultiplier:0.0}";
+            string capacity = lastMaxCapacity > 0 ? $" / {lastMaxCapacity:N0}" : string.Empty;
+            text.text = $"Count: {lastCount:N0}{capacity}   x{lastMultiplier:0.0}";
         }
     }
 }
