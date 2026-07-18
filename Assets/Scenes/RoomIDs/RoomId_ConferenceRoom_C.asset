@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RoomId_ConferenceRoom_C
   m_EditorClassIdentifier: Assembly-CSharp::RoomId
   sceneName: ConferenceRoom_C
-  baseCapacity: 10
-  activationCost: 5
+  baseCapacity: 15
+  activationCost: 12

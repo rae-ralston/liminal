@@ -449,6 +449,12 @@ public class DoorConsistencyWindow : EditorWindow
       if (doors.Count == 0)
         continue;
 
+      // SecurityRoom is exempt (2026-07-18): the player spawns inside and never
+      // enters through a door, so pricing every exit is the deliberate
+      // first-purchase teach beat, not a blind buy-in.
+      if (room.Key == BootstrapSceneName)
+        continue;
+
       bool allPriced = doors.All(d =>
         d.connectionGuid != null
         && connectionsByGuid.TryGetValue(d.connectionGuid, out DoorConnection c)

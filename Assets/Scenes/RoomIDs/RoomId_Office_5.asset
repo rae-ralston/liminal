@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RoomId_Office_5
   m_EditorClassIdentifier: Assembly-CSharp::RoomId
   sceneName: Office_5
-  baseCapacity: 10
-  activationCost: 5
+  baseCapacity: 15
+  activationCost: 20
