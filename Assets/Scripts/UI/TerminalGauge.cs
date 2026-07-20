@@ -135,7 +135,7 @@ public class TerminalGauge : MonoBehaviour
         if (bar.frame != null)
         {
             bar.frame.enabled = true;
-            bar.frame.color = Color.white;
+            bar.frame.color = ghostColor;
         }
 
         if (bar.fill != null)
