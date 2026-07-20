@@ -354,6 +354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 261688616}
   - component: {fileID: 261688615}
+  - component: {fileID: 261688617}
   m_Layer: 0
   m_Name: Incremental
   m_TagString: Untagged
@@ -374,6 +375,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Incremental
   baseTicksPerSecond: 1
+  bootstrapRoom: {fileID: 11400000, guid: 65e050043a5352c4bb15245677fa0fa3, type: 2}
+  allRooms:
+  - {fileID: 11400000, guid: bd62363dc6ced824bb661a693783622a, type: 2}
+  - {fileID: 11400000, guid: 549e3b41499330745b254ce197a66e35, type: 2}
+  - {fileID: 11400000, guid: e80d9bf1c60e3b641997ef4700db0dbe, type: 2}
+  - {fileID: 11400000, guid: 82c56789c3563654daf90418e20ebaf4, type: 2}
+  - {fileID: 11400000, guid: 4fc003921c5f8fb499553190c2833e58, type: 2}
+  - {fileID: 11400000, guid: 4d3d24b0ce188a649b5ce5e8b4227918, type: 2}
+  - {fileID: 11400000, guid: 951b2142713f9e841b96068b06e0f748, type: 2}
+  - {fileID: 11400000, guid: eb068a7d3f8869d48abab74269446d1d, type: 2}
+  - {fileID: 11400000, guid: b17e4b3d91af387449b667cfa7dbad0a, type: 2}
+  - {fileID: 11400000, guid: f1d6e9f7c84a91f4fb61165de6b325f4, type: 2}
+  - {fileID: 11400000, guid: 56265e1006423854fb85af068c8fa83c, type: 2}
+  - {fileID: 11400000, guid: 313e47b638c96b7449cd8ae50c309c96, type: 2}
+  - {fileID: 11400000, guid: 2699ee5be63b49c419636b4736278ea1, type: 2}
+  - {fileID: 11400000, guid: eb68fa678a9a3a941b9f368bfdad94f7, type: 2}
+  - {fileID: 11400000, guid: e552c9b61e6930245a8ea72fea32eb74, type: 2}
+  - {fileID: 11400000, guid: 4a656bebf000ec14ebff5b658aff4993, type: 2}
+  - {fileID: 11400000, guid: b1a57591cbd07d74285e4bee5115c7c4, type: 2}
+  - {fileID: 11400000, guid: f2735f8fbce75f64d9f5d405bb71ee3e, type: 2}
+  - {fileID: 11400000, guid: a26711fe255820f48870cefba45d20b5, type: 2}
+  - {fileID: 11400000, guid: fdb312ba5ec78224990b27d88116f7bf, type: 2}
+  - {fileID: 11400000, guid: 0bfa803e2919ef24d801a0cbe459e447, type: 2}
+  - {fileID: 11400000, guid: 1402d9317472d754a82ec1a06d69e1de, type: 2}
+  - {fileID: 11400000, guid: 65e050043a5352c4bb15245677fa0fa3, type: 2}
+  - {fileID: 11400000, guid: 699e85906d920ae4282f524333850b1c, type: 2}
+  chargeDumpFraction: 1
+  startImpulseSource: {fileID: 261688617}
 --- !u!4 &261688616
 Transform:
   m_ObjectHideFlags: 0
@@ -389,6 +418,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &261688617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261688614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 4
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.5
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &310877940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,6 +1666,7 @@ GameObject:
   - component: {fileID: 724267182}
   - component: {fileID: 724267181}
   - component: {fileID: 724267180}
+  - component: {fileID: 724267184}
   m_Layer: 0
   m_Name: FollowPlayerCamera
   m_TagString: Untagged
@@ -1697,6 +1780,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1256506677}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &724267184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724267179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &741974928
 GameObject:
   m_ObjectHideFlags: 0
@@ -3382,7 +3489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomTransitionManager
   player: {fileID: 1423616336}
   fadeController: {fileID: 1647222257}
-  initialDoor: {fileID: 11400000, guid: 1b2e5bcf1efc8944d8bb11f78d64e1ec, type: 2}
+  initialDoor: {fileID: 11400000, guid: 294648cf7c2a3f04892d869cf07d0057, type: 2}
 --- !u!1 &1647222255
 GameObject:
   m_ObjectHideFlags: 0

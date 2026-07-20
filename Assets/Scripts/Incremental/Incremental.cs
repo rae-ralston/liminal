@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 // Core state of The Incremental: the ONE source of truth for the count
@@ -45,6 +46,9 @@ public class Incremental : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] float chargeDumpFraction = 1f;
 
+    [Tooltip("Fires one impulse on StartIncremental() - the lever's camera-shake beat. Editor wiring: add this component here, add a CinemachineImpulseListener on the vCam. Unassigned = shake skipped, logged as a WOULD hook - doesn't block the phase.")]
+    [SerializeField] CinemachineImpulseSource startImpulseSource;
+
     public bool Running { get; private set; }
 
     // Current spendable balance. long, not float - a raw float counter
@@ -56,14 +60,6 @@ public class Incremental : MonoBehaviour
     // tiers / stats later - it is free to keep.
     public long TotalEarned { get; private set; }
 
-    // Highest balance ever held; never decreases. Exists for the door
-    // keypads' "Suspended" display state (yellow = "you could afford this
-    // once, not now"): could-afford-once is a fact about balance HISTORY,
-    // so deriving it from the peak works retroactively even for doors whose
-    // room was unloaded when the peak happened - no per-connection latch
-    // to store or poll.
-    public long PeakCount { get; private set; }
-
     // Charge cap (The Circuit): capacity floor + every collected segment.
     // Only ever rises. 0 means the Circuit isn't wired yet (no bootstrap
     // room, no segments) - credit paths treat that as uncapped so the
@@ -73,6 +69,13 @@ public class Incremental : MonoBehaviour
     // Gauge/debug ledger only - fill math never iterates this (proportional
     // fill everywhere is just Count / MaxCapacity).
     public IReadOnlyList<CapacitySegment> Segments => segments;
+
+    // True when the bank is full and any credit would bank zero. One-shot
+    // reward effects check this BEFORE claiming their consume - same
+    // reasoning as their Running check: never burn a one-shot on a no-op.
+    // Deliberately NOT checked by streams (tick/ManualClick): waste-at-cap
+    // for generation is the ruling; this only protects total-loss presses.
+    public bool AtCapacity => MaxCapacity > 0 && Count >= MaxCapacity;
 
     public float Multiplier => 1f + multiplierBonusSum;
 
@@ -150,7 +153,6 @@ public class Incremental : MonoBehaviour
         residueSeeded = true;
         RaiseCapacityFloor(bootstrapRoom.ActivationCost);
         Count = System.Math.Min(bootstrapRoom.ActivationCost, MaxCapacity);
-        if (Count > PeakCount) PeakCount = Count;
         Debug.Log($"[Circuit] Residue charge seeded: {Count} (bootstrap room '{bootstrapRoom.name}').");
     }
 
@@ -196,6 +198,16 @@ public class Incremental : MonoBehaviour
 
         Running = true;
         Debug.Log("[Incremental] Started.");
+
+        if (startImpulseSource != null)
+        {
+            startImpulseSource.GenerateImpulse();
+        }
+        else
+        {
+            Debug.Log("[Incremental] WOULD: camera shake on start (no CinemachineImpulseSource wired).");
+        }
+
         Debug.Log("[Incremental] WOULD: notify ViR system that The Incremental has begun.");
     }
 
@@ -250,7 +262,6 @@ public class Incremental : MonoBehaviour
 
         Count += banked;
         TotalEarned += banked;
-        if (Count > PeakCount) PeakCount = Count;
         return banked;
     }
 
@@ -325,6 +336,25 @@ public class Incremental : MonoBehaviour
             }
 
             return true;
+        }
+    }
+
+    // Refusal-log detail for EndButtonSummoner ("N rooms unpowered").
+    // Counts against the serialized list, same source as AllRoomsActivated.
+    public int UnpoweredRoomCount
+    {
+        get
+        {
+            int count = 0;
+            foreach (RoomId room in allRooms)
+            {
+                if (room != null && !activatedRooms.Contains(room))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
     }
 

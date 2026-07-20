@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b4867072b3dce04ba1f69c9256020d2, type: 3}
-  m_Name: DC_OpenSpace_Office_1
+  m_Name: DC_Hallway_1_Office_1
   m_EditorClassIdentifier: Assembly-CSharp::DoorConnection
-  endpointA: {fileID: 11400000, guid: def5e4d45e58070418219241115f8355, type: 2}
-  endpointB: {fileID: 11400000, guid: 1b2e5bcf1efc8944d8bb11f78d64e1ec, type: 2}
+  endpointA: {fileID: 11400000, guid: 4165db96421b3714985bc73438b61c90, type: 2}
+  endpointB: {fileID: 11400000, guid: 92549a2a4041a354181100b256c0a2e3, type: 2}
   startsLocked: 0
-  unlockId: Office_1_to_OpenSpace_DoorUnlocker
-  clickCost: 20
+  unlockId: 
+  clickCost: 100
   doorType: 0
   isOneWay: 0
   fadeDurationOverride: -1

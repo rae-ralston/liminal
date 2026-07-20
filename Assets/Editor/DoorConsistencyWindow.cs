@@ -25,6 +25,7 @@ using UnityEngine.SceneManagement;
 public class DoorConsistencyWindow : EditorWindow
 {
   private const string RoomSceneFolder = "Assets/Scenes/Rooms";
+  private const string BootstrapSceneName = "SecurityRoom";
 
   private enum Severity { Warning, Error }
 
@@ -177,6 +178,10 @@ public class DoorConsistencyWindow : EditorWindow
     Dictionary<string, List<DoorInstance>> keypadUsage = new Dictionary<string, List<DoorInstance>>();
     List<DoorInstance> allDoors = new List<DoorInstance>();
 
+    // Collectible CapacityUpgrade totals per scene, for the Circuit C7
+    // reachability lint - plain longs, gathered while each scene is open.
+    Dictionary<string, long> upgradeCapacityByScene = new Dictionary<string, long>();
+
     string[] scenePaths = AssetDatabase.FindAssets("t:Scene", new[] { RoomSceneFolder })
       .Select(AssetDatabase.GUIDToAssetPath)
       .OrderBy(p => p)
@@ -279,6 +284,16 @@ public class DoorConsistencyWindow : EditorWindow
           keypadUsage[instance.connectionGuid] = uses = new List<DoorInstance>();
         uses.Add(instance);
       }
+
+      long upgradeSum = 0;
+      foreach (CapacityUpgrade upgrade in Resources.FindObjectsOfTypeAll<CapacityUpgrade>()
+                 .Where(c => c.gameObject.scene == scene))
+      {
+        SerializedProperty amount = new SerializedObject(upgrade).FindProperty("capacityAmount");
+        if (amount != null && amount.longValue > 0)
+          upgradeSum += amount.longValue;
+      }
+      upgradeCapacityByScene[sceneName] = upgradeSum;
 
       foreach (DoorIndicatorLight indicator in Resources.FindObjectsOfTypeAll<DoorIndicatorLight>()
                  .Where(l => l.gameObject.scene == scene))
@@ -434,6 +449,12 @@ public class DoorConsistencyWindow : EditorWindow
       if (doors.Count == 0)
         continue;
 
+      // SecurityRoom is exempt (2026-07-18): the player spawns inside and never
+      // enters through a door, so pricing every exit is the deliberate
+      // first-purchase teach beat, not a blind buy-in.
+      if (room.Key == BootstrapSceneName)
+        continue;
+
       bool allPriced = doors.All(d =>
         d.connectionGuid != null
         && connectionsByGuid.TryGetValue(d.connectionGuid, out DoorConnection c)
@@ -444,9 +465,137 @@ public class DoorConsistencyWindow : EditorWindow
           $"Room '{room.Key}': EVERY door ({doors.Count}) is priced - no free way in or out. Progression smell; make sure this is deliberate.");
     }
 
+    CheckReachability(connectionsByGuid, upgradeCapacityByScene);
+
     hasRun = true;
     Debug.Log($"[DoorConsistencyChecker] Checked {doorCount} door instances across {sceneCount} scenes: {issues.Count} problem(s) found.");
     Repaint();
+  }
+
+  // --- Circuit C7: the reachability lint (exact feasibility) ---
+  //
+  // A purchase is EVER affordable iff its cost fits under an attainable
+  // MaxCapacity (Count <= MaxCapacity, and charge regenerates up to the cap -
+  // capacity, not income, is the binding resource). Because the economy is
+  // fully MONOTONE (capacity only rises, unlocks are permanent, charge
+  // refills for free), greedy simulation is exact: simulate progression from
+  // SecurityRoom to a fixpoint - cross every door whose cost fits, activate
+  // every entered room whose cost fits, repeat until nothing changes.
+  // Anything still locked out at the fixpoint is unbuyable FOREVER -> ERROR.
+  //
+  // The earlier OPTIMISTIC bound (sum all reachable capacity, assume other
+  // priced doors are crossable) missed the mutual-lockout case a real
+  // playtest hit on 2026-07-18: every exit of SecurityRoom priced above the
+  // starting cap - each door's bound counted rooms behind the OTHER
+  // unaffordable doors. The fixpoint catches it.
+  //
+  // Model notes: pre-start wandering (C4: doors free before Running) grants
+  // no ECONOMIC access - all purchases/activations happen post-lever with
+  // locks enforced, so simulating from SecurityRoom with locks on is right.
+  // startsLocked (DoorUnlocker) doors are treated as crossable - lock-puzzle
+  // solvability is not this lint's job.
+  private void CheckReachability(Dictionary<string, DoorConnection> connectionsByGuid, Dictionary<string, long> upgradeCapacityByScene)
+  {
+    // RoomId config lives on the assets, so this lint works before any
+    // terminal is placed. No RoomId assets = Circuit not wired yet; skip
+    // silently rather than flooding a pre-Circuit project with errors.
+    Dictionary<string, RoomId> roomsByGuid = LoadAssets<RoomId>(AssetDatabase.FindAssets("t:RoomId"));
+    if (roomsByGuid.Count == 0)
+      return;
+
+    Dictionary<string, RoomId> roomsByScene = new Dictionary<string, RoomId>();
+    Dictionary<string, string> roomGuidByScene = new Dictionary<string, string>();
+    foreach (KeyValuePair<string, RoomId> kv in roomsByGuid)
+    {
+      if (!string.IsNullOrEmpty(kv.Value.SceneName) && !roomsByScene.ContainsKey(kv.Value.SceneName))
+      {
+        roomsByScene[kv.Value.SceneName] = kv.Value;
+        roomGuidByScene[kv.Value.SceneName] = kv.Key;
+      }
+    }
+
+    if (!roomsByScene.TryGetValue(BootstrapSceneName, out RoomId bootstrap))
+    {
+      AddIssue(Severity.Warning,
+        $"No RoomId for '{BootstrapSceneName}' - the reachability lint can't run without the bootstrap room.");
+      return;
+    }
+
+    long UpgradesIn(string sceneName) =>
+      upgradeCapacityByScene.TryGetValue(sceneName, out long u) ? u : 0;
+
+    // Start state: bootstrap room activated via the residue seed - capacity
+    // floor (== its activationCost) + its base segment + its upgrades.
+    HashSet<string> entered = new HashSet<string> { BootstrapSceneName };
+    HashSet<string> activated = new HashSet<string> { BootstrapSceneName };
+    long capacity = bootstrap.ActivationCost + bootstrap.BaseCapacity + UpgradesIn(BootstrapSceneName);
+
+    List<DoorConnection> connections = connectionsByGuid.Values
+      .Where(c => c.EndpointA != null && c.EndpointB != null)
+      .ToList();
+
+    bool changed = true;
+    while (changed)
+    {
+      changed = false;
+
+      foreach (DoorConnection conn in connections)
+      {
+        if (conn.IsPriced && conn.ClickCost > capacity)
+          continue;
+
+        string sceneA = conn.EndpointA.SceneName;
+        string sceneB = conn.EndpointB.SceneName;
+        if (entered.Contains(sceneA) && entered.Add(sceneB))
+          changed = true;
+        if (!conn.IsOneWay && entered.Contains(sceneB) && entered.Add(sceneA))
+          changed = true;
+      }
+
+      foreach (string sceneName in entered.ToList())
+      {
+        if (activated.Contains(sceneName) || !roomsByScene.TryGetValue(sceneName, out RoomId room))
+          continue;
+        if (room.ActivationCost > capacity)
+          continue;
+
+        activated.Add(sceneName);
+        capacity += room.BaseCapacity + UpgradesIn(sceneName);
+        changed = true;
+      }
+    }
+
+    // Fixpoint reached: 'capacity' is the maximum attainable MaxCapacity.
+
+    foreach (KeyValuePair<string, DoorConnection> kv in connectionsByGuid)
+    {
+      DoorConnection conn = kv.Value;
+      if (!conn.IsPriced || conn.EndpointA == null || conn.EndpointB == null)
+        continue;
+
+      bool anyEndpointEntered = entered.Contains(conn.EndpointA.SceneName) || entered.Contains(conn.EndpointB.SceneName);
+      if (anyEndpointEntered && conn.ClickCost > capacity)
+        AddIssue(Severity.Error,
+          $"DoorConnection '{conn.name}' clickCost {conn.ClickCost} exceeds the {capacity} max attainable capacity - unbuyable FOREVER.",
+          assetGuid: kv.Key);
+      // both endpoints unreachable -> the room errors below already cover it
+    }
+
+    foreach (KeyValuePair<string, RoomId> kv in roomsByScene)
+    {
+      if (activated.Contains(kv.Key))
+        continue;
+
+      string guid = roomGuidByScene[kv.Key];
+      if (!entered.Contains(kv.Key))
+        AddIssue(Severity.Error,
+          $"RoomId '{kv.Value.name}' (scene '{kv.Key}') can never be REACHED from {BootstrapSceneName} - every route is blocked by doors that can never be afforded.",
+          assetGuid: guid);
+      else
+        AddIssue(Severity.Error,
+          $"RoomId '{kv.Value.name}' activationCost {kv.Value.ActivationCost} exceeds the {capacity} max attainable capacity - the room can NEVER be powered.",
+          assetGuid: guid);
+    }
   }
 
   private void AddIssue(Severity severity, string message, string assetGuid = null, string scenePath = null, string hierarchyPath = null)
