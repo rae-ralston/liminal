@@ -136,9 +136,10 @@ public class DoorStateRegistry : MonoBehaviour
   }
 
   // Derived per query, never stored (aside from the purchased set): the
-  // keypad light state. Yellow ("could afford this once") falls out of
-  // Incremental.PeakCount, so it is correct even for connections whose
-  // room was unloaded when the balance peaked.
+  // keypad light state, all read from the current IS-state. Yellow
+  // ("within reach - your capacity can hold the cost, you just haven't
+  // saved it") falls out of Incremental.MaxCapacity; red means the cost
+  // exceeds MaxCapacity, i.e. activate more rooms before this is buyable.
   public DoorEconomyStatus GetEconomyStatus(DoorConnection connection)
   {
     if (connection == null || !connection.IsPriced)
@@ -162,7 +163,7 @@ public class DoorStateRegistry : MonoBehaviour
       return DoorEconomyStatus.Unlockable;
     }
 
-    return incremental.PeakCount >= connection.ClickCost
+    return incremental.MaxCapacity >= connection.ClickCost
       ? DoorEconomyStatus.Suspended
       : DoorEconomyStatus.Locked;
   }

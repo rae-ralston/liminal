@@ -60,14 +60,6 @@ public class Incremental : MonoBehaviour
     // tiers / stats later - it is free to keep.
     public long TotalEarned { get; private set; }
 
-    // Highest balance ever held; never decreases. Exists for the door
-    // keypads' "Suspended" display state (yellow = "you could afford this
-    // once, not now"): could-afford-once is a fact about balance HISTORY,
-    // so deriving it from the peak works retroactively even for doors whose
-    // room was unloaded when the peak happened - no per-connection latch
-    // to store or poll.
-    public long PeakCount { get; private set; }
-
     // Charge cap (The Circuit): capacity floor + every collected segment.
     // Only ever rises. 0 means the Circuit isn't wired yet (no bootstrap
     // room, no segments) - credit paths treat that as uncapped so the
@@ -161,7 +153,6 @@ public class Incremental : MonoBehaviour
         residueSeeded = true;
         RaiseCapacityFloor(bootstrapRoom.ActivationCost);
         Count = System.Math.Min(bootstrapRoom.ActivationCost, MaxCapacity);
-        if (Count > PeakCount) PeakCount = Count;
         Debug.Log($"[Circuit] Residue charge seeded: {Count} (bootstrap room '{bootstrapRoom.name}').");
     }
 
@@ -271,7 +262,6 @@ public class Incremental : MonoBehaviour
 
         Count += banked;
         TotalEarned += banked;
-        if (Count > PeakCount) PeakCount = Count;
         return banked;
     }
 

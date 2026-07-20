@@ -402,7 +402,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 65e050043a5352c4bb15245677fa0fa3, type: 2}
   - {fileID: 11400000, guid: 699e85906d920ae4282f524333850b1c, type: 2}
   chargeDumpFraction: 1
-  startImpulseSource: {fileID: 0}
+  startImpulseSource: {fileID: 261688617}
 --- !u!4 &261688616
 Transform:
   m_ObjectHideFlags: 0
@@ -432,14 +432,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 2
+    ImpulseShape: 4
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    ImpulseDuration: 0.2
+    ImpulseDuration: 0.5
     ImpulseType: 0
     DissipationRate: 0.25
     RawSignal: {fileID: 0}

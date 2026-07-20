@@ -5,9 +5,9 @@ using UnityEngine.Rendering.Universal;
 // DoorStateRegistry.GetEconomyStatus every frame (no pub/sub in this
 // project) and drives a small status SpriteRenderer and/or Light2D:
 //
-//   red    Locked      not purchased, never affordable so far
+//   red    Locked      not purchased, cost exceeds MaxCapacity (raise capacity first)
 //   orange Unlockable  not purchased, can buy right now
-//   yellow Suspended   not purchased, was affordable once, not anymore
+//   yellow Suspended   not purchased, fits capacity but unsaved - keep earning
 //   green  Purchased   bought - permanent
 //
 // Lives on the keypad prefab (pointed at a dedicated child status sprite -
