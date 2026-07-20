@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
   private Animator animator;
   private SpriteRenderer spriteRenderer;
   private InputAction interactAction;
-  private IInteractable currentInteractable;
+  private readonly List<InteractableTrigger> nearbyInteractables = new List<InteractableTrigger>();
 
   [Header("Turn sound")]
   [SerializeField] private float turnAngleThreshold = 90f;
@@ -58,17 +59,44 @@ public class PlayerMovement : MonoBehaviour
     else if (movement.x > 0)
       spriteRenderer.flipX = false;
     
-    if (interactAction.WasPressedThisFrame() && currentInteractable != null)
-      currentInteractable.Interact();
-  }
-    
-  public void SetInteractable(IInteractable interactable)
-  {
-    currentInteractable = interactable;
+    if (interactAction.WasPressedThisFrame())
+    {
+      InteractableTrigger target = GetNearestInteractable();
+      if (target != null)
+        target.Interact();
+    }
   }
 
-  public void ClearInteractable()
+  private InteractableTrigger GetNearestInteractable()
   {
-    currentInteractable = null;
+    InteractableTrigger nearest = null;
+    float nearestSqrDist = float.MaxValue;
+    Vector2 pos = transform.position;
+
+    for (int i = 0; i < nearbyInteractables.Count; i++)
+    {
+      InteractableTrigger candidate = nearbyInteractables[i];
+      if (candidate == null) continue;
+
+      float sqrDist = ((Vector2)candidate.transform.position - pos).sqrMagnitude;
+      if (sqrDist < nearestSqrDist)
+      {
+        nearestSqrDist = sqrDist;
+        nearest = candidate;
+      }
+    }
+
+    return nearest;
+  }
+
+  public void AddInteractable(InteractableTrigger interactable)
+  {
+    if (!nearbyInteractables.Contains(interactable))
+      nearbyInteractables.Add(interactable);
+  }
+
+  public void RemoveInteractable(InteractableTrigger interactable)
+  {
+    nearbyInteractables.Remove(interactable);
   }
 }
