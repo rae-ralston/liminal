@@ -61,6 +61,10 @@ public class TerminalGlow : MonoBehaviour
 
     if (glowLight != null)
     {
+      // Left disabled on the prefab/instance on purpose - an active Light2D
+      // skews the editor's 2D lighting preview for everything else being
+      // edited nearby. Turned on here so it's only ever lit at runtime.
+      glowLight.gameObject.SetActive(true);
       lightBaseIntensity = glowLight.intensity;
     }
   }
@@ -73,8 +77,7 @@ public class TerminalGlow : MonoBehaviour
     }
 
     Incremental incremental = Incremental.Instance;
-    bool systemLive = incremental.Running || terminal.IsBootstrap;
-    if (!systemLive)
+    if (!terminal.IsLive)
     {
       if (!isDark)
       {

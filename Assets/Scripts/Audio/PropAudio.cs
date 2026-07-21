@@ -17,10 +17,13 @@ using UnityEngine;
  */
 public class PropAudio : MonoBehaviour
 {
+    public enum AmbientState { Active, Inactive, Suspended }
+
     [SerializeField] private PropAudioDefinition sounds;
 
     private EventInstance ambientInstance;
     private bool ambientPlaying;
+    private AmbientState ambientState = AmbientState.Active; // props that never call SetAmbientState keep the old unconditional loop
 
     private EventInstance chargeInstance;
     private bool chargePlaying;
@@ -55,12 +58,13 @@ public class PropAudio : MonoBehaviour
 
     public void StartAmbientLoop()
     {
-        if (ambientPlaying || sounds == null || sounds.ambientLoop.IsNull)
+        EventReference loop = CurrentAmbientLoop();
+        if (ambientPlaying || loop.IsNull)
         {
             return;
         }
 
-        ambientInstance = RuntimeManager.CreateInstance(sounds.ambientLoop);
+        ambientInstance = RuntimeManager.CreateInstance(loop);
         RuntimeManager.AttachInstanceToGameObject(ambientInstance, gameObject);
         ambientInstance.start();
         ambientPlaying = true;
@@ -76,6 +80,43 @@ public class PropAudio : MonoBehaviour
         ambientInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         ambientInstance.release();
         ambientPlaying = false;
+    }
+
+    // Swaps which ambient loop plays (e.g. a terminal dark / live / suspended
+    // mid-transition). No-op if the state didn't change; restarts the loop
+    // instance if already playing so props that never call this keep today's
+    // unconditional-loop behavior.
+    public void SetAmbientState(AmbientState state)
+    {
+        if (state == ambientState)
+        {
+            return;
+        }
+
+        ambientState = state;
+
+        if (!ambientPlaying)
+        {
+            return;
+        }
+
+        StopAmbientLoop();
+        StartAmbientLoop();
+    }
+
+    private EventReference CurrentAmbientLoop()
+    {
+        if (sounds == null)
+        {
+            return default;
+        }
+
+        switch (ambientState)
+        {
+            case AmbientState.Inactive:  return sounds.ambientLoopInactive;
+            case AmbientState.Suspended: return sounds.ambientLoopSuspended;
+            default:                     return sounds.ambientLoop;
+        }
     }
 
     // ------------------------------------------------------------------
