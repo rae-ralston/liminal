@@ -13,7 +13,9 @@ using UnityEngine;
 public class PropAudioDefinition : ScriptableObject
 {
     [Header("Loops")]
-    public EventReference ambientLoop;   // hum/buzz playing while the prop is active
+    public EventReference ambientLoop;           // hum/buzz playing while the prop is active
+    public EventReference ambientLoopInactive;   // plays instead while inactive; empty = silent
+    public EventReference ambientLoopSuspended;  // plays instead mid-transition (e.g. activated but the wider system hasn't started); empty = silent
 
     [Header("One-shots")]
     public EventReference interact;      // default sound on interaction
