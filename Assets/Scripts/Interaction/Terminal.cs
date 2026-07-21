@@ -32,6 +32,18 @@ public class Terminal : InteractableTrigger
   public RoomId RoomId => roomId;
   public bool IsBootstrap => isBootstrap;
 
+  // Single source of truth for "does this terminal respond to interaction" -
+  // TerminalGlow reads this. TRUE for the bootstrap terminal even before
+  // Running (it's the one interaction that works pre-start).
+  public bool IsLive => Incremental.Instance != null && (Incremental.Instance.Running || isBootstrap);
+
+  PropAudio audio;
+
+  void Awake()
+  {
+    audio = GetComponent<PropAudio>();
+  }
+
   void OnEnable()
   {
     Current = this;
@@ -40,6 +52,31 @@ public class Terminal : InteractableTrigger
   void OnDisable()
   {
     if (Current == this) Current = null;
+  }
+
+  // Ambient state is just (activated, running) - not activated is Inactive
+  // regardless of anything else; activated while Running is Active; activated
+  // while not Running is Suspended. No isBootstrap check needed here: today
+  // only the bootstrap terminal can reach "activated but not Running" (its
+  // Interact() gate below is the only path that allows activating pre-Running)
+  // but the state machine itself doesn't care how that combination came about.
+  void Update()
+  {
+    if (audio == null || Incremental.Instance == null)
+    {
+      return;
+    }
+
+    if (!Incremental.Instance.IsRoomActivated(roomId))
+    {
+      audio.SetAmbientState(PropAudio.AmbientState.Inactive);
+    }
+    else
+    {
+      audio.SetAmbientState(Incremental.Instance.Running
+        ? PropAudio.AmbientState.Active
+        : PropAudio.AmbientState.Suspended);
+    }
   }
 
   public override void Interact()
@@ -55,8 +92,6 @@ public class Terminal : InteractableTrigger
       Debug.LogError("[Circuit] No Incremental in scene.", this);
       return;
     }
-
-    PropAudio audio = GetComponent<PropAudio>();
 
     if (Incremental.Instance.IsRoomActivated(roomId))
     {

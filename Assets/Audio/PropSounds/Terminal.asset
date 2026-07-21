@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39a9765599fd9004993190bacceccb4b, type: 3}
+  m_Name: Terminal
+  m_EditorClassIdentifier: Assembly-CSharp::PropAudioDefinition
+  ambientLoop:
+    Guid:
+      Data1: -88072221
+      Data2: 1301388886
+      Data3: 1109797807
+      Data4: -532289713
+    Path: event:/Props/Ambience/PROP_amb_terminal_running
+  ambientLoopInactive:
+    Guid:
+      Data1: 537537494
+      Data2: 1081253385
+      Data3: -2064764010
+      Data4: -553520986
+    Path: event:/Props/Ambience/PROP_amb_terminal_hybernating
+  ambientLoopSuspended:
+    Guid:
+      Data1: 1409933271
+      Data2: 1275527139
+      Data3: -1601765718
+      Data4: 1102671442
+    Path: event:/Props/Ambience/PROP_amb_terminal_suspended
+  interact:
+    Guid:
+      Data1: -1403240109
+      Data2: 1189526122
+      Data3: -2038789728
+      Data4: -623008152
+    Path: event:/Props/Interact/PROP_interact_terminal_switch
+  locked:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  turnOn:
+    Guid:
+      Data1: -1505152406
+      Data2: 1318140403
+      Data3: -1156316738
+      Data4: 1376983990
+    Path: event:/Props/Interact/PROP_interact_terminal_on-off
+  turnOff:
+    Guid:
+      Data1: -1505152406
+      Data2: 1318140403
+      Data3: -1156316738
+      Data4: 1376983990
+    Path: event:/Props/Interact/PROP_interact_terminal_on-off
+  chargeLoop:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeComplete:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
