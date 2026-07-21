@@ -403,6 +403,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 699e85906d920ae4282f524333850b1c, type: 2}
   chargeDumpFraction: 1
   startImpulseSource: {fileID: 261688617}
+  startImpulseDelay: 3.5
 --- !u!4 &261688616
 Transform:
   m_ObjectHideFlags: 0

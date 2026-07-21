@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -48,6 +49,8 @@ public class Incremental : MonoBehaviour
 
     [Tooltip("Fires one impulse on StartIncremental() - the lever's camera-shake beat. Editor wiring: add this component here, add a CinemachineImpulseListener on the vCam. Unassigned = shake skipped, logged as a WOULD hook - doesn't block the phase.")]
     [SerializeField] CinemachineImpulseSource startImpulseSource;
+    [Tooltip("Delay in seconds between StartIncremental() and the camera-shake impulse (Running still flips immediately - this only delays the shake beat).")]
+    [SerializeField] float startImpulseDelay = 3f;
 
     public bool Running { get; private set; }
 
@@ -201,7 +204,7 @@ public class Incremental : MonoBehaviour
 
         if (startImpulseSource != null)
         {
-            startImpulseSource.GenerateImpulse();
+            StartCoroutine(FireStartImpulseAfterDelay());
         }
         else
         {
@@ -209,6 +212,12 @@ public class Incremental : MonoBehaviour
         }
 
         Debug.Log("[Incremental] WOULD: notify ViR system that The Incremental has begun.");
+    }
+
+    IEnumerator FireStartImpulseAfterDelay()
+    {
+        yield return new WaitForSeconds(startImpulseDelay);
+        startImpulseSource.GenerateImpulse();
     }
 
     // Flat one-time gain - FlatClickReward props.

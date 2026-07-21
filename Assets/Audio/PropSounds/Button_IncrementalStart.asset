@@ -19,13 +19,27 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  interact:
+  ambientLoopInactive:
     Guid:
       Data1: 0
       Data2: 0
       Data3: 0
       Data4: 0
     Path: 
+  ambientLoopSuspended:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  interact:
+    Guid:
+      Data1: 1993328807
+      Data2: 1212845978
+      Data3: 208996227
+      Data4: -507219178
+    Path: event:/Props/Interact/PROP_interact_incremental_start
   locked:
     Guid:
       Data1: 0
@@ -41,6 +55,20 @@ MonoBehaviour:
       Data4: 0
     Path: 
   turnOff:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeLoop:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeComplete:
     Guid:
       Data1: 0
       Data2: 0

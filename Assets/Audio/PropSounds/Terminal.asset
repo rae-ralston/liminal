@@ -42,11 +42,11 @@ MonoBehaviour:
     Path: event:/Props/Interact/PROP_interact_terminal_switch
   locked:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1711950853
+      Data2: 1221045569
+      Data3: 1155503292
+      Data4: -686279203
+    Path: event:/Props/Interact/PROP_interact_terminal_denied
   turnOn:
     Guid:
       Data1: -1505152406

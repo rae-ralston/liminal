@@ -4908,6 +4908,10 @@ PrefabInstance:
       propertyPath: propId
       value: securityroom_starter_a
       objectReference: {fileID: 0}
+    - target: {fileID: 1006, guid: c12581c808a6b5f4eb36468df1dedee4, type: 3}
+      propertyPath: sounds
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a5230a6369f56244b25b65a6ccb1d4a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
