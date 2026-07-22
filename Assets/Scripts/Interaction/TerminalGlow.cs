@@ -61,10 +61,13 @@ public class TerminalGlow : MonoBehaviour
 
     if (glowLight != null)
     {
-      // Left disabled on the prefab/instance on purpose - an active Light2D
-      // skews the editor's 2D lighting preview for everything else being
-      // edited nearby. Turned on here so it's only ever lit at runtime.
-      glowLight.gameObject.SetActive(true);
+      // The Light2D component (not its GameObject) is left disabled on the
+      // prefab/instance on purpose - an active Light2D skews the editor's
+      // 2D lighting preview for everything else being edited nearby. The
+      // GameObject itself stays active so it behaves normally in the
+      // Hierarchy while editing; only the component is turned on here, so
+      // it's only ever lit at runtime.
+      glowLight.enabled = true;
       lightBaseIntensity = glowLight.intensity;
     }
   }
