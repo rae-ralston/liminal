@@ -47,6 +47,10 @@ public class Incremental : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] float chargeDumpFraction = 1f;
 
+    [Tooltip("Fraction of MaxCapacity the bank must reach (with every room activated) for the end condition. Day-7 balancing knob. The SINGLE source - EndButtonSummoner/Sigil/checker all read EndConditionMet, never their own copy.")]
+    [Range(0f, 1f)]
+    [SerializeField] float endFraction = 1f;
+
     [Tooltip("Fires one impulse on StartIncremental() - the lever's camera-shake beat. Editor wiring: add this component here, add a CinemachineImpulseListener on the vCam. Unassigned = shake skipped, logged as a WOULD hook - doesn't block the phase.")]
     [SerializeField] CinemachineImpulseSource startImpulseSource;
     [Tooltip("Delay in seconds between StartIncremental() and the camera-shake impulse (Running still flips immediately - this only delays the shake beat).")]
@@ -322,6 +326,27 @@ public class Incremental : MonoBehaviour
     public bool IsRoomActivated(RoomId room)
     {
         return room != null && activatedRooms.Contains(room);
+    }
+
+    // Read-only view of the configured room list - the RoomLampBoard cross-
+    // checks its lamps against this at Start, and the E9 checker will too.
+    public IReadOnlyList<RoomId> AllRooms => allRooms;
+
+    // THE single end-condition expression (brief E4): every room powered AND
+    // the bank at endFraction of capacity. EndButtonSummoner, Sigil, and the
+    // checker must all read THIS - never reimplement the two-part gate.
+    public bool EndConditionMet
+    {
+        get
+        {
+            if (!AllRoomsActivated)
+            {
+                return false;
+            }
+
+            long threshold = (long)System.Math.Ceiling(endFraction * (double)MaxCapacity);
+            return HasReached(threshold);
+        }
     }
 
     // One half of the end condition (the other is the charge threshold).
