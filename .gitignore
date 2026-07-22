@@ -41,6 +41,11 @@ Assets/TextMesh Pro/Examples & Extras/
 # FMOD
 Assets/Plugins/FMOD/Cache/
 
+# FMOD auto-copies built banks here (StreamingAssets import mode).
+# Source banks are tracked under FMOD/Desktop/.
+/[Aa]ssets/StreamingAssets/
+/[Aa]ssets/StreamingAssets.meta
+
 # Never ignore DLLs in the FMOD subfolder.
 !/[Aa]ssets/Plugins/FMOD/**/lib/*
 
