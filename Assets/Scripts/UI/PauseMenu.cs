@@ -18,19 +18,31 @@ public class PauseMenu : MonoBehaviour
   {
     menuPanel.SetActive(false);
     controlsPanel.SetActive(false);
-    StartMenuAudio();
   }
 
   /*
-   * FMOD: Start Audio playback muted/in background
-   * This way the audio does not restart everytime the player presses pause. 
-   * If it turns out to be too processing heavy, we can move this call into TogglePause(), 
-   * just before calling the snapshot
+   * FMOD: Start pause-menu audio.
+   * Created and started when the pause screen is activated so it does not
+   * run nonstop in the background. Stopped and released again on unpause.
    */
   private void StartMenuAudio()
   {
     menuAudio = AudioManager.Instance.CreateEventInstance(FMODMenuEvent);
     menuAudio.start();
+  }
+
+  /*
+   * FMOD: Stop and release the pause-menu audio instance.
+   * ALLOWFADEOUT lets FMOD play out the release tail; release() frees the
+   * instance once it has fully stopped so nothing keeps playing/leaking.
+   */
+  private void StopMenuAudio()
+  {
+    if (menuAudio.isValid())
+    {
+      menuAudio.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+      menuAudio.release();
+    }
   }
 
   /*
@@ -60,7 +72,8 @@ public class PauseMenu : MonoBehaviour
       menuPanel.SetActive(true);
       controlsPanel.SetActive(false);
       Time.timeScale = 0f;
-      ActivateSnapshot(); // call FMOD Snapshot      
+      StartMenuAudio();  // start pause music
+      ActivateSnapshot(); // call FMOD Snapshot
     }
     else
     {
@@ -68,8 +81,13 @@ public class PauseMenu : MonoBehaviour
       menuPanel.SetActive(false);
       controlsPanel.SetActive(false);
       Time.timeScale = 1f;
-      if (menuSnapshot.isValid()) menuSnapshot.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+      if (menuSnapshot.isValid())
+      {
+        menuSnapshot.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        menuSnapshot.release();
       }
+      StopMenuAudio(); // stop and release pause music
+    }
   }
 
   public void OnResumePressed()
@@ -92,5 +110,16 @@ public class PauseMenu : MonoBehaviour
   public void OnQuitPressed()
   {
     Application.Quit();
+  }
+
+  private void OnDestroy()
+  {
+    // Release any instance still alive if we're torn down while paused.
+    StopMenuAudio();
+    if (menuSnapshot.isValid())
+    {
+      menuSnapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+      menuSnapshot.release();
+    }
   }
 }

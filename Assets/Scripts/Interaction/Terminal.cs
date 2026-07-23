@@ -37,11 +37,13 @@ public class Terminal : InteractableTrigger
   // Running (it's the one interaction that works pre-start).
   public bool IsLive => Incremental.Instance != null && (Incremental.Instance.Running || isBootstrap);
 
-  PropAudio audio;
+  // NOT named 'audio': that hides the deprecated Component.audio accessor
+  // and warns (CS0108).
+  PropAudio propAudio;
 
   void Awake()
   {
-    audio = GetComponent<PropAudio>();
+    propAudio = GetComponent<PropAudio>();
   }
 
   void OnEnable()
@@ -62,18 +64,18 @@ public class Terminal : InteractableTrigger
   // but the state machine itself doesn't care how that combination came about.
   void Update()
   {
-    if (audio == null || Incremental.Instance == null)
+    if (propAudio == null || Incremental.Instance == null)
     {
       return;
     }
 
     if (!Incremental.Instance.IsRoomActivated(roomId))
     {
-      audio.SetAmbientState(PropAudio.AmbientState.Inactive);
+      propAudio.SetAmbientState(PropAudio.AmbientState.Inactive);
     }
     else
     {
-      audio.SetAmbientState(Incremental.Instance.Running
+      propAudio.SetAmbientState(Incremental.Instance.Running
         ? PropAudio.AmbientState.Active
         : PropAudio.AmbientState.Suspended);
     }
@@ -97,7 +99,7 @@ public class Terminal : InteractableTrigger
     {
       // acknowledge, no second charge - activation is permanent
       Debug.Log($"[Circuit] Terminal '{name}': room '{roomId.name}' already activated.");
-      if (audio != null) audio.PlayInteract();
+      if (propAudio != null) propAudio.PlayInteract();
       return;
     }
 
@@ -105,19 +107,19 @@ public class Terminal : InteractableTrigger
     {
       // the dead-building wander: nothing responds until the bootstrap
       Debug.Log($"[Circuit] Terminal '{name}' inert: system not running.");
-      if (audio != null) audio.PlayLocked();
+      if (propAudio != null) propAudio.PlayLocked();
       return;
     }
 
     if (Incremental.Instance.TryActivateRoom(roomId, isBootstrap))
     {
-      if (audio != null) audio.PlayInteract();
+      if (propAudio != null) propAudio.PlayInteract();
       Debug.Log("[Circuit] WOULD: PA reacts to a room coming online.");
       return;
     }
 
     // refused - unaffordable
     Debug.Log($"[Circuit] Terminal '{name}': activation refused - cost {roomId.ActivationCost}, balance {Incremental.Instance.Count}.");
-    if (audio != null) audio.PlayLocked();
+    if (propAudio != null) propAudio.PlayLocked();
   }
 }
