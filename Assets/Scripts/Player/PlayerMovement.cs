@@ -61,6 +61,14 @@ public class PlayerMovement : MonoBehaviour
     
     if (interactAction.WasPressedThisFrame())
     {
+      // Ending brief E6 step 1: the whole interaction pipeline is gated OFF
+      // once the discharge starts - one check in front of the single place
+      // interaction is dispatched, rather than a flag threaded through every
+      // InteractableTrigger subclass. Movement deliberately stays enabled:
+      // the player walks the dark hall during the void hold.
+      if (GameManager.Instance != null && GameManager.Instance.EndSequenceRunning)
+        return;
+
       InteractableTrigger target = GetNearestInteractable();
       if (target != null)
         target.Interact();

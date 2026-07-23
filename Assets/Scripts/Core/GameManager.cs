@@ -37,6 +37,17 @@ public class GameManager : MonoBehaviour
   // ending). The sequence itself is not built yet.
   public bool EndSequenceRunning { get; private set; } = false;
 
+  // Session length for the end card's meter reading. Starts at boot so a run
+  // driven by the debug button (which never touches StartGame) still reports
+  // something honest, and is overwritten when the run properly begins. Frozen
+  // at BeginEndSequence so the number doesn't keep climbing while the player
+  // reads the card.
+  private float sessionStartTime;
+  private float sessionEndTime = -1f;
+
+  public float SessionDuration =>
+    (sessionEndTime < 0f ? Time.time : sessionEndTime) - sessionStartTime;
+
   private void Awake()
   {
     if (Instance != null && Instance != this)
@@ -46,6 +57,7 @@ public class GameManager : MonoBehaviour
     }
 
     Instance = this;
+    sessionStartTime = Time.time;
   }
 
   // Called by SecurityStation. The old threshold branch that summoned the
@@ -53,6 +65,7 @@ public class GameManager : MonoBehaviour
   public void StartGame()
   {
     GameStarted = true;
+    sessionStartTime = Time.time;
   }
 
   // Advance the end chain by exactly one step. `expected` is the stage the
@@ -82,5 +95,6 @@ public class GameManager : MonoBehaviour
   public void BeginEndSequence()
   {
     EndSequenceRunning = true;
+    sessionEndTime = Time.time;
   }
 }

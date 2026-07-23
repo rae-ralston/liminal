@@ -39,8 +39,14 @@ public class SummonStep : MonoBehaviour, IIncrementalEffect
             }
 
             Debug.Log("[Ending] End Button pressed - beginning discharge.", this);
-            Debug.Log("[Ending] WOULD: EndSequenceController.Instance.Begin() (E6, not built yet).", this);
-            Debug.Log("[Ending] WOULD: play the End Button press cue.", this);
+
+            if (EndSequenceController.Instance == null)
+            {
+                Debug.LogError("[Ending] No EndSequenceController in PersistentScene - the End Button does nothing.", this);
+                return;
+            }
+
+            EndSequenceController.Instance.Begin();
             return;
         }
 
