@@ -116,13 +116,11 @@ public class TerminalGauge : MonoBehaviour
         }
     }
 
+    // Shared with CapacityColumn via GaugeColorRamp so the two can never drift.
     // red < 50%, orange < 80%, yellow < 99%, green at 100%
     Color RampColor(float fraction)
     {
-        if (fraction < 0.5f) return lowColor;
-        if (fraction < 0.8f) return midColor;
-        if (fraction < 0.99f) return highColor;
-        return fullColor;
+        return GaugeColorRamp.Evaluate(fraction, lowColor, midColor, highColor, fullColor);
     }
 
     void SetLive(Bar bar, float fraction)

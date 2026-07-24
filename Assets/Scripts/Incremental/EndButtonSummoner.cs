@@ -1,61 +1,54 @@
 using UnityEngine;
 
-// Summons the huge end-of-game button once the end condition is reached.
-// Lives on whatever prop/trigger performs the summoning; the end button
-// itself is just a Prop (PropKind.EndButton) + an effect that calls into
-// GameManager to end the game.
+// The SecurityRoom end lever (Ending brief E5). The FIRST of the four-press end
+// chain: it authorises the chain (Stage None -> Called) once the end condition
+// is met. It does NOT summon or spawn anything - the AssemblyHall stage objects
+// are pre-placed and enable themselves from GameManager.Stage (see
+// EndStageObjects). Persistence is free from GameManager.Stage; no propId gate.
 //
-// No propId gate here - persistence comes free from
-// GameManager.FinalButtonSummoned.
+// Lives on the lever prop as an IIncrementalEffect. An unwired build can never
+// fire it: Incremental.EndConditionMet is false while the room list is empty
+// (AllRoomsActivated == false).
 //
-// The Circuit C6: the condition is AllRoomsActivated AND the charge at
-// endFraction of MaxCapacity. Still reads the CURRENT BALANCE (decided
-// 2026-07-15), so spending can delay the ending on purpose. An unwired
-// build can never fire it: AllRoomsActivated is false while the room list
-// is empty. endFraction is a Day-7 balancing knob (if "sit and wait at
-// cap" feels flat, drop it - don't add mechanics).
+// (Name kept for continuity; it is the lever, not a spawner. The endFraction
+// knob and endButtonPrefab it used to carry are gone - the condition is the
+// single Incremental.EndConditionMet, and the stage objects are pre-placed.)
 public class EndButtonSummoner : MonoBehaviour, IIncrementalEffect
 {
-    [Tooltip("Fraction of MaxCapacity the charge must reach (with every room activated) to summon the end button. Day-7 balancing knob.")]
-    [Range(0f, 1f)]
-    [SerializeField] float endFraction = 1f;
-    [SerializeField] GameObject endButtonPrefab;
-
     public void Apply()
     {
         Incremental incremental = Incremental.Instance;
         if (incremental == null)
         {
-            Debug.LogWarning("[Incremental] EndButtonSummoner ignored - no Incremental instance.", this);
+            Debug.LogWarning("[Ending] End lever ignored - no Incremental instance.", this);
             return;
         }
 
         GameManager gameManager = GameManager.Instance;
         if (gameManager == null)
         {
-            Debug.LogWarning("[Incremental] EndButtonSummoner ignored - no GameManager instance.", this);
+            Debug.LogWarning("[Ending] End lever ignored - no GameManager instance.", this);
             return;
         }
 
-        if (gameManager.FinalButtonSummoned)
+        if (gameManager.Stage >= GameManager.EndStage.Called)
         {
-            Debug.Log("[Incremental] End button already summoned - skipping.", this);
+            Debug.Log("[Ending] End lever already thrown - chain already authorised.", this);
             return;
         }
 
-        long chargeThreshold = (long)System.Math.Ceiling(endFraction * (double)incremental.MaxCapacity);
-        if (!incremental.AllRoomsActivated || !incremental.HasReached(chargeThreshold))
+        if (!incremental.EndConditionMet)
         {
-            // distinguish the two failures in the log - rooms first, since
-            // charge percent is meaningless while capacity is still missing
+            // Distinguish the two failures - rooms first, since charge percent
+            // is meaningless while capacity is still missing.
             if (!incremental.AllRoomsActivated)
             {
-                Debug.Log($"[Incremental] End locked: {incremental.UnpoweredRoomCount} rooms unpowered.", this);
+                Debug.Log($"[Ending] Locked: {incremental.UnpoweredRoomCount} rooms unpowered.", this);
             }
             else
             {
                 long percent = incremental.MaxCapacity > 0 ? incremental.Count * 100 / incremental.MaxCapacity : 0;
-                Debug.Log($"[Incremental] End locked: charge at {percent}% (need {chargeThreshold}, have {incremental.Count}).", this);
+                Debug.Log($"[Ending] Locked: charge at {percent}%.", this);
             }
 
             PropAudio audio = GetComponent<PropAudio>();
@@ -63,9 +56,7 @@ public class EndButtonSummoner : MonoBehaviour, IIncrementalEffect
             return;
         }
 
-        gameManager.SummonFinalButton();
-        Debug.Log("[Incremental] End button summoned.", this);
-        Debug.Log($"[Incremental] WOULD: instantiate End Button prefab '{(endButtonPrefab != null ? endButtonPrefab.name : "None")}'.", this);
-        Debug.Log("[Incremental] WOULD: notify ViR system of endgame phase.", this);
+        gameManager.AdvanceEndStage(GameManager.EndStage.None);
+        Debug.Log("[Ending] End lever thrown - chain authorised (Stage -> Called).", this);
     }
 }

@@ -47,12 +47,38 @@ public class Incremental : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] float chargeDumpFraction = 1f;
 
+    [Tooltip("Fraction of MaxCapacity the bank must reach (with every room activated) for the end condition. Day-7 balancing knob. The SINGLE source - EndButtonSummoner/Sigil/checker all read EndConditionMet, never their own copy.")]
+    [Range(0f, 1f)]
+    [SerializeField] float endFraction = 1f;
+
+    [Header("The Ending")]
+    [Tooltip("Shape of the terminal discharge: X = elapsed fraction of the drain, Y = fraction of the starting balance already discharged (0 -> 1). Linear by design (brief E6); serialized so the curve can be swapped without a code change. NOT a gameplay drain - see BeginFinalDischarge.")]
+    [SerializeField] AnimationCurve dischargeCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
     [Tooltip("Fires one impulse on StartIncremental() - the lever's camera-shake beat. Editor wiring: add this component here, add a CinemachineImpulseListener on the vCam. Unassigned = shake skipped, logged as a WOULD hook - doesn't block the phase.")]
     [SerializeField] CinemachineImpulseSource startImpulseSource;
     [Tooltip("Delay in seconds between StartIncremental() and the camera-shake impulse (Running still flips immediately - this only delays the shake beat).")]
     [SerializeField] float startImpulseDelay = 3f;
 
     public bool Running { get; private set; }
+
+    // The terminal shutdown (brief E6). One-way: set by BeginFinalDischarge,
+    // NEVER cleared, with no path back to gameplay.
+    //
+    // This does NOT violate the Circuit's "nothing ever drains" law. That law
+    // is about the economy: no mechanic may take charge back, so the player
+    // can always trust a number that has gone up. This is not a mechanic - it
+    // is the game ending. It is reachable from exactly one place (the End
+    // Button's terminal press, via EndSequenceController), it stops the tick
+    // and refuses every credit and every spend, and once it is set the run is
+    // over. MaxCapacity is untouched: the building's capacity is not what
+    // drains, the charge in it is.
+    //
+    // If you are ever tempted to call this from gameplay - a "power surge"
+    // event, a malfunction that costs charge, a boss that drains you - do not.
+    // Add a separate, non-terminal mechanic and argue the no-drain law on its
+    // own merits.
+    public bool Discharging { get; private set; }
 
     // Current spendable balance. long, not float - a raw float counter
     // loses integer precision above ~16.7M.
@@ -169,7 +195,9 @@ public class Incremental : MonoBehaviour
     // gameplay code should never call this.
     public void Advance(double deltaSeconds)
     {
-        if (!Running || deltaSeconds <= 0)
+        // Discharging stops the tick outright (brief E6) - the generator is
+        // dead, not merely capped.
+        if (!Running || Discharging || deltaSeconds <= 0)
         {
             return;
         }
@@ -258,6 +286,14 @@ public class Incremental : MonoBehaviour
     // generator produced. Returns the banked amount.
     long Credit(long amount)
     {
+        // Nothing banks once the shutdown starts - otherwise a late tick or a
+        // one-shot prop could push charge back into a bank that is draining to
+        // zero, and the gauges would stutter upward mid-ending.
+        if (Discharging)
+        {
+            return 0;
+        }
+
         long banked = amount;
         if (MaxCapacity > 0)
         {
@@ -291,6 +327,15 @@ public class Incremental : MonoBehaviour
 
     bool SpendInternal(long cost)
     {
+        // Belt and braces: interaction is already locked out for the duration
+        // of the ending (PlayerMovement's gate), so nothing should reach a
+        // spend. This refuses anyway rather than trusting that gate.
+        if (Discharging)
+        {
+            Debug.Log("[Ending] Spend refused - final discharge running.");
+            return false;
+        }
+
         if (cost < 0)
         {
             Debug.LogWarning($"[Incremental] TrySpend refused - negative cost {cost}.");
@@ -322,6 +367,31 @@ public class Incremental : MonoBehaviour
     public bool IsRoomActivated(RoomId room)
     {
         return room != null && activatedRooms.Contains(room);
+    }
+
+    // "Rooms serviced" on the end card. Counts activations, not the configured
+    // list - they match on a completed run and differ on an abandoned one.
+    public int ActivatedRoomCount => activatedRooms.Count;
+
+    // Read-only view of the configured room list - the RoomLampBoard cross-
+    // checks its lamps against this at Start, and the E9 checker will too.
+    public IReadOnlyList<RoomId> AllRooms => allRooms;
+
+    // THE single end-condition expression (brief E4): every room powered AND
+    // the bank at endFraction of capacity. EndButtonSummoner, Sigil, and the
+    // checker must all read THIS - never reimplement the two-part gate.
+    public bool EndConditionMet
+    {
+        get
+        {
+            if (!AllRoomsActivated)
+            {
+                return false;
+            }
+
+            long threshold = (long)System.Math.Ceiling(endFraction * (double)MaxCapacity);
+            return HasReached(threshold);
+        }
     }
 
     // One half of the end condition (the other is the charge threshold).
@@ -447,6 +517,112 @@ public class Incremental : MonoBehaviour
         }
 
         return sum;
+    }
+
+    // ------------------------------------------------------------------
+    // The Ending: terminal discharge (brief E6)
+    // ------------------------------------------------------------------
+
+    // Begins the one-way shutdown. Called by EndSequenceController ONLY, from
+    // the End Button's terminal press - see the Discharging comment above for
+    // why this is not a drain mechanic and must never be reachable from
+    // gameplay. Idempotent: a second call is ignored.
+    //
+    // Every derived view (TerminalGauge, CapacityColumn, RoomLampBoard, the
+    // LEDs) follows Count for free. Write no per-view shutdown code.
+    public void BeginFinalDischarge(float duration)
+    {
+        if (Discharging)
+        {
+            Debug.Log("[Ending] BeginFinalDischarge ignored - already discharging.");
+            return;
+        }
+
+        Discharging = true;
+        Debug.Log($"[Ending] Final discharge begun: {Count} charge over {duration}s. The Circuit is shutting down.");
+        StartCoroutine(DischargeRoutine(duration));
+    }
+
+    IEnumerator DischargeRoutine(float duration)
+    {
+        long startCount = Count;
+
+        if (duration <= 0f || startCount <= 0)
+        {
+            Count = 0;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            Count = DischargedCountAt(startCount, elapsed / duration);
+            yield return null;
+        }
+
+        // Land on exactly 0 rather than trusting the curve's endpoint - a
+        // hand-edited curve that doesn't quite reach 1 would otherwise strand
+        // the bank a few charge above empty, which reads as a bug on the
+        // gauges at the one moment they are being stared at.
+        Count = 0;
+        Debug.Log("[Ending] Discharge complete - bank empty.");
+    }
+
+    // The discharge curve evaluated at progress t (0..1), exposed so the E9
+    // self-test can assert the shape - and that it lands on 0 - without
+    // running a coroutine (edit mode has no frames).
+    public long DischargedCountAt(long startCount, float t)
+    {
+        float discharged = dischargeCurve.Evaluate(Mathf.Clamp01(t));
+        return (long)System.Math.Round(startCount * (1f - discharged));
+    }
+
+    // ------------------------------------------------------------------
+    // Debug: force the end condition
+    // ------------------------------------------------------------------
+
+    // TESTING ONLY - drives the economy to a state where EndConditionMet is
+    // true, so the ending can be reached in seconds instead of a full run.
+    // Called by DebugEndConditionButton; nothing in the real game calls this.
+    //
+    // Deliberately BYPASSES activation cost. That is the point: paying for
+    // every room honestly is the thing being skipped. It still goes through
+    // AddCapacitySegment, so the capacity ledger, the gauges, the lamps and
+    // the CapacityColumn all end up in exactly the state a real run would
+    // produce - the shortcut is in how we got here, not in what results.
+    //
+    // NOT a reachability test. Whether a real player could actually afford
+    // every room in some order is a separate question (activation spends,
+    // capacity only rises, so a room can become permanently unaffordable) and
+    // wants its own editor simulation.
+    public void DebugSatisfyEndCondition()
+    {
+        if (!Running)
+        {
+            StartIncremental();
+        }
+
+        int activated = 0;
+        foreach (RoomId room in allRooms)
+        {
+            if (room == null || activatedRooms.Contains(room))
+            {
+                continue;
+            }
+
+            activatedRooms.Add(room);
+            AddCapacitySegment(room, room.name, room.BaseCapacity);
+            activated++;
+        }
+
+        long shortfall = MaxCapacity - Count;
+        if (shortfall > 0)
+        {
+            Credit(shortfall);
+        }
+
+        Debug.LogWarning($"[DEBUG] End condition forced: {activated} rooms activated free, bank filled to {Count}/{MaxCapacity}. EndConditionMet = {EndConditionMet}.", this);
     }
 
     // ------------------------------------------------------------------
