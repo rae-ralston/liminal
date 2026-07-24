@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PropAudioDefinition
   ambientLoop:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1199521506
+      Data2: 1289360529
+      Data3: -633886838
+      Data4: -1854334941
+    Path: event:/Props/Ambience/PROP_amb_Computer
   ambientLoopInactive:
     Guid:
       Data1: 0
