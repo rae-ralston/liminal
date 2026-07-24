@@ -35,6 +35,11 @@ using UnityEngine.SceneManagement;
 //  - a NON-empty propId serialized in the prefab itself (rule: propId stays
 //    empty in prefabs, set per placed instance - a shared id would consume
 //    every instance at once), plus the XOR/applier/collider checks above.
+// Checks (Scatter Placer output, §6 - GeneratedProp-marked objects only):
+//  - a sourcePrefabGuid that resolves to no asset (source prefab deleted/moved)
+//  - off-grid by > 0.01 (a hand-nudge that undid the alignment)
+//  - root transform off its collider's south edge / X-centre (the §3.1 sort-
+//    anchor law - the placed-instance form of the desk bug)
 public class PropConsistencyWindow : EditorWindow
 {
   private const string RoomSceneFolder = "Assets/Scenes/Rooms";
@@ -274,6 +279,8 @@ public class PropConsistencyWindow : EditorWindow
           }
         }
       }
+
+      CheckGeneratedProps(scene, scenePath, sceneName);
     }
 
     bool restored = false;
@@ -399,6 +406,55 @@ public class PropConsistencyWindow : EditorWindow
       AddIssue(Severity.Error,
         $"The isBootstrap terminal is in {bootstraps[0].sceneName}, not {BootstrapSceneName} - the pre-start softlock guarantee only holds from the starting room.",
         scenePath: bootstraps[0].scenePath, hierarchyPath: bootstraps[0].hierarchyPath);
+    }
+  }
+
+  // §6 (Scatter Placer) additions: audit the tool's own output in each scene.
+  // Scoped to GeneratedProp so it never false-flags a deliberately-anchored
+  // prop (a wall board, a terminal). All warnings - none block the game, they
+  // flag a first-draft layout that drifted.
+  private void CheckGeneratedProps(Scene scene, string scenePath, string sceneName)
+  {
+    Grid grid = Resources.FindObjectsOfTypeAll<Grid>().FirstOrDefault(g => g != null && g.gameObject.scene == scene);
+    float half = (grid != null ? grid.cellSize.x : 1f) * 0.5f;
+    Vector3 origin = grid != null ? grid.CellToWorld(Vector3Int.zero) : Vector3.zero;
+
+    foreach (GeneratedProp gp in Resources.FindObjectsOfTypeAll<GeneratedProp>().Where(g => g != null && g.gameObject.scene == scene))
+    {
+      propCount++;
+      string path = GetHierarchyPath(gp.transform);
+
+      // 1. dead source prefab
+      if (string.IsNullOrEmpty(gp.sourcePrefabGuid) || string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(gp.sourcePrefabGuid)))
+        AddIssue(Severity.Warning,
+          $"{sceneName} :: {path} GeneratedProp's sourcePrefabGuid resolves to no asset - the source prefab was deleted or moved.",
+          scenePath: scenePath, hierarchyPath: path);
+
+      // 2. off-grid (a hand-nudge that undid the alignment). Anchors land on
+      //    half-cell multiples from the grid origin (cell edges + W-centred X).
+      if (grid != null && half > 0f)
+      {
+        Vector3 rel = gp.transform.position - origin;
+        float ox = Mathf.Abs(rel.x / half - Mathf.Round(rel.x / half)) * half;
+        float oy = Mathf.Abs(rel.y / half - Mathf.Round(rel.y / half)) * half;
+        if (ox > 0.01f || oy > 0.01f)
+          AddIssue(Severity.Warning,
+            $"{sceneName} :: {path} is off-grid by ({ox:0.00}, {oy:0.00}) - a hand-nudge undid the alignment pass.",
+            scenePath: scenePath, hierarchyPath: path);
+      }
+
+      // 3. sort anchor (§3.1): root must sit at the collider's south edge / X
+      //    centre. This is the placed-instance form of the 2026-07-22 desk bug.
+      Collider2D col = gp.GetComponentInChildren<Collider2D>();
+      if (col != null)
+      {
+        float dy = Mathf.Abs(gp.transform.position.y - col.bounds.min.y);
+        float dx = Mathf.Abs(gp.transform.position.x - col.bounds.center.x);
+        if (dy > 0.05f || dx > 0.05f)
+          AddIssue(Severity.Warning,
+            $"{sceneName} :: {path} root is off its collider's south edge (x {dx:0.00}, y {dy:0.00}) - the §3.1 sort-anchor law (desk bug); it will occlude wrong from one side.",
+            scenePath: scenePath, hierarchyPath: path);
+      }
     }
   }
 
