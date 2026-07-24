@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering; // SortingGroup
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
@@ -20,6 +21,15 @@ using UnityEngine.UI;
 // discharge sequence (E6+) are NOT built here - see Ending_Build_Brief.md.
 public static class EndgameScaffold
 {
+    // Lamps render one step ABOVE the board backing (order 0). Order in layer is
+    // compared before the transparency-sort custom axis, so this holds regardless
+    // of a lamp's Y - without it, a top-zone lamp (higher Y = farther back under
+    // the (0,1,0) sort axis) draws behind the backing and disappears. Paired with
+    // a SortingGroup on the board root so the whole assembly still sorts as one
+    // unit against the player (order 1 alone would bleed the lamps over the
+    // player when they stand in front of the board).
+    const int LampSortingOrder = 1;
+
     [MenuItem("Tools/Circuit/Create SecurityRoom End Board")]
     public static void CreateEndBoard()
     {
@@ -31,6 +41,10 @@ public static class EndgameScaffold
         //      SigilAnchor                          (E4 placeholder - hidden sigil above the lever)
         GameObject root = NewGroup("EndBoard", null);
         root.AddComponent<RoomLampBoard>();
+        // The board is a multi-sprite assembly (backing + 24 lamps + column +
+        // lever); the group makes it sort as one unit against the player, and
+        // lets the lamps sit in front of the backing via order-in-layer.
+        root.AddComponent<SortingGroup>();
 
         GameObject lamps = NewGroup("Lamps", root.transform);
         NewGroup("ZoneTop", lamps.transform);
@@ -172,6 +186,14 @@ public static class EndgameScaffold
             return;
         }
 
+        // Idempotent: an older board (or one built before this pass existed) has
+        // no SortingGroup and lamps at order 0 - re-running fixes both.
+        if (board.GetComponent<SortingGroup>() == null)
+        {
+            Undo.AddComponent<SortingGroup>(board.gameObject);
+            Debug.Log("[Ending] Added a SortingGroup to the board so it sorts as one unit against the player and the lamps sit in front of the backing.", board);
+        }
+
         Transform lampsParent = FindOrCreateChild(board.transform, "Lamps");
         Transform[] zones =
         {
@@ -253,6 +275,7 @@ public static class EndgameScaffold
             GameObject lampGo = NewSprite($"Lamp_{room.name}", zone);
             lampGo.transform.localPosition = new Vector3(indexInZone * 0.6f, 0f, 0f);
             lampGo.transform.localScale = Vector3.one * 0.4f;
+            lampGo.GetComponent<SpriteRenderer>().sortingOrder = LampSortingOrder;
 
             int index = lamps.arraySize;
             lamps.InsertArrayElementAtIndex(index);
@@ -266,6 +289,31 @@ public static class EndgameScaffold
         }
 
         so.ApplyModifiedProperties();
+
+        // Normalize EVERY lamp (created + already-wired) to the board order, so a
+        // re-run also lifts old lamps left at order 0 in front of the backing.
+        // Re-read the list off a fresh SerializedObject - the entries are private,
+        // and 'so' above has just been applied.
+        int reordered = 0;
+        SerializedProperty finalLamps = new SerializedObject(board).FindProperty("lamps");
+        for (int i = 0; i < finalLamps.arraySize; i++)
+        {
+            SpriteRenderer lamp = finalLamps.GetArrayElementAtIndex(i)
+                .FindPropertyRelative("lamp").objectReferenceValue as SpriteRenderer;
+
+            if (lamp != null && lamp.sortingOrder != LampSortingOrder)
+            {
+                Undo.RecordObject(lamp, "Normalize Lamp Sorting");
+                lamp.sortingOrder = LampSortingOrder;
+                EditorUtility.SetDirty(lamp);
+                reordered++;
+            }
+        }
+
+        if (reordered > 0)
+        {
+            Debug.Log($"[Ending] Set {reordered} lamp(s) to sortingOrder {LampSortingOrder} (in front of the board backing at 0).", board);
+        }
 
         Debug.Log($"[Ending] Board lamps: {created} created, {alreadyWired.Count} already wired, {rooms.Count} rooms total. Arrange them onto the board art; the lamp list is wired by reference, so renaming and reparenting are both safe.", board);
 

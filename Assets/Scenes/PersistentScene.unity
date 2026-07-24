@@ -3048,7 +3048,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   confiner: {fileID: 0}
-  pixelPerfect: {fileID: 0}
+  pixelPerfect: {fileID: 330585550}
   globalLight: {fileID: 0}
   dissolveLeadFraction: 0.85
   flashlight: {fileID: 152473147}
@@ -3057,7 +3057,7 @@ MonoBehaviour:
   emberIntensity: 0.6
   emberFallDuration: 4
   extinguishDuration: 1
-  screenFade: {fileID: 0}
+  screenFade: {fileID: 1647222258}
   endCard: {fileID: 2055304335}
   endCardGroup: {fileID: 2055304337}
   bootSceneName: PersistentScene
