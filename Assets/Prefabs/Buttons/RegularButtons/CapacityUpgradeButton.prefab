@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1007}
   - component: {fileID: 3714207467295983046}
   - component: {fileID: 1009}
+  - component: {fileID: 7945538219735342140}
   m_Layer: 0
   m_Name: CapacityUpgradeButton
   m_TagString: Untagged
@@ -257,7 +258,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableHighlight
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
+  driveHighlightLighten: 0.4
   pulseStrength: 0.6
   pulseSpeed: 4
   fadeTime: 0.15
   highlightLight: {fileID: 0}
+--- !u!114 &7945538219735342140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43e19a70d2e49946b89c7b2e8d3d89c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonStateTint
+  body: {fileID: 0}
