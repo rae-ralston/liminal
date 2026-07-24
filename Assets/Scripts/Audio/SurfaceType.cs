@@ -4,5 +4,6 @@ public enum SurfaceType
     floorTile,
     linoleum,
     carpet,
-    wood
+    wood,
+    metal
 }
