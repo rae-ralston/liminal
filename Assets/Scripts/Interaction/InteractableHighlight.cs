@@ -14,6 +14,9 @@ using UnityEngine.Rendering.Universal;
 public class InteractableHighlight : MonoBehaviour
 {
   [SerializeField] private Color highlightColor = Color.white;
+  [Tooltip("When a controller drives the base colour (ButtonStateTint), the highlight is instead this much lighter than the CURRENT base, so it tracks the used/unused colour. Ignored when undriven.")]
+  [Range(0f, 1f)]
+  [SerializeField] private float driveHighlightLighten = 0.4f;
   [Tooltip("How far the sprite tints toward the highlight color at the pulse peak (0-1).")]
   [SerializeField] private float pulseStrength = 0.6f;
   [SerializeField] private float pulseSpeed = 4f;
@@ -27,6 +30,18 @@ public class InteractableHighlight : MonoBehaviour
   private float lightBaseIntensity;
   private float glow;          // 0 = off, 1 = fully highlighted (eased)
   private bool playerInRange;
+  private bool baseColorDriven;
+
+  // Lets a controller (ButtonStateTint) own the resting colour: the highlight
+  // then eases toward a lighter tint of THAT colour, so a button's used/unused
+  // state and its proximity glow never fight over the sprite. Undriven props are
+  // unchanged (Awake baseColor + fixed highlightColor). The controller writes
+  // the resting colour itself; this only affects the hover ease.
+  public void SetBaseColor(Color color)
+  {
+    baseColor = color;
+    baseColorDriven = true;
+  }
 
   private void Awake()
   {
@@ -68,7 +83,10 @@ public class InteractableHighlight : MonoBehaviour
     float amount = glow * pulseStrength * Mathf.Lerp(0.6f, 1f, wave);
 
     if (spriteRenderer != null)
-      spriteRenderer.color = Color.Lerp(baseColor, highlightColor, amount);
+    {
+      Color coloringTarget = baseColorDriven ? Color.Lerp(baseColor, Color.white, driveHighlightLighten) : highlightColor;
+      spriteRenderer.color = Color.Lerp(baseColor, coloringTarget, amount);
+    }
 
     if (highlightLight != null)
     {

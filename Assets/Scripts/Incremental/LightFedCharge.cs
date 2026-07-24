@@ -220,6 +220,15 @@ public class LightFedCharge : MonoBehaviour
         }
     }
 
+    // Lets ButtonStateTint own the resting colour: the charge tint then lerps
+    // from the current used/unused colour toward chargedColor, instead of from
+    // the sprite's authored colour. Driven every frame, so a state change (or
+    // the consumed-state colour) tracks live.
+    public void SetBaseColor(Color color)
+    {
+        baseColor = color;
+    }
+
     void OnDisable()
     {
         // Leave the sprite exactly as we found it (room unloads must never

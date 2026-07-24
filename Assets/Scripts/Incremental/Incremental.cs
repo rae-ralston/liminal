@@ -60,6 +60,15 @@ public class Incremental : MonoBehaviour
     [Tooltip("Delay in seconds between StartIncremental() and the camera-shake impulse (Running still flips immediately - this only delays the shake beat).")]
     [SerializeField] float startImpulseDelay = 3f;
 
+    [Header("Button state tint (central - ButtonStateTint reads these)")]
+    [Tooltip("Body colour of a spendable button that has NOT been used yet. Default 00C3C2.")]
+    [SerializeField] Color unusedButtonColor = new Color(0f, 0.764706f, 0.760784f, 1f);
+    [Tooltip("Body colour of a spendable button once it has been used/consumed. Default C3008A. The clicker never consumes, so it stays 'unused'.")]
+    [SerializeField] Color usedButtonColor = new Color(0.764706f, 0f, 0.541176f, 1f);
+
+    public Color UnusedButtonColor => unusedButtonColor;
+    public Color UsedButtonColor => usedButtonColor;
+
     public bool Running { get; private set; }
 
     // The terminal shutdown (brief E6). One-way: set by BeginFinalDischarge,
