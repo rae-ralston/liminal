@@ -14,6 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PropAudioDefinition
   ambientLoop:
     Guid:
+      Data1: -1185602132
+      Data2: 1208033134
+      Data3: -345258107
+      Data4: 1129049223
+    Path: event:/Props/Ambience/PROP_amb_fridge_hum
+  ambientLoopInactive:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  ambientLoopSuspended:
+    Guid:
       Data1: 0
       Data2: 0
       Data3: 0
@@ -21,11 +35,11 @@ MonoBehaviour:
     Path: 
   interact:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1386506381
+      Data2: 1124693406
+      Data3: 1834389913
+      Data4: -393574427
+    Path: event:/Props/Interact/PROP_interact_switch_flip
   locked:
     Guid:
       Data1: 0
@@ -41,6 +55,20 @@ MonoBehaviour:
       Data4: 0
     Path: 
   turnOff:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeLoop:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeComplete:
     Guid:
       Data1: 0
       Data2: 0

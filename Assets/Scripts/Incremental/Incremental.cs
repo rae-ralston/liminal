@@ -106,6 +106,12 @@ public class Incremental : MonoBehaviour
     // for generation is the ruling; this only protects total-loss presses.
     public bool AtCapacity => MaxCapacity > 0 && Count >= MaxCapacity;
 
+    // True once the player has activated the bootstrap room at its terminal -
+    // the first real step, distinct from SeedBootstrapResidue() (which raises
+    // MaxCapacity at Start before any interaction). StarterButtonGlow uses this
+    // with !Running to know the player should be guided to press start next.
+    public bool BootstrapActivated => bootstrapRoom != null && IsRoomActivated(bootstrapRoom);
+
     public float Multiplier => 1f + multiplierBonusSum;
 
     // Charge store for light-fed props (Phase 5) - a plain class on the

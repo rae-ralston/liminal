@@ -54,9 +54,8 @@ public class EndSequenceController : MonoBehaviour
   [Header("E6c - the dissolve")]
   [Tooltip("The global/ambient Light2D, if one exists. Serialized rather than hunted for - a scene search would also catch it as a room light and double-lerp it.")]
   [SerializeField] Light2D globalLight;
-  [Tooltip("Fraction of the drain over which room lights die. Below 1 so the last of the bank empties into an already-dark hall.")]
-  [Range(0.1f, 1f)]
-  [SerializeField] float dissolveLeadFraction = 0.85f;
+  [Tooltip("Seconds the room keeps dying AFTER the bank is empty. The dissolve runs over drainDuration + this, so the capacity bar's final drain is still (dimly) lit instead of finishing in the dark; the hall reaches full black this long after the drain ends, then the void hold begins.")]
+  [SerializeField] float darkTailAfterDrain = 2f;
 
   [Tooltip("The player's FLASHLIGHT (not the ember). It lives on the Player in PersistentScene, so the scene-scoped dissolve cannot see it - it has to be handed over explicitly or it burns through the ending. Dies on the dissolve curve, WITH the hall: the flashlight is equipment, part of the building's kit. The ember below is the player's own presence and outlives everything.")]
   [SerializeField] Light2D flashlight;
@@ -161,6 +160,11 @@ public class EndSequenceController : MonoBehaviour
 
     yield return new WaitForSeconds(drainDuration);
 
+    // The bar is empty now, but the hall is only dim - hold for the dark tail
+    // while the last of the light dies, so the depletion finished in light and
+    // the void hold below opens on a fully black hall.
+    yield return new WaitForSeconds(darkTailAfterDrain);
+
     // 3. The void. Player is lit, alone, and still controllable - movement is
     //    never disabled, only interaction.
     Debug.Log("[Ending] Void hold - the hall is gone, the player is not.");
@@ -185,6 +189,13 @@ public class EndSequenceController : MonoBehaviour
   {
     rigCaptured = true;
 
+    // Capture the authored size FIRST - the pixel-perfect match below
+    // overwrites the vCam size, and Again() must restore the original.
+    if (vCam != null)
+    {
+      restoreOrthoSize = vCam.Lens.OrthographicSize;
+    }
+
     if (confiner != null)
     {
       restoreConfinerEnabled = confiner.enabled;
@@ -198,12 +209,20 @@ public class EndSequenceController : MonoBehaviour
       // silently lerping against a live PixelPerfectCamera is not an option:
       // it judders in visible steps or gets overridden outright.
       restorePixelPerfectEnabled = pixelPerfect.enabled;
-      pixelPerfect.enabled = false;
-    }
 
-    if (vCam != null)
-    {
-      restoreOrthoSize = vCam.Lens.OrthographicSize;
+      // Turning PixelPerfect off pops the framing: it renders the output
+      // camera at an integer-scaled ortho size that differs slightly from the
+      // vCam's authored size, so the image visibly jumps IN the instant it's
+      // disabled. Match the vCam to what's on screen right now, so Cinemachine
+      // holds that exact size and the cut is invisible; the zoom eases out from
+      // there.
+      Camera cam = pixelPerfect.GetComponent<Camera>();
+      if (vCam != null && cam != null)
+      {
+        vCam.Lens.OrthographicSize = cam.orthographicSize;
+      }
+
+      pixelPerfect.enabled = false;
     }
   }
 
@@ -250,7 +269,7 @@ public class EndSequenceController : MonoBehaviour
       startIntensities[i] = lights[i].intensity;
     }
 
-    float duration = Mathf.Max(0.01f, drainDuration * dissolveLeadFraction);
+    float duration = Mathf.Max(0.01f, drainDuration + darkTailAfterDrain);
     float elapsed = 0f;
 
     while (elapsed < duration)
@@ -429,6 +448,13 @@ public class EndSequenceController : MonoBehaviour
     endCardGroup.alpha = 0f;
     endCardGroup.blocksRaycasts = true;
 
+    // The run is over once the card is up - stop the player walking (the void
+    // hold before this left movement enabled on purpose). Cleared in Again().
+    if (GameManager.Instance != null)
+    {
+      GameManager.Instance.MovementFrozen = true;
+    }
+
     // Populate AFTER enabling (the fields have to exist) and BEFORE the fade,
     // so no frame shows placeholder text.
     EndCard card = endCard.GetComponent<EndCard>();
@@ -459,6 +485,13 @@ public class EndSequenceController : MonoBehaviour
   // brief warns about. Restoring first is correct either way.
   public void Again()
   {
+    // The reload rebuilds a fresh GameManager (frozen defaults false), but
+    // clear it explicitly too - correctness shouldn't hinge on the reload.
+    if (GameManager.Instance != null)
+    {
+      GameManager.Instance.MovementFrozen = false;
+    }
+
     RestoreCameraRig();
     SceneManager.LoadScene(bootSceneName);
   }

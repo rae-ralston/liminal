@@ -30,6 +30,14 @@ public static class EndgameScaffold
     // player when they stand in front of the board).
     const int LampSortingOrder = 1;
 
+    // Lamps carry a Sprite Light2D (added 2026-07-24) so a room powering on
+    // reads as a real light switching on, not just a tint. A 0.4-unit lamp was
+    // too small for the light to register, so lamps are scale 2 now; re-space
+    // the board to suit. The light is disabled until RoomLampBoard turns it on.
+    const float LampScale = 2f;
+    const float LampSpacing = 2.4f;
+    static readonly Color LampGhostGreen = new Color(0.12f, 0.35f, 0.18f);
+
     [MenuItem("Tools/Circuit/Create SecurityRoom End Board")]
     public static void CreateEndBoard()
     {
@@ -273,8 +281,8 @@ public static class EndgameScaffold
             int indexInZone = zone.childCount;
 
             GameObject lampGo = NewSprite($"Lamp_{room.name}", zone);
-            lampGo.transform.localPosition = new Vector3(indexInZone * 0.6f, 0f, 0f);
-            lampGo.transform.localScale = Vector3.one * 0.4f;
+            lampGo.transform.localPosition = new Vector3(indexInZone * LampSpacing, 0f, 0f);
+            lampGo.transform.localScale = Vector3.one * LampScale;
             lampGo.GetComponent<SpriteRenderer>().sortingOrder = LampSortingOrder;
 
             int index = lamps.arraySize;
@@ -290,32 +298,9 @@ public static class EndgameScaffold
 
         so.ApplyModifiedProperties();
 
-        // Normalize EVERY lamp (created + already-wired) to the board order, so a
-        // re-run also lifts old lamps left at order 0 in front of the backing.
-        // Re-read the list off a fresh SerializedObject - the entries are private,
-        // and 'so' above has just been applied.
-        int reordered = 0;
-        SerializedProperty finalLamps = new SerializedObject(board).FindProperty("lamps");
-        for (int i = 0; i < finalLamps.arraySize; i++)
-        {
-            SpriteRenderer lamp = finalLamps.GetArrayElementAtIndex(i)
-                .FindPropertyRelative("lamp").objectReferenceValue as SpriteRenderer;
+        int lit = NormalizeLampVisuals(board);
 
-            if (lamp != null && lamp.sortingOrder != LampSortingOrder)
-            {
-                Undo.RecordObject(lamp, "Normalize Lamp Sorting");
-                lamp.sortingOrder = LampSortingOrder;
-                EditorUtility.SetDirty(lamp);
-                reordered++;
-            }
-        }
-
-        if (reordered > 0)
-        {
-            Debug.Log($"[Ending] Set {reordered} lamp(s) to sortingOrder {LampSortingOrder} (in front of the board backing at 0).", board);
-        }
-
-        Debug.Log($"[Ending] Board lamps: {created} created, {alreadyWired.Count} already wired, {rooms.Count} rooms total. Arrange them onto the board art; the lamp list is wired by reference, so renaming and reparenting are both safe.", board);
+        Debug.Log($"[Ending] Board lamps: {created} created, {alreadyWired.Count} already wired, {rooms.Count} rooms total. Lights on {lit} lamp(s). Re-space the scale-2 lamps onto the board art; the lamp list is wired by reference, so renaming and reparenting are both safe.", board);
 
         List<string> unzoned = new List<string>();
         foreach (RoomId room in rooms)
@@ -329,6 +314,93 @@ public static class EndgameScaffold
         if (unzoned.Count > 0)
         {
             Debug.LogWarning($"[Ending] Rooms in no zone list, placed in ZoneMiddle by default: {string.Join(", ", unzoned)}. Add them to ZoneTopRooms/ZoneMiddleRooms/ZoneBottomRooms in EndgameScaffold.cs.", board);
+        }
+    }
+
+    // Retrofit EVERY lamp (created + already-placed) to the current look:
+    // sort order in front of the backing, scale 2, a dim-green unlit sprite,
+    // and a disabled Sprite Light2D wired to `glow` that RoomLampBoard switches
+    // on when the room powers up. Idempotent - a lamp that already has a light
+    // keeps it (and its tuning), so re-running only fills the gaps. Also forces
+    // the board's ghostColor to green so the placed instance matches. Returns
+    // the number of lamps carrying a light afterwards.
+    static int NormalizeLampVisuals(RoomLampBoard board)
+    {
+        Sprite cookie = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+
+        SerializedObject boardSo = new SerializedObject(board);
+        boardSo.FindProperty("ghostColor").colorValue = LampGhostGreen;
+
+        SerializedProperty lamps = boardSo.FindProperty("lamps");
+        int withLight = 0;
+
+        for (int i = 0; i < lamps.arraySize; i++)
+        {
+            SerializedProperty row = lamps.GetArrayElementAtIndex(i);
+            SpriteRenderer sprite = row.FindPropertyRelative("lamp").objectReferenceValue as SpriteRenderer;
+            if (sprite == null)
+            {
+                continue;
+            }
+
+            Undo.RecordObject(sprite, "Normalize Lamp Visuals");
+            sprite.sortingOrder = LampSortingOrder;
+            sprite.color = LampGhostGreen;
+            EditorUtility.SetDirty(sprite);
+
+            Undo.RecordObject(sprite.transform, "Normalize Lamp Visuals");
+            sprite.transform.localScale = Vector3.one * LampScale;
+
+            SerializedProperty glow = row.FindPropertyRelative("glow");
+            Light2D light = glow.objectReferenceValue as Light2D;
+            if (light == null)
+            {
+                // Reuse a light already on the lamp (e.g. the one hand-placed
+                // while prototyping) before adding a second.
+                light = sprite.GetComponent<Light2D>();
+                if (light == null)
+                {
+                    light = Undo.AddComponent<Light2D>(sprite.gameObject);
+                }
+
+                ConfigureLampLight(light, cookie);
+                glow.objectReferenceValue = light;
+            }
+
+            withLight++;
+        }
+
+        boardSo.ApplyModifiedProperties();
+        return withLight;
+    }
+
+    // A Sprite Light2D matching the prototype: sprite cookie, white, intensity
+    // 1, falloff 0.5, no shadows (a wall board casts none, and 24 shadow-casters
+    // is a needless WebGL cost). Disabled here - it stays off until RoomLampBoard
+    // enables it for a powered room. Type/intensity/color go through the public
+    // API (stable across URP versions); the cookie/falloff/shadows have no
+    // reliable public setter, so those go through SerializedObject.
+    static void ConfigureLampLight(Light2D light, Sprite cookie)
+    {
+        Undo.RecordObject(light, "Configure Lamp Light");
+        light.enabled = false;
+        light.lightType = Light2D.LightType.Sprite;
+        light.intensity = 1f;
+        light.color = Color.white;
+
+        SerializedObject lso = new SerializedObject(light);
+        SetIfPresent(lso, "m_FalloffIntensity", p => p.floatValue = 0.5f);
+        SetIfPresent(lso, "m_LightCookieSprite", p => p.objectReferenceValue = cookie);
+        SetIfPresent(lso, "m_ShadowsEnabled", p => p.boolValue = false);
+        lso.ApplyModifiedProperties();
+    }
+
+    static void SetIfPresent(SerializedObject so, string property, System.Action<SerializedProperty> set)
+    {
+        SerializedProperty p = so.FindProperty(property);
+        if (p != null)
+        {
+            set(p);
         }
     }
 

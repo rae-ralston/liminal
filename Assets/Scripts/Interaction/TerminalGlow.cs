@@ -79,6 +79,15 @@ public class TerminalGlow : MonoBehaviour
       return;
     }
 
+    // Yield the glow light to the ending's dissolve (E6c). This view writes
+    // glowLight.intensity every frame, so without bowing out it would stomp the
+    // dissolve's lerp and the terminal would stay lit in the dark hall. Stop
+    // driving and let EndSequenceController.DissolveRoomLights take it to zero.
+    if (GameManager.Instance != null && GameManager.Instance.EndSequenceRunning)
+    {
+      return;
+    }
+
     Incremental incremental = Incremental.Instance;
     if (!terminal.IsLive)
     {

@@ -37,6 +37,13 @@ public class GameManager : MonoBehaviour
   // ending). The sequence itself is not built yet.
   public bool EndSequenceRunning { get; private set; } = false;
 
+  // Set true while the end card is on screen so the player stops walking. The
+  // void hold BEFORE the card deliberately leaves movement enabled (the lit
+  // figure walks the dark hall); only once the card is up is the run over.
+  // Cleared naturally by the Again reload (a fresh GameManager), and
+  // explicitly in EndSequenceController.Again() for safety.
+  public bool MovementFrozen { get; set; } = false;
+
   // Session length for the end card's meter reading. Starts at boot so a run
   // driven by the debug button (which never touches StartGame) still reports
   // something honest, and is overwritten when the run properly begins. Frozen

@@ -32,7 +32,10 @@ public class RoomLampBoard : MonoBehaviour
 
     [Header("Colors")]
     [SerializeField] Color litColor = new Color(0.2f, 0.85f, 0.3f);
-    [SerializeField] Color ghostColor = new Color(0.2f, 0.2f, 0.2f);
+    // Unlit = a dim GREEN lamp, not grey - so a powered room reads as the same
+    // lamp brightening AND its Light2D switching on, rather than a colour swap
+    // alone. The board generator forces this onto the placed board too.
+    [SerializeField] Color ghostColor = new Color(0.12f, 0.35f, 0.18f);
 
     [Tooltip("Approx seconds to ease each lamp's colour on activation - no snapping.")]
     [SerializeField] float lerpSeconds = 0.3f;

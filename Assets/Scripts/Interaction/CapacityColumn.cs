@@ -27,6 +27,8 @@ public class CapacityColumn : MonoBehaviour
     [SerializeField] SpriteRenderer fill;
 
     [Header("Height mapping (MaxCapacity -> column height)")]
+    [Tooltip("ColumnRoot Y localScale at FULL height. The 0.15..1 height fraction multiplies this, so it sets how tall the whole column reads. Bump it up for the small placeholder sprite (a bar, not a dot); set to whatever your final art wants.")]
+    [SerializeField] float fullHeightScale = 6f;
     [Tooltip("Shortest the column ever gets, as a fraction of full height, so an early tiny MaxCapacity is still visible.")]
     [Range(0f, 1f)]
     [SerializeField] float minHeightFraction = 0.15f;
@@ -75,8 +77,11 @@ public class CapacityColumn : MonoBehaviour
     {
         if (columnRoot != null)
         {
+            // fullHeightScale sets the bar's height at full capacity; the
+            // fraction scales it down. X/Z are left alone so column WIDTH stays
+            // authorable on the transform (the component only owns height).
             Vector3 s = columnRoot.localScale;
-            s.y = height;
+            s.y = height * fullHeightScale;
             columnRoot.localScale = s;
         }
 

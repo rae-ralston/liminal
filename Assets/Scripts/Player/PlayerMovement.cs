@@ -32,6 +32,16 @@ public class PlayerMovement : MonoBehaviour
 
   void Update()
   {
+    // Frozen once the end card is up (set by EndSequenceController). Zero the
+    // velocity ourselves rather than disabling the component, so there's no
+    // residual slide and the animator settles to idle.
+    if (GameManager.Instance != null && GameManager.Instance.MovementFrozen)
+    {
+      rb.linearVelocity = Vector2.zero;
+      animator.SetFloat("Speed", 0f);
+      return;
+    }
+
     Vector2 movement = moveAction.ReadValue<Vector2>();
     if (movement.sqrMagnitude > 0.01f)
     {
