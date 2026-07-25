@@ -48,13 +48,28 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        // Buses only. Ambience is deliberately NOT started here: on WebGL the
+        // browser suspends the audio context until the first user gesture, so
+        // the first FMOD playback must happen inside a click. SplashScreen calls
+        // StartAmbience() from its dismiss (the boot click). See SplashScreen.cs.
         InitializeBuses();
-        InitializeAmbience(FMODEvents.Instance.Ambience);
     }
 
     /*
      * Ambience
      */
+
+    // Public entry point, called from the boot click (SplashScreen). Idempotent:
+    // if the ambience is already running, does nothing, so a second call (or a
+    // scene that starts it another way) can't stack instances.
+    public void StartAmbience()
+    {
+        if (ambienceEventInstance.isValid())
+            return;
+
+        InitializeAmbience(FMODEvents.Instance.Ambience);
+    }
+
     private void InitializeAmbience(EventReference ambienceEventReference)
     {
         if (ambienceEventReference.IsNull)
