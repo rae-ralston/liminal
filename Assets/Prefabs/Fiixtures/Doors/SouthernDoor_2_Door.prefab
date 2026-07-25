@@ -24,6 +24,10 @@ PrefabInstance:
       propertyPath: spawnOffset.y
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 1818521367755720532, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_Name
+      value: Door_2
+      objectReference: {fileID: 0}
     - target: {fileID: 1959482116753538390, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_Name
       value: DoorTeleporter_toAssemblyHall_Door_Left
@@ -54,7 +58,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5580844283366901126, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.0277176
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6253281898465792057, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6527961932712132932, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
       propertyPath: m_LocalPosition.x
@@ -126,6 +134,7 @@ PrefabInstance:
     - {fileID: 6909308059358297637, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
     - {fileID: 3854432621169179280, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
     - {fileID: 1719918713151520023, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
+    - {fileID: 6253281898465792057, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a814f6273a371a4f9f3009a687a0d61, type: 3}
