@@ -179,7 +179,7 @@ public class ScatterPlacerWindow : EditorWindow
     {
         if (!active.IsValid()) return "No active scene.";
         if (active.name == "PersistentScene") return "PersistentScene is active - switch to a room scene. The placer never writes to PersistentScene.";
-        if (Object.FindObjectsByType<FloorTilemapGroup>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).All(g => g.gameObject.scene != active))
+        if (Object.FindObjectsByType<FloorTilemapGroup>(FindObjectsInactive.Exclude).All(g => g.gameObject.scene != active))
             return "The active scene has no FloorTilemapGroup - nothing defines 'floor' here.";
         return null;
     }
@@ -337,7 +337,7 @@ public class ScatterPlacerWindow : EditorWindow
     HashSet<Vector3Int> FloorCells(Scene active)
     {
         HashSet<Vector3Int> set = new HashSet<Vector3Int>();
-        foreach (FloorTilemapGroup g in Object.FindObjectsByType<FloorTilemapGroup>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (FloorTilemapGroup g in Object.FindObjectsByType<FloorTilemapGroup>(FindObjectsInactive.Exclude))
         {
             if (g.gameObject.scene != active) continue;
             foreach (Tilemap tm in g.GetTilemaps()) AddTiles(tm, set);
@@ -351,7 +351,7 @@ public class ScatterPlacerWindow : EditorWindow
         Tilemap wall = wallTilemapOverride;
         if (wall == null || wall.gameObject.scene != active)
         {
-            wall = Object.FindObjectsByType<Tilemap>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+            wall = Object.FindObjectsByType<Tilemap>(FindObjectsInactive.Exclude)
                 .FirstOrDefault(t => t.gameObject.scene == active && t.gameObject.name == "WallTilemap");
         }
         if (wall == null)
@@ -375,7 +375,7 @@ public class ScatterPlacerWindow : EditorWindow
         // tilemap/composite colliders (their AABB spans the whole wall outline =
         // the whole room, which would block every floor cell); and trigger zones
         // (interaction volumes - doors/interactables are handled by clearance).
-        foreach (Collider2D col in Object.FindObjectsByType<Collider2D>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (Collider2D col in Object.FindObjectsByType<Collider2D>(FindObjectsInactive.Exclude))
         {
             if (col.gameObject.scene != active) continue;
             if (col is TilemapCollider2D || col is CompositeCollider2D) continue;
@@ -387,10 +387,10 @@ public class ScatterPlacerWindow : EditorWindow
         }
 
         // door / interactable clearance
-        foreach (Door door in Object.FindObjectsByType<Door>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (Door door in Object.FindObjectsByType<Door>(FindObjectsInactive.Exclude))
             if (door.gameObject.scene == active) AddClearance(door.transform.position, doorClearanceCells, grid, floor, blocked);
 
-        foreach (InteractableTrigger it in Object.FindObjectsByType<InteractableTrigger>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (InteractableTrigger it in Object.FindObjectsByType<InteractableTrigger>(FindObjectsInactive.Exclude))
             if (it.gameObject.scene == active && !(it is Door)) AddClearance(it.transform.position, interactableClearanceCells, grid, floor, blocked);
 
         return blocked;
@@ -538,7 +538,7 @@ public class ScatterPlacerWindow : EditorWindow
         int group = Undo.GetCurrentGroup();
         Undo.SetCurrentGroupName(undoName);
         int removed = 0;
-        foreach (GeneratedProp gp in Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (GeneratedProp gp in Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude))
         {
             if (gp.gameObject.scene != active) continue;
             if (guidFilter != null && gp.sourcePrefabGuid != guidFilter) continue;
@@ -551,20 +551,20 @@ public class ScatterPlacerWindow : EditorWindow
     }
 
     int CountMatching(Scene active, string guidFilter, string batchFilter) =>
-        Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Count(gp =>
+        Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude).Count(gp =>
             gp.gameObject.scene == active
             && (guidFilter == null || gp.sourcePrefabGuid == guidFilter)
             && (batchFilter == null || gp.batchId == batchFilter));
 
     List<string> BatchIdsInScene(Scene active) =>
-        Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None)
+        Object.FindObjectsByType<GeneratedProp>(FindObjectsInactive.Exclude)
             .Where(gp => gp.gameObject.scene == active && !string.IsNullOrEmpty(gp.batchId))
             .Select(gp => gp.batchId).Distinct().ToList();
 
     // ------------------------------------------------------------- helpers
 
     static Grid FindGrid(Scene active) =>
-        Object.FindObjectsByType<Grid>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).FirstOrDefault(g => g.gameObject.scene == active);
+        Object.FindObjectsByType<Grid>(FindObjectsInactive.Exclude).FirstOrDefault(g => g.gameObject.scene == active);
 
     static int Cheb(Vector3Int a, Vector3Int b) => Mathf.Max(Mathf.Abs(a.x - b.x), Mathf.Abs(a.y - b.y));
 
