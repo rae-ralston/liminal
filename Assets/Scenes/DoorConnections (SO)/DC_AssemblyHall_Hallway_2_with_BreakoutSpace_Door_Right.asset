@@ -16,6 +16,7 @@ MonoBehaviour:
   endpointB: {fileID: 11400000, guid: bad0a00276718854b8afff763a33be00, type: 2}
   startsLocked: 0
   unlockId: 
+  clickCost: 50
   doorType: 0
   isOneWay: 0
   fadeDurationOverride: -1

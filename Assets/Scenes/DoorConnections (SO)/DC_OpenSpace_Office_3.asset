@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorConnection
   endpointA: {fileID: 11400000, guid: 6109cf3778510bf4b8ce096b1c7dbdd3, type: 2}
   endpointB: {fileID: 11400000, guid: 2f350ddf6877a8c4a85e4beb4741a1a4, type: 2}
-  startsLocked: 0
+  startsLocked: 1
   unlockId: 
+  clickCost: 0
   doorType: 0
   isOneWay: 0
   fadeDurationOverride: -1

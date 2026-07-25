@@ -378,29 +378,12 @@ MonoBehaviour:
   bootstrapRoom: {fileID: 11400000, guid: 65e050043a5352c4bb15245677fa0fa3, type: 2}
   allRooms:
   - {fileID: 11400000, guid: bd62363dc6ced824bb661a693783622a, type: 2}
-  - {fileID: 11400000, guid: 549e3b41499330745b254ce197a66e35, type: 2}
-  - {fileID: 11400000, guid: e80d9bf1c60e3b641997ef4700db0dbe, type: 2}
-  - {fileID: 11400000, guid: 82c56789c3563654daf90418e20ebaf4, type: 2}
-  - {fileID: 11400000, guid: 4fc003921c5f8fb499553190c2833e58, type: 2}
-  - {fileID: 11400000, guid: 4d3d24b0ce188a649b5ce5e8b4227918, type: 2}
   - {fileID: 11400000, guid: 951b2142713f9e841b96068b06e0f748, type: 2}
   - {fileID: 11400000, guid: eb068a7d3f8869d48abab74269446d1d, type: 2}
-  - {fileID: 11400000, guid: b17e4b3d91af387449b667cfa7dbad0a, type: 2}
-  - {fileID: 11400000, guid: f1d6e9f7c84a91f4fb61165de6b325f4, type: 2}
   - {fileID: 11400000, guid: 56265e1006423854fb85af068c8fa83c, type: 2}
-  - {fileID: 11400000, guid: 313e47b638c96b7449cd8ae50c309c96, type: 2}
-  - {fileID: 11400000, guid: 2699ee5be63b49c419636b4736278ea1, type: 2}
-  - {fileID: 11400000, guid: eb68fa678a9a3a941b9f368bfdad94f7, type: 2}
-  - {fileID: 11400000, guid: e552c9b61e6930245a8ea72fea32eb74, type: 2}
-  - {fileID: 11400000, guid: 4a656bebf000ec14ebff5b658aff4993, type: 2}
-  - {fileID: 11400000, guid: b1a57591cbd07d74285e4bee5115c7c4, type: 2}
   - {fileID: 11400000, guid: f2735f8fbce75f64d9f5d405bb71ee3e, type: 2}
   - {fileID: 11400000, guid: a26711fe255820f48870cefba45d20b5, type: 2}
-  - {fileID: 11400000, guid: fdb312ba5ec78224990b27d88116f7bf, type: 2}
-  - {fileID: 11400000, guid: 0bfa803e2919ef24d801a0cbe459e447, type: 2}
-  - {fileID: 11400000, guid: 1402d9317472d754a82ec1a06d69e1de, type: 2}
   - {fileID: 11400000, guid: 65e050043a5352c4bb15245677fa0fa3, type: 2}
-  - {fileID: 11400000, guid: 699e85906d920ae4282f524333850b1c, type: 2}
   chargeDumpFraction: 1
   endFraction: 1
   dischargeCurve:
@@ -981,9 +964,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.17933492
-    width: 1
-    height: 0.64066213
+    y: 0.32665095
+    width: 0.3147763
+    height: 0.4013119
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
