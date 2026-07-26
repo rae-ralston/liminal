@@ -20,7 +20,7 @@ public class PropAudio : MonoBehaviour
     public enum AmbientState { Active, Inactive, Suspended }
 
     [SerializeField] private PropAudioDefinition sounds;
-    [Tooltip("Start the ambient loop automatically on enable. Turn OFF for props whose loop is gated by a controller - e.g. the starter button, whose tick StarterButtonGlow starts only once the bootstrap room is activated.")]
+    [Tooltip("Start the ambient loop automatically on enable. Turn OFF for props whose loop is gated by a controller - e.g. the starter button, whose tick IncrementalStartEndButtonGlow starts only once the bootstrap room is activated.")]
     [SerializeField] private bool autoStartAmbientLoop = true;
 
     private EventInstance ambientInstance;

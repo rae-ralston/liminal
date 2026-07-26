@@ -15,8 +15,10 @@ GameObject:
   - component: {fileID: 1006}
   - component: {fileID: 1007}
   - component: {fileID: 1008}
+  - component: {fileID: 1685333840826990250}
   - component: {fileID: 1009}
   - component: {fileID: 2892605569659337155}
+  - component: {fileID: 766906011590468957}
   m_Layer: 0
   m_Name: StarterButton
   m_TagString: Untagged
@@ -172,6 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PropAudio
   sounds: {fileID: 11400000, guid: 9365106750b74224bbeac677d80a8d39, type: 2}
+  autoStartAmbientLoop: 1
 --- !u!114 &1007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,6 +200,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IncrementalStarter
   oneShot: 1
+--- !u!114 &1685333840826990250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df496c748254e0429c80fd370cfde16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndButtonSummoner
 --- !u!114 &1009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableHighlight
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
+  driveHighlightLighten: 0.4
   pulseStrength: 0.6
   pulseSpeed: 4
   fadeTime: 0.15
@@ -225,14 +241,72 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 609ed115192d8444e97a0694bb4b1437, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StarterButtonGlow
+  m_EditorClassIdentifier: Assembly-CSharp::IncrementalStartEndButtonGlow
+  buttonBody: {fileID: 0}
+  highlight: {fileID: 0}
   glowLight: {fileID: 8785031067109787566}
   glowSprite: {fileID: 1003}
-  propAudio: {fileID: 0}
   glowColor: {r: 1, g: 0.07843138, b: 0.5764706, a: 1}
+  endGlowColor: {r: 1, g: 0.25, b: 0.2, a: 1}
   pulseSpeed: 2
+  endPulseSpeed: 3.5
   pulseMin: 0.35
   pulseMax: 1
+  propAudio: {fileID: 0}
+  tickInEndPhase: 1
+--- !u!114 &766906011590468957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 1003}
+  m_ShadowShape2DProvider:
+    rid: 5435965185116864586
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0.44999695, y: 0.44999695, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.05
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0.05
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.05
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 2
+  m_PreviousShadowShape2DSource: {fileID: 1003}
+  references:
+    version: 2
+    RefIds:
+    - rid: 5435965185116864586
+      type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
 --- !u!1 &7593437467758427800
 GameObject:
   m_ObjectHideFlags: 0

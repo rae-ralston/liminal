@@ -73,6 +73,7 @@ Cross-reference with `GDD.md` for design intent.
 ## Lighting
 
 - [ ] Assess Bo's LightsPlayground.unity setup in depth — understand Light2D configuration, URP renderer setup, FlashlightAimToMouse script
+- [ ] FlashlightAimToMouse caches `Camera.main` in Awake — goes stale and throws in Update if the camera rig is ever swapped or torn down (EndSequenceController rearranges it). Resolve lazily or re-fetch on null.
 - [ ] Port lighting from LightsPlayground into Main scene
 - [ ] Resolve FMOD bank location with Bo (currently FMOD/Desktop/ — may need to move to Assets/StreamingAssets/)
 

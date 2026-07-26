@@ -963,10 +963,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.09296148
+    x: 0
     y: 0
-    width: 0.81373274
-    height: 1
+    width: 0
+    height: 0
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -2939,6 +2939,20 @@ MonoBehaviour:
       Data3: -320454484
       Data4: 1960931474
     Path: event:/Ambience/Bed/AMB_bed_DarkRoomTone
+  <EndConditionMet>k__BackingField:
+    Guid:
+      Data1: -424223188
+      Data2: 1140157421
+      Data3: 415236792
+      Data4: -1044041920
+    Path: event:/UI/EndConditionMet
+  <EndAnnouncement>k__BackingField:
+    Guid:
+      Data1: 1014276166
+      Data2: 1131642506
+      Data3: -1979681100
+      Data4: 1003397089
+    Path: event:/PA/PA-ReportToAssemblyHall
 --- !u!1 &1024500551
 GameObject:
   m_ObjectHideFlags: 0
@@ -3617,6 +3631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1317272323}
   - component: {fileID: 1317272322}
+  - component: {fileID: 1317272324}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3651,6 +3666,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 95062283}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317272324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317272321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82d587d6b1f0e22489bb28eff9e3955d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndAnnouncer
 --- !u!1 &1345621989
 GameObject:
   m_ObjectHideFlags: 0

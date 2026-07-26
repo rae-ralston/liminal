@@ -19,13 +19,27 @@ MonoBehaviour:
       Data3: -633886838
       Data4: -1854334941
     Path: event:/Props/Ambience/PROP_amb_Computer
+  ambientLoopInactive:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  ambientLoopSuspended:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   interact:
     Guid:
       Data1: -1488398329
       Data2: 1309267347
       Data3: 962527896
       Data4: 2004342830
-    Path: event:/Props/Interact/PROP_interact_keyboard_type
+    Path: event:/Props/Interact/PROP_interact_keyboard_type_fast
   locked:
     Guid:
       Data1: 0
@@ -41,6 +55,20 @@ MonoBehaviour:
       Data4: 0
     Path: 
   turnOff:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeLoop:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  chargeComplete:
     Guid:
       Data1: 0
       Data2: 0
