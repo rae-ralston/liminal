@@ -12,6 +12,20 @@ public class FlashlightAimToMouse : MonoBehaviour
 
     void Update()
     {
+        // The pause menu freezes time; the splash and the end card freeze
+        // movement. Neither stops Update(), and this aim is pure input ->
+        // rotation with no time term, so it has to opt out explicitly or the
+        // beam keeps tracking the cursor the player is using on the menu.
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.MovementFrozen)
+        {
+            return;
+        }
+
         Vector2 mousePos =
             Mouse.current.position.ReadValue();
 

@@ -117,8 +117,9 @@ public class Incremental : MonoBehaviour
 
     // True once the player has activated the bootstrap room at its terminal -
     // the first real step, distinct from SeedBootstrapResidue() (which raises
-    // MaxCapacity at Start before any interaction). StarterButtonGlow uses this
-    // with !Running to know the player should be guided to press start next.
+    // MaxCapacity at Start before any interaction). The button glow
+    // (IncrementalStartEndButtonGlow) uses this with !Running to know the
+    // player should be guided to press start next.
     public bool BootstrapActivated => bootstrapRoom != null && IsRoomActivated(bootstrapRoom);
 
     public float Multiplier => 1f + multiplierBonusSum;
@@ -203,6 +204,22 @@ public class Incremental : MonoBehaviour
     void Update()
     {
         Advance(Time.deltaTime);
+        UpdateEndConditionLatch();
+    }
+
+    // Deliberately outside Advance: Advance early-returns while stopped,
+    // capped or discharging, and the latch has to be evaluated whenever the
+    // reading is true - including the frame a room activation or a capacity
+    // segment completes the condition without a tick landing.
+    void UpdateEndConditionLatch()
+    {
+        if (EndConditionLatched || !EndConditionMet)
+        {
+            return;
+        }
+
+        EndConditionLatched = true;
+        Debug.Log($"[Ending] End condition reached: every room powered, bank at {Count}/{MaxCapacity}. The ending is now available (latched).");
     }
 
     // The whole tick model, separated from Update so the editor self-test
@@ -432,6 +449,21 @@ public class Incremental : MonoBehaviour
             return true;
         }
     }
+
+    // EndConditionMet, latched: once true it never goes back to false.
+    //
+    // EndConditionMet itself is a live reading and CAN drop back - a capacity
+    // upgrade raises MaxCapacity, so the fill ratio falls back under
+    // endFraction and the condition un-meets until the bank refills. That is
+    // fine for a live gauge and wrong for everything the player is told: the
+    // glow would strobe, and worse, a player summoned by EndAnnouncer's cue
+    // could arrive at a lever that refuses them.
+    //
+    // So the announcement, the glow and the lever all read THIS, and the
+    // promise is one-way: the moment the building has once been full with
+    // every room powered, the ending is available. EndConditionMet stays the
+    // live reading for gauges and debug.
+    public bool EndConditionLatched { get; private set; }
 
     // Refusal-log detail for EndButtonSummoner ("N rooms unpowered").
     // Counts against the serialized list, same source as AllRoomsActivated.
